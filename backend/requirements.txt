@@ -1,0 +1,33 @@
+# --- web framework ---
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+gunicorn==23.0.0
+python-multipart==0.0.20          # form / file uploads (label scans)
+
+# --- config / validation ---
+pydantic==2.10.4
+pydantic-settings==2.7.1
+
+# --- database (PostgreSQL 15+) ---
+SQLAlchemy==2.0.36
+alembic==1.14.0
+psycopg[binary]==3.2.3            # psycopg 3 driver
+
+# --- auth ---
+pyjwt==2.10.1
+bcrypt==4.2.1
+
+# --- http / misc ---
+httpx==0.28.1
+
+# --- vector database ---
+pymilvus==2.5.0
+# pinecone-client==5.0.1          # uncomment if you switch from Milvus to Pinecone
+
+# --- graph database (Phase 6+, stretch) ---
+# neo4j==5.27.0
+
+# --- dev / test ---
+pytest==8.3.4
+pytest-asyncio==0.25.0
+ruff==0.8.4
