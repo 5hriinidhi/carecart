@@ -11,43 +11,43 @@ Stack from the proposal: **Flutter** (mobile) · **FastAPI + PostgreSQL + Alembi
 |---|---|
 | **Python 3.11.4** | already installed |
 | **Backend venv + all deps** | `backend/.venv/` created, `requirements.txt` installed (FastAPI, SQLAlchemy 2, Alembic, psycopg 3, pymilvus, PyJWT, bcrypt, ruff, pytest) |
-| **Backend app skeleton** | `backend/app/…` — config, DB session, `User/Profile/Medication/ScanHistory` models, JWT+bcrypt helpers, `/api/v1/health` + `/health/db`. Boots clean, lint clean. |
-| **Alembic** | initialised, `env.py` wired to app settings + model metadata (no migration generated yet — needs a running Postgres) |
+| **Backend app skeleton** | `backend/app/…` — config, DB session, `User/Profile/Medication/ScanHistory` models, JWT+bcrypt helpers. `GET /health` does a real `SELECT 1` and returns `{"status":"ok","db":"connected"}` or **503** with the reason. Boots clean, lint clean, 3 pytest pass. |
+| **backend/Dockerfile** | `python:3.11-slim`, installs `requirements.txt`, runs uvicorn on 8000. `.dockerignore` excludes `.venv`/`.env`. |
+| **Alembic** | initialised, `env.py` → `settings.sqlalchemy_url` (same URL the app uses). No migration generated yet — needs a running Postgres. |
 | **Flutter 3.38.5 / Dart 3.10.4** | already installed at `C:\flutter` |
 | **Flutter app** | `mobile/` created (`com.carecart`, platforms android/ios/web). Added **flutter_riverpod 3.x**, **go_router 17**, **dio**, **flutter_secure_storage**. Scaffolded theme (CareCart design tokens), `dioProvider`, go_router with an onboarding→app redirect, placeholder Onboarding/Home screens. `flutter analyze` + `flutter test` pass. |
-| **Docker Compose** | `infra/docker-compose.yml` for Postgres 15 + Milvus (+ etcd/minio + Attu UI). Neo4j block included, commented. Validated. |
+| **Docker Compose** | root `docker-compose.yml` = **postgres:15 + backend** (postgres reads creds from `backend/.env`, has a healthcheck, backend `depends_on` it; named `pgdata` volume). `infra/docker-compose.yml` = Milvus stack (same compose project). Both validated. |
 | **.gitignore** | updated for `backend/.venv`, `mobile/build`, `.env`, etc. |
 
 ---
 
 ## 🔧 What you need to do
 
-### 1. Start Docker Desktop  (required for Postgres + Milvus)
+### 1. Start Docker Desktop  (required for Postgres + backend)
 Docker CLI is installed but the engine isn't running.
 
 ```powershell
 Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
-# wait ~1 min for the whale icon to go steady, then:
-cd C:\Users\Shrinidhi\CARECART\infra
-docker compose up -d
-docker compose ps            # postgres + milvus should be "healthy" (milvus takes ~90s)
+# wait ~1 min for the whale icon to go steady
 ```
-Milvus web UI: http://localhost:8000  ·  Postgres: `localhost:5432` user/pass/db all `carecart`.
 
-### 2. Backend: create `.env` and run the first migration
+### 2. Backend: create `.env`, bring up the stack, run migrations
 
 ```powershell
-cd C:\Users\Shrinidhi\CARECART\backend
-copy .env.example .env
-# generate a real JWT secret and paste it into .env:
-python -c "import secrets; print(secrets.token_urlsafe(48))"
+cd C:\Users\Shrinidhi\CARECART
+copy backend\.env.example backend\.env
+# optional: real JWT secret ->  python -c "import secrets; print(secrets.token_urlsafe(48))"
+# (POSTGRES_* dev creds in .env are fine as-is; fill the 4 API keys when you have them)
 
-.\.venv\Scripts\activate
-alembic revision --autogenerate -m "initial schema"   # needs Postgres up (step 1)
-alembic upgrade head
-uvicorn app.main:app --reload
+docker compose up -d --build                          # postgres + backend
+docker compose exec backend alembic revision --autogenerate -m "initial schema"
+docker compose exec backend alembic upgrade head
+docker compose ps                                     # both "healthy"
 ```
-Check http://localhost:8000/docs and http://localhost:8000/api/v1/health/db → `{"database":"reachable"}`.
+Check http://localhost:8000/docs and http://localhost:8000/health → `{"status":"ok","db":"connected"}`.
+
+Vector stack (Milvus), only from Phase 3 on:
+`docker compose -f infra\docker-compose.yml up -d`  → Milvus `:19530`, Attu UI http://localhost:8100
 
 ### 3. Flutter: accept Android licenses (only for Android builds)
 

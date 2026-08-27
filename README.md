@@ -8,8 +8,9 @@ Monorepo:
 | Path | What |
 |---|---|
 | `mobile/` | Flutter app (Riverpod + go_router), targets Android & iOS (web enabled for fast local iteration) |
-| `backend/` | FastAPI service (Python 3.11, SQLAlchemy 2 + Alembic, PostgreSQL, Milvus) |
-| `infra/` | `docker-compose.yml` — Postgres 15 + Milvus (+ Neo4j, Phase 6+) |
+| `backend/` | FastAPI service (Python 3.11, SQLAlchemy 2 + Alembic, PostgreSQL, Milvus) + `Dockerfile` |
+| `docker-compose.yml` | Postgres 15 + backend (this is the one you run) |
+| `infra/docker-compose.yml` | vector stack — Milvus + deps + Attu UI (needed from Phase 3) |
 | `gradient-ascend-mobile-app/` | The approved UI design (`CareCart App.dc.html`) — reference, the app must match it |
 | `SETUP.md` | One-time toolchain setup + what's already installed on this machine |
 
@@ -18,36 +19,38 @@ Monorepo:
 ## Run it locally
 
 ### Prerequisites
-- **Flutter 3.24+** and **Python 3.11** on `PATH`
-- **Docker Desktop** running (for Postgres + Milvus)
+- **Docker Desktop** running
+- (for the mobile app) **Flutter 3.24+**; (to run the backend outside Docker) **Python 3.11**
 
 See `SETUP.md` for install details and machine-specific notes.
 
-### 1. Infrastructure
+### 1. Everything via Docker (recommended)
 
 ```bash
-cd infra
-docker compose up -d          # postgres:5432, milvus:19530, Attu UI :8000
-docker compose ps             # wait for "healthy" (milvus ~90s)
+cp backend/.env.example backend/.env     # copy .env.example .env on Windows; fill in API keys
+docker compose up -d --build             # postgres:5432  +  backend:8000
+docker compose exec backend alembic upgrade head
+docker compose ps                        # both should be "healthy"
 ```
 
-### 2. Backend
+- API docs:   http://localhost:8000/docs
+- Health:     `GET http://localhost:8000/health` → `{"status":"ok","db":"connected"}` (503 if the DB is unreachable)
+
+Vector stack, when you need it (Phase 3+):
+`docker compose -f infra/docker-compose.yml up -d`  → Milvus `:19530`, Attu UI `:8100`.
+
+### 2. Backend without Docker (alternative)
 
 ```bash
 cd backend
 python -m venv .venv
-.venv\Scripts\activate                 # Windows  (source .venv/bin/activate elsewhere)
+.venv\Scripts\activate                   # Windows  (source .venv/bin/activate elsewhere)
 pip install -r requirements.txt
-
-copy .env.example .env                  # then fill in DATABASE_URL + API keys
-#   DATABASE_URL=postgresql+psycopg://carecart:carecart@localhost:5432/carecart
-
-alembic upgrade head                     # apply migrations
-uvicorn app.main:app --reload           # http://localhost:8000/docs
+cp .env.example .env                      # POSTGRES_HOST stays "localhost" here
+# start just Postgres:  docker compose up -d postgres
+alembic upgrade head
+uvicorn app.main:app --reload            # http://localhost:8000/docs
 ```
-
-Health check: `GET http://localhost:8000/api/v1/health` → `{"status":"ok"}`
-(and `/api/v1/health/db` once Postgres is up).
 
 ### 3. Mobile
 
@@ -66,13 +69,17 @@ override with `--dart-define=API_BASE_URL=https://...` for other targets.
 ## Layout
 
 ```
-backend/app/
-  api/          FastAPI routers          (api/v1/routes/*.py)
-  models/       SQLAlchemy ORM models
-  services/     business logic + integrations (OCR, openFDA, USDA, scoring, Claude)
-  core/         config, security (JWT + bcrypt)
-  db/           engine / session / declarative base
-  vector/       Milvus client helper
+backend/
+  Dockerfile    python:3.11-slim image
+  app/
+    main.py       app + GET /health (DB readiness -> 200 or 503)
+    api/          FastAPI routers          (api/v1/routes/*.py)
+    models/       SQLAlchemy ORM models
+    services/     business logic + integrations (OCR, openFDA, USDA, scoring, Claude)
+    core/         config (composes DATABASE_URL from POSTGRES_* or uses an override), security
+    db/           engine / session / declarative base
+    vector/       Milvus client helper
+  alembic/      migrations (env.py -> settings.sqlalchemy_url)
 
 mobile/lib/src/
   core/         theme (CareCart design tokens), api client

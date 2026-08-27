@@ -1,31 +1,14 @@
-# CareCart local infrastructure.
-#   docker compose up -d            # start postgres + milvus (+ UIs)
-#   docker compose down             # stop, keep data
-#   docker compose down -v          # stop, wipe data
+# CareCart - vector stack (Milvus). Optional; needed from Phase 3 onward.
+# Attaches to the same compose project as the root docker-compose.yml.
 #
-# Requires Docker Desktop to be running.
+#   docker compose -f infra/docker-compose.yml up -d
+#   docker compose -f infra/docker-compose.yml down
+#
+# Postgres + backend live in ../docker-compose.yml. Requires Docker Desktop.
 
 name: carecart
 
 services:
-  # ---------------------------------------------------------------- PostgreSQL
-  postgres:
-    image: postgres:15-alpine
-    environment:
-      POSTGRES_USER: carecart
-      POSTGRES_PASSWORD: carecart
-      POSTGRES_DB: carecart
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U carecart"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
-  # ------------------------------------------------------------- Milvus deps
   etcd:
     image: quay.io/coreos/etcd:v3.5.16
     environment:
@@ -58,7 +41,6 @@ services:
       timeout: 10s
       retries: 5
 
-  # ------------------------------------------------------------------- Milvus
   milvus:
     image: milvusdb/milvus:v2.5.0
     command: ["milvus", "run", "standalone"]
@@ -82,31 +64,29 @@ services:
       timeout: 20s
       retries: 5
 
-  # Milvus web UI (optional) - http://localhost:8000
+  # Milvus web UI - http://localhost:8100
   attu:
     image: zilliz/attu:v2.5
     environment:
       MILVUS_URL: milvus:19530
     ports:
-      - "8000:3000"
+      - "8100:3000"
     depends_on:
       - milvus
 
-  # ------------------------------------------------- Neo4j (Phase 6+, stretch)
-  # Uncomment when you start the relationship-mapping feature.
+  # ----------------------------------------------- Neo4j (Phase 6+, stretch)
   # neo4j:
   #   image: neo4j:5.26-community
   #   environment:
   #     NEO4J_AUTH: neo4j/carecart-neo4j
   #     NEO4J_PLUGINS: '["apoc"]'
   #   ports:
-  #     - "7474:7474"   # browser
-  #     - "7687:7687"   # bolt
+  #     - "7474:7474"
+  #     - "7687:7687"
   #   volumes:
   #     - neo4j-data:/data
 
 volumes:
-  pgdata:
   etcd-data:
   minio-data:
   milvus-data:
