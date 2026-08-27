@@ -36,15 +36,17 @@ Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
 ```powershell
 cd C:\Users\Shrinidhi\CARECART
 copy backend\.env.example backend\.env
-# optional: real JWT secret ->  python -c "import secrets; print(secrets.token_urlsafe(48))"
-# (POSTGRES_* dev creds in .env are fine as-is; fill the 4 API keys when you have them)
+# (POSTGRES_* dev creds in .env are fine as-is; fill API keys when you have them)
 
-docker compose up -d --build                          # postgres + backend
-docker compose exec backend alembic revision --autogenerate -m "initial schema"
-docker compose exec backend alembic upgrade head
-docker compose ps                                     # both "healthy"
+docker compose up -d --build                          # postgres + backend, auto-migrated
+docker compose ps                                     # both "healthy" (~25s from cold on a warm image)
 ```
-Check http://localhost:8000/docs and http://localhost:8000/health → `{"status":"ok","db":"connected"}`.
+The initial migration is committed and the container auto-applies it on start,
+so no `alembic` command is needed for a fresh setup. Check
+http://localhost:8000/docs and http://localhost:8000/health → `{"status":"ok","db":"connected"}`.
+
+Later, to add a migration after changing models:
+`docker compose exec backend alembic revision --autogenerate -m "..."` then restart the backend.
 
 Vector stack (Milvus), only from Phase 3 on:
 `docker compose -f infra\docker-compose.yml up -d`  → Milvus `:19530`, Attu UI http://localhost:8100

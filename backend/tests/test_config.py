@@ -23,7 +23,16 @@ def test_optional_keys_do_not_block_startup_in_dev():
 
 
 def test_production_enforces_optional_keys_and_real_jwt_secret():
-    problems = Settings(environment="production").missing_required()
+    # blank every optional key explicitly so the result does not depend on
+    # whatever a local backend/.env happens to contain
+    problems = Settings(
+        environment="production",
+        jwt_secret="dev-only-change-me",
+        otp_provider_api_key="",
+        claude_api_key="",
+        openfda_api_key="",
+        usda_fdc_api_key="",
+    ).missing_required()
     joined = " ".join(problems)
     for env in ("OTP_PROVIDER_API_KEY", "CLAUDE_API_KEY", "OPENFDA_API_KEY", "USDA_FDC_API_KEY"):
         assert env in joined

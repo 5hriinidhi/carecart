@@ -1,0 +1,11 @@
+# Normalize line endings. Shell scripts MUST stay LF or they break in Linux containers.
+* text=auto
+*.sh text eol=lf
+entrypoint.sh text eol=lf
+gradlew text eol=lf
+*.bat text eol=crlf
+*.png binary
+*.jpg binary
+*.pdf binary
+*.zip binary
+*.ttf binary

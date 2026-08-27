@@ -8,8 +8,10 @@ FastAPI 0.115 · SQLAlchemy 2.0 · Alembic · psycopg 3 · PostgreSQL 15 · pymi
 ```bash
 cp .env.example .env                              # from repo root: copy backend\.env.example backend\.env
 docker compose up -d --build                      # runs from repo root; postgres + backend
-docker compose exec backend alembic upgrade head
 ```
+
+The image's `entrypoint.sh` runs `alembic upgrade head` before starting uvicorn
+(disable with `AUTO_MIGRATE=0`), so `up` alone gives a migrated DB.
 
 - API docs: http://localhost:8000/docs
 - Health:   http://localhost:8000/health → `{"status":"ok","db":"connected"}` (503 + reason if the DB is down)

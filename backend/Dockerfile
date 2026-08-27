@@ -20,5 +20,8 @@ COPY . .
 
 EXPOSE 8000
 
-# Dev default. Compose overrides this with --reload + a bind mount.
+# entrypoint runs `alembic upgrade head` (unless AUTO_MIGRATE=0), then the CMD.
+ENTRYPOINT ["sh", "entrypoint.sh"]
+
+# Dev default. Compose overrides this with --reload.
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -33,11 +33,13 @@ _ALWAYS_REQUIRED: dict[str, str] = {
 }
 
 # attr -> (ENV_NAME, feature that breaks without it). Optional in dev.
+# NOTE: runtime scans are pure table lookups - no live LLM calls. CLAUDE_API_KEY
+# is used ONLY by the offline batch job that tags queued unknown ingredients.
 _OPTIONAL_KEYS: dict[str, tuple[str, str]] = {
     "otp_provider_api_key": ("OTP_PROVIDER_API_KEY", "phone / OTP sign-in"),
-    "claude_api_key": ("CLAUDE_API_KEY", "LLM ingredient fallback + verdict explanations"),
-    "openfda_api_key": ("OPENFDA_API_KEY", "openFDA drug-label / interaction lookups"),
-    "usda_fdc_api_key": ("USDA_FDC_API_KEY", "USDA FoodData Central nutrient enrichment"),
+    "openfda_api_key": ("OPENFDA_API_KEY", "openFDA drug-label / interaction data refresh"),
+    "usda_fdc_api_key": ("USDA_FDC_API_KEY", "USDA FoodData Central nutrient data refresh"),
+    "claude_api_key": ("CLAUDE_API_KEY", "offline batch tagging of unknown ingredients"),
 }
 
 _DEV_JWT_SECRET = "dev-only-change-me"

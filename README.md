@@ -27,11 +27,14 @@ See `SETUP.md` for install details and machine-specific notes.
 ### 1. Everything via Docker (recommended)
 
 ```bash
-cp backend/.env.example backend/.env     # copy .env.example .env on Windows; fill in API keys
+cp backend/.env.example backend/.env     # copy .env.example .env on Windows
 docker compose up -d --build             # postgres:5432  +  backend:8000
-docker compose exec backend alembic upgrade head
 docker compose ps                        # both should be "healthy"
 ```
+
+That's it — the backend container runs `alembic upgrade head` on start
+(`AUTO_MIGRATE=1`), so a fresh clone comes up fully migrated with no extra step.
+API keys can stay blank in dev (features degrade, logged at startup).
 
 - API docs:   http://localhost:8000/docs
 - Health:     `GET http://localhost:8000/health` → `{"status":"ok","db":"connected"}` (503 if the DB is unreachable)

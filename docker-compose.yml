@@ -39,6 +39,8 @@ services:
       POSTGRES_HOST: postgres
       # if the vector stack is also up, reach Milvus by its service name
       MILVUS_HOST: milvus
+      # entrypoint runs `alembic upgrade head` on start; set to 0 to disable
+      AUTO_MIGRATE: "1"
     ports:
       - "8000:8000"
     depends_on:
