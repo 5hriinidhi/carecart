@@ -2,14 +2,20 @@
 #
 #   docker compose up -d           # start postgres + backend
 #   docker compose logs -f backend
-#   docker compose exec backend alembic upgrade head
 #   docker compose down            # stop, keep data
 #   docker compose down -v         # stop, wipe the postgres volume
 #
+# Requires Docker Engine 20.10+ and Compose v2 (`docker compose`, NOT the old
+# hyphenated `docker-compose` v1 - the top-level `name:` key below needs v2).
+#
+# Host-port conflicts (a teammate already running Postgres on 5432, etc.):
+# override without editing this file -
+#   POSTGRES_HOST_PORT=5434 BACKEND_HOST_PORT=8001 docker compose up -d
+# or put those in a repo-root .env (see .env.example at the repo root).
+# Defaults are 5433 (Postgres) and 8000 (backend) to dodge the common clash.
+#
 # The vector stack (Milvus) lives in infra/docker-compose.yml and attaches to
 # the same project:  docker compose -f infra/docker-compose.yml up -d
-#
-# Requires Docker Desktop to be running.
 
 name: carecart
 
@@ -20,7 +26,8 @@ services:
     env_file:
       - backend/.env
     ports:
-      - "5432:5432"
+      # HOST:CONTAINER - host side overridable to avoid clashing with a local Postgres
+      - "${POSTGRES_HOST_PORT:-5433}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -35,14 +42,16 @@ services:
     env_file:
       - backend/.env
     environment:
-      # reach the DB service by its compose name, not localhost
+      # reach the DB service by its compose name + the in-network port (5432),
+      # regardless of what backend/.env says (that value is for host-run uvicorn)
       POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
       # if the vector stack is also up, reach Milvus by its service name
       MILVUS_HOST: milvus
       # entrypoint runs `alembic upgrade head` on start; set to 0 to disable
       AUTO_MIGRATE: "1"
     ports:
-      - "8000:8000"
+      - "${BACKEND_HOST_PORT:-8000}:8000"
     depends_on:
       postgres:
         condition: service_healthy

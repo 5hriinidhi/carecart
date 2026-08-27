@@ -16,19 +16,25 @@ Monorepo:
 
 ---
 
+## Requirements (pinned — match these)
+
+| Tool | Version | Notes |
+|---|---|---|
+| Docker Engine | ≥ 20.10 | |
+| Docker Compose | **v2** (`docker compose`) | the old hyphenated `docker-compose` v1 will **not** parse this repo's compose file |
+| Flutter | **3.38.5** (stable) | pinned in `/.tool-versions` and `/mobile/.fvmrc`; hard floor `>=3.24.0` in `pubspec.yaml` |
+| Dart | 3.10.4 | bundled with Flutter |
+| Python | **3.11.4** | only needed to run the backend *outside* Docker |
+
+`asdf install` / `mise install` read `/.tool-versions`; `fvm use` reads `/mobile/.fvmrc`.
+No version manager? Match by hand. Run `sh scripts/check-env.sh` to verify your machine.
+
 ## Run it locally
 
-### Prerequisites
-- **Docker Desktop** running
-- (for the mobile app) **Flutter 3.24+**; (to run the backend outside Docker) **Python 3.11**
-
-See `SETUP.md` for install details and machine-specific notes.
-
-### 1. Everything via Docker (recommended)
-
 ```bash
-cp backend/.env.example backend/.env     # copy .env.example .env on Windows
-docker compose up -d --build             # postgres:5432  +  backend:8000
+sh scripts/check-env.sh                  # optional preflight (docker, compose v2, versions, .env)
+cp backend/.env.example backend/.env     # copy backend\.env.example backend\.env on Windows
+docker compose up -d --build             # postgres + backend, auto-migrated
 docker compose ps                        # both should be "healthy"
 ```
 
@@ -38,6 +44,13 @@ API keys can stay blank in dev (features degrade, logged at startup).
 
 - API docs:   http://localhost:8000/docs
 - Health:     `GET http://localhost:8000/health` → `{"status":"ok","db":"connected"}` (503 if the DB is unreachable)
+
+**Port already in use?** Defaults are Postgres `5433`, backend `8000`. Override per-run
+or via a repo-root `.env` (see `/.env.example`):
+```bash
+POSTGRES_HOST_PORT=5434 BACKEND_HOST_PORT=8001 docker compose up -d
+```
+The container-internal Postgres port is always `5432` regardless.
 
 Vector stack, when you need it (Phase 3+):
 `docker compose -f infra/docker-compose.yml up -d`  → Milvus `:19530`, Attu UI `:8100`.
@@ -49,8 +62,10 @@ cd backend
 python -m venv .venv
 .venv\Scripts\activate                   # Windows  (source .venv/bin/activate elsewhere)
 pip install -r requirements.txt
-cp .env.example .env                      # POSTGRES_HOST stays "localhost" here
-# start just Postgres:  docker compose up -d postgres
+cp .env.example .env
+# start just Postgres:  docker compose up -d postgres   (publishes host port 5433)
+# then in backend/.env set  POSTGRES_HOST=localhost  and  POSTGRES_PORT=5433
+#   (or: POSTGRES_HOST_PORT=5432 docker compose up -d postgres, and keep 5432)
 alembic upgrade head
 uvicorn app.main:app --reload            # http://localhost:8000/docs
 ```

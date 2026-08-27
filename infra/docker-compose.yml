@@ -48,8 +48,8 @@ services:
       ETCD_ENDPOINTS: etcd:2379
       MINIO_ADDRESS: minio:9000
     ports:
-      - "19530:19530"   # gRPC / SDK
-      - "9091:9091"     # metrics / health
+      - "${MILVUS_HOST_PORT:-19530}:19530"   # gRPC / SDK
+      - "${MILVUS_METRICS_PORT:-9091}:9091"  # metrics / health
     volumes:
       - milvus-data:/var/lib/milvus
     depends_on:
@@ -70,7 +70,7 @@ services:
     environment:
       MILVUS_URL: milvus:19530
     ports:
-      - "8100:3000"
+      - "${ATTU_HOST_PORT:-8100}:3000"
     depends_on:
       - milvus
 

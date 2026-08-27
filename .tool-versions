@@ -1,0 +1,6 @@
+# Pinned toolchain versions - read by asdf / mise.
+#   asdf install         (needs plugins: flutter, python)
+#   mise install
+# If you don't use a version manager, match these by hand (see README "Requirements").
+flutter 3.38.5-stable
+python 3.11.4

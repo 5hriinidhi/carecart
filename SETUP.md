@@ -79,6 +79,24 @@ flutter doctor -v                                   # Android toolchain should g
 The stack is Flutter + Python. Skip unless a future tool requires it
 (`winget install OpenJS.NodeJS.LTS`).
 
+---
+
+### Common snags (per-machine)
+
+- **Port already in use** (local Postgres on 5432, another API on 8000): defaults
+  are already Postgres `5433` / backend `8000`; override with
+  `POSTGRES_HOST_PORT` / `BACKEND_HOST_PORT` (repo-root `.env`, see `/.env.example`).
+- **Compose v1**: `docker-compose` (hyphen) can't parse this repo. Use Docker
+  Desktop's bundled Compose v2 (`docker compose`, space).
+- **Flutter/Dart drift between teammates**: pinned in `/.tool-versions` (asdf/mise)
+  and `/mobile/.fvmrc` (fvm); floor in `mobile/pubspec.yaml`. `sh scripts/check-env.sh`
+  reports mismatches.
+- **Line endings**: `.gitattributes` forces `*.sh` (incl. `backend/entrypoint.sh`)
+  to LF so the Linux container can run them. If a script fails with
+  `bad interpreter` / `\r`, run `git add --renormalize . && git checkout -- .`.
+
+---
+
 ### 6. Later / optional
 - **Neo4j** (Phase 6+): uncomment the `neo4j` service in `infra/docker-compose.yml` and the `neo4j` line in `backend/requirements.txt`.
 - **Pinecone** instead of Milvus: swap `pymilvus` for `pinecone-client` in `requirements.txt`, set an API key in `.env`. Only if you outgrow local Milvus.
