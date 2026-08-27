@@ -1,0 +1,389 @@
+active_ingredient,drug_class,confidence,method,rationale
+magnesium,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+metoprolol succinate,Beta blocker,0.9,llm,pharmacology knowledge: Beta blocker
+niacinamide,Vitamin B3 (niacin),0.9,llm,pharmacology knowledge: Vitamin B3 (niacin)
+melatonin,Melatonergic hypnotic,0.9,llm,pharmacology knowledge: Melatonergic hypnotic
+glucosamine,SYSADOA (osteoarthritis),0.9,llm,pharmacology knowledge: SYSADOA (osteoarthritis)
+nicotinamide,Vitamin B3 (niacin),0.9,llm,pharmacology knowledge: Vitamin B3 (niacin)
+menthol,Counterirritant / topical analgesic,0.9,llm,pharmacology knowledge: Counterirritant / topical analgesic
+isoxsuprine,Tocolytic,0.9,llm,pharmacology knowledge: Tocolytic
+nepafenac,NSAID (ophthalmic),0.9,llm,pharmacology knowledge: NSAID (ophthalmic)
+ammonium chloride,Expectorant,0.9,llm,pharmacology knowledge: Expectorant
+olmesartan medoxomil,Angiotensin receptor blocker (ARB),0.9,llm,pharmacology knowledge: Angiotensin receptor blocker (ARB)
+human chorionic gonadotropin,Gonadotropin,0.9,llm,pharmacology knowledge: Gonadotropin
+levo-carnitine,Amino acid / nutritional,0.9,llm,pharmacology knowledge: Amino acid / nutritional
+recombinant human erythropoietin alfa,Erythropoiesis-stimulating agent,0.9,llm,pharmacology knowledge: Erythropoiesis-stimulating agent
+melitracen,Tricyclic antidepressant,0.9,llm,pharmacology knowledge: Tricyclic antidepressant
+methyl sulfonyl methane,SYSADOA (osteoarthritis),0.9,llm,pharmacology knowledge: SYSADOA (osteoarthritis)
+medroxyprogesterone acetate,Progestogen,0.9,llm,pharmacology knowledge: Progestogen
+paclitaxel,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+tolnaftate,Topical antifungal,0.9,llm,pharmacology knowledge: Topical antifungal
+hydroxypropylmethylcellulose,Ocular lubricant,0.9,llm,pharmacology knowledge: Ocular lubricant
+loteprednol etabonate,Corticosteroid,0.9,llm,pharmacology knowledge: Corticosteroid
+colistin sulphate,Polymyxin,0.9,llm,pharmacology knowledge: Polymyxin
+colistimethate sodium,Polymyxin,0.9,llm,pharmacology knowledge: Polymyxin
+orlistat,Lipase inhibitor (anti-obesity),0.9,llm,pharmacology knowledge: Lipase inhibitor (anti-obesity)
+levodropropizine,Antitussive,0.9,llm,pharmacology knowledge: Antitussive
+hydroxyurea,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+cyclophosphamide,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+doxorubicin,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+iron sucrose,Iron supplement,0.9,llm,pharmacology knowledge: Iron supplement
+cerebroprotein hydrolysate,Nootropic / neurotrophic,0.9,llm,pharmacology knowledge: Nootropic / neurotrophic
+amorolfine,Topical antifungal,0.9,llm,pharmacology knowledge: Topical antifungal
+mifepristone,Antiprogestogen,0.9,llm,pharmacology knowledge: Antiprogestogen
+propylene glycol,Ocular lubricant,0.9,llm,pharmacology knowledge: Ocular lubricant
+imatinib mesylate,Kinase inhibitor,0.9,llm,pharmacology knowledge: Kinase inhibitor
+etoposide,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+temozolomide,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+iron,Iron supplement,0.9,llm,pharmacology knowledge: Iron supplement
+darbepoetin alfa,Erythropoiesis-stimulating agent,0.9,llm,pharmacology knowledge: Erythropoiesis-stimulating agent
+orciprenaline,Beta-2 agonist (bronchodilator),0.9,llm,pharmacology knowledge: Beta-2 agonist (bronchodilator)
+levocloperastine,Antitussive,0.9,llm,pharmacology knowledge: Antitussive
+fluorometholone,Corticosteroid,0.9,llm,pharmacology knowledge: Corticosteroid
+calcium,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+perindopril erbumine,ACE inhibitor,0.9,llm,pharmacology knowledge: ACE inhibitor
+testosterone,Androgen,0.9,llm,pharmacology knowledge: Androgen
+chlorbutol,Antiseptic / disinfectant,0.9,llm,pharmacology knowledge: Antiseptic / disinfectant
+paradichlorobenzene,Antiseptic / disinfectant,0.9,llm,pharmacology knowledge: Antiseptic / disinfectant
+turpentine oil,Counterirritant / topical analgesic,0.9,llm,pharmacology knowledge: Counterirritant / topical analgesic
+brimonidine,Alpha-2 adrenergic agonist (antiglaucoma),0.9,llm,pharmacology knowledge: Alpha-2 adrenergic agonist (antiglaucoma)
+dehydroepiandrosterone,Androgen,0.9,llm,pharmacology knowledge: Androgen
+capecitabine,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+resveratrol,Antioxidant / cytoprotective,0.9,llm,pharmacology knowledge: Antioxidant / cytoprotective
+albumin,Plasma volume expander,0.9,llm,pharmacology knowledge: Plasma volume expander
+chlorhexidine gluconate,Antiseptic / disinfectant,0.9,llm,pharmacology knowledge: Antiseptic / disinfectant
+hyaluronic acid,SYSADOA (osteoarthritis),0.9,llm,pharmacology knowledge: SYSADOA (osteoarthritis)
+fluorouracil,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+octreotide acetate,Somatostatin analogue,0.9,llm,pharmacology knowledge: Somatostatin analogue
+disulfiram,Alcohol deterrent (ALDH inhibitor),0.9,llm,pharmacology knowledge: Alcohol deterrent (ALDH inhibitor)
+dextrose,IV fluid / parenteral nutrition,0.9,llm,pharmacology knowledge: IV fluid / parenteral nutrition
+glutathione,Antioxidant / cytoprotective,0.9,llm,pharmacology knowledge: Antioxidant / cytoprotective
+ritodrine,Tocolytic,0.9,llm,pharmacology knowledge: Tocolytic
+abiraterone acetate,Antineoplastic - hormonal,0.9,llm,pharmacology knowledge: Antineoplastic - hormonal
+tolvaptan,Vasopressin V2 receptor antagonist,0.9,llm,pharmacology knowledge: Vasopressin V2 receptor antagonist
+phenoxyethanol,Preservative / antimicrobial excipient,0.9,llm,pharmacology knowledge: Preservative / antimicrobial excipient
+oxychloro complex,Ophthalmic preservative / oxidant,0.9,llm,pharmacology knowledge: Ophthalmic preservative / oxidant
+inactivated influenza vaccine,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+leuprolide,Antineoplastic - hormonal,0.9,llm,pharmacology knowledge: Antineoplastic - hormonal
+atracurium,Neuromuscular blocking agent,0.9,llm,pharmacology knowledge: Neuromuscular blocking agent
+docetaxel,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+calcitonin,Calcitonin,0.9,llm,pharmacology knowledge: Calcitonin
+human normal immunoglobulin,Immunoglobulin / antiserum,0.9,llm,pharmacology knowledge: Immunoglobulin / antiserum
+pirfenidone,Antifibrotic,0.9,llm,pharmacology knowledge: Antifibrotic
+filgrastim,Colony-stimulating factor,0.9,llm,pharmacology knowledge: Colony-stimulating factor
+magnesium citrate,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+caroverine,Antispasmodic (anticholinergic/musculotropic),0.9,llm,pharmacology knowledge: Antispasmodic (anticholinergic/musculotropic)
+dienogest,Progestogen,0.9,llm,pharmacology knowledge: Progestogen
+bromfenac,NSAID (ophthalmic),0.9,llm,pharmacology knowledge: NSAID (ophthalmic)
+mitomycin,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+calcium leucovorin,Folinic acid rescue / detox agent,0.9,llm,pharmacology knowledge: Folinic acid rescue / detox agent
+dithranol,Antipsoriatic,0.9,llm,pharmacology knowledge: Antipsoriatic
+insulin isophane/nph,Insulin,0.9,llm,pharmacology knowledge: Insulin
+human insulin/soluble insulin,Insulin,0.9,llm,pharmacology knowledge: Insulin
+terlipressin,Vasopressin analogue,0.9,llm,pharmacology knowledge: Vasopressin analogue
+camphor,Counterirritant / topical analgesic,0.9,llm,pharmacology knowledge: Counterirritant / topical analgesic
+oxaceprol,SYSADOA (osteoarthritis),0.9,llm,pharmacology knowledge: SYSADOA (osteoarthritis)
+haloperidol decanoate,Typical antipsychotic,0.9,llm,pharmacology knowledge: Typical antipsychotic
+lenalidomide,Immunomodulatory imide (IMiD),0.9,llm,pharmacology knowledge: Immunomodulatory imide (IMiD)
+nintedanib,Kinase inhibitor,0.9,llm,pharmacology knowledge: Kinase inhibitor
+sorafenib,Kinase inhibitor,0.9,llm,pharmacology knowledge: Kinase inhibitor
+danazol,Androgen,0.9,llm,pharmacology knowledge: Androgen
+bethanechol,Cholinomimetic (bladder/GI),0.9,llm,pharmacology knowledge: Cholinomimetic (bladder/GI)
+tribasic calcium phosphate,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+citrus bioflavonoid,Bioflavonoid,0.9,llm,pharmacology knowledge: Bioflavonoid
+menotrophin,Gonadotropin,0.9,llm,pharmacology knowledge: Gonadotropin
+riluzole,Neurodegenerative disease agent,0.9,llm,pharmacology knowledge: Neurodegenerative disease agent
+pyridostigmine,Cholinesterase inhibitor,0.9,llm,pharmacology knowledge: Cholinesterase inhibitor
+pegylated interferon alpha 2b,Interferon,0.9,llm,pharmacology knowledge: Interferon
+magnesium trisilicate,Antacid,0.9,llm,pharmacology knowledge: Antacid
+nicotine,Smoking cessation aid,0.9,llm,pharmacology knowledge: Smoking cessation aid
+tropicamide,Mydriatic / cycloplegic,0.9,llm,pharmacology knowledge: Mydriatic / cycloplegic
+pralidoxime,Cholinesterase reactivator,0.9,llm,pharmacology knowledge: Cholinesterase reactivator
+epalrestat,Aldose reductase inhibitor,0.9,llm,pharmacology knowledge: Aldose reductase inhibitor
+thalidomide,Immunomodulatory imide (IMiD),0.9,llm,pharmacology knowledge: Immunomodulatory imide (IMiD)
+mannitol,Osmotic diuretic,0.9,llm,pharmacology knowledge: Osmotic diuretic
+azelaic acid,Topical anti-acne,0.9,llm,pharmacology knowledge: Topical anti-acne
+propofol,General anaesthetic,0.9,llm,pharmacology knowledge: General anaesthetic
+glucosamine sulfate potassium chloride,SYSADOA (osteoarthritis),0.9,llm,pharmacology knowledge: SYSADOA (osteoarthritis)
+chondroitin,SYSADOA (osteoarthritis),0.9,llm,pharmacology knowledge: SYSADOA (osteoarthritis)
+anti rh d immunoglobulin,Immunoglobulin / antiserum,0.9,llm,pharmacology knowledge: Immunoglobulin / antiserum
+tetanus toxoid,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+ifosfamide,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+bleomycin,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+epirubicin,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+oxytocin,Uterotonic,0.9,llm,pharmacology knowledge: Uterotonic
+cabergoline,Dopamine agonist (prolactin inhibitor),0.9,llm,pharmacology knowledge: Dopamine agonist (prolactin inhibitor)
+stabilized oxychloro,Ophthalmic preservative / oxidant,0.9,llm,pharmacology knowledge: Ophthalmic preservative / oxidant
+bromocriptine,Dopamine agonist (prolactin inhibitor),0.9,llm,pharmacology knowledge: Dopamine agonist (prolactin inhibitor)
+vecuronium,Neuromuscular blocking agent,0.9,llm,pharmacology knowledge: Neuromuscular blocking agent
+mesna,Uroprotectant (chemotherapy),0.9,llm,pharmacology knowledge: Uroprotectant (chemotherapy)
+calcipotriol,Antipsoriatic,0.9,llm,pharmacology knowledge: Antipsoriatic
+ketamine,General anaesthetic,0.9,llm,pharmacology knowledge: General anaesthetic
+acitretin,Antipsoriatic,0.9,llm,pharmacology knowledge: Antipsoriatic
+choline,Nootropic / neurotrophic,0.9,llm,pharmacology knowledge: Nootropic / neurotrophic
+chlorambucil,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+lomustine,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+bicalutamide,Antineoplastic - hormonal,0.9,llm,pharmacology knowledge: Antineoplastic - hormonal
+interferon alpha 2b,Interferon,0.9,llm,pharmacology knowledge: Interferon
+benzyl nicotinate,Rubefacient / peripheral vasodilator,0.9,llm,pharmacology knowledge: Rubefacient / peripheral vasodilator
+dextropropoxyphene,Opioid analgesic,0.9,llm,pharmacology knowledge: Opioid analgesic
+otilonium bromide,Antispasmodic (anticholinergic/musculotropic),0.9,llm,pharmacology knowledge: Antispasmodic (anticholinergic/musculotropic)
+rabies vaccine,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+neostigmine,Cholinesterase inhibitor,0.9,llm,pharmacology knowledge: Cholinesterase inhibitor
+pegfilgrastim,Colony-stimulating factor,0.9,llm,pharmacology knowledge: Colony-stimulating factor
+iron isomaltoside,Iron supplement,0.9,llm,pharmacology knowledge: Iron supplement
+desmopressin,Vasopressin analogue,0.9,llm,pharmacology knowledge: Vasopressin analogue
+alpha glycerylphosphorylcholine,Nootropic / neurotrophic,0.9,llm,pharmacology knowledge: Nootropic / neurotrophic
+mitoxantrone,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+daunorubicin,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+calcium chloride,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+teriparatide,Parathyroid hormone analogue,0.9,llm,pharmacology knowledge: Parathyroid hormone analogue
+vincristine,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+vinblastine,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+sodium lactate,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+pilocarpine,Cholinergic miotic,0.9,llm,pharmacology knowledge: Cholinergic miotic
+butorphanol,Opioid analgesic,0.9,llm,pharmacology knowledge: Opioid analgesic
+amylmetacresol,Antiseptic lozenge,0.9,llm,pharmacology knowledge: Antiseptic lozenge
+vitamin b,B-complex (multi),0.9,llm,pharmacology knowledge: B-complex (multi)
+cetrorelix,GnRH antagonist,0.9,llm,pharmacology knowledge: GnRH antagonist
+triclofos,Sedative-hypnotic (chloral group),0.9,llm,pharmacology knowledge: Sedative-hypnotic (chloral group)
+pazopanib,Kinase inhibitor,0.9,llm,pharmacology knowledge: Kinase inhibitor
+benzoic acid,Preservative / antimicrobial excipient,0.9,llm,pharmacology knowledge: Preservative / antimicrobial excipient
+vasopressin,Vasopressin analogue,0.9,llm,pharmacology knowledge: Vasopressin analogue
+thiopental sodium,General anaesthetic,0.9,llm,pharmacology knowledge: General anaesthetic
+rocuronium,Neuromuscular blocking agent,0.9,llm,pharmacology knowledge: Neuromuscular blocking agent
+pertussis toxoid,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+megestrol,Progestogen,0.9,llm,pharmacology knowledge: Progestogen
+urofollitropin,Gonadotropin,0.9,llm,pharmacology knowledge: Gonadotropin
+recombinant follicle stimulating hormone,Gonadotropin,0.9,llm,pharmacology knowledge: Gonadotropin
+d-panthenol,Vitamin B5 (pantothenic acid),0.9,llm,pharmacology knowledge: Vitamin B5 (pantothenic acid)
+terpin hydrate,Antitussive,0.9,llm,pharmacology knowledge: Antitussive
+isopropamide,Antispasmodic (anticholinergic/musculotropic),0.9,llm,pharmacology knowledge: Antispasmodic (anticholinergic/musculotropic)
+dinoprostone,Prostaglandin (obstetric),0.9,llm,pharmacology knowledge: Prostaglandin (obstetric)
+metadoxine,Alcohol metabolism modifier,0.9,llm,pharmacology knowledge: Alcohol metabolism modifier
+homatropine,Mydriatic / cycloplegic,0.9,llm,pharmacology knowledge: Mydriatic / cycloplegic
+pneumococcal polysaccharide vaccine,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+dimethyl fumarate,Multiple sclerosis immunomodulator,0.9,llm,pharmacology knowledge: Multiple sclerosis immunomodulator
+mesterolone,Androgen,0.9,llm,pharmacology knowledge: Androgen
+roflumilast,PDE4 inhibitor,0.9,llm,pharmacology knowledge: PDE4 inhibitor
+hepatitis b vaccine,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+garenoxacin,Fluoroquinolone,0.9,llm,pharmacology knowledge: Fluoroquinolone
+dactinomycin,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+ornithine,Amino acid / nutritional,0.9,llm,pharmacology knowledge: Amino acid / nutritional
+edaravone,Neurodegenerative disease agent,0.9,llm,pharmacology knowledge: Neurodegenerative disease agent
+diphtheria toxoid,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+mercaptopurine,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+tegafur,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+uracil,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+insulin lispro protamine,Insulin,0.9,llm,pharmacology knowledge: Insulin
+papaverine,Antispasmodic (anticholinergic/musculotropic),0.9,llm,pharmacology knowledge: Antispasmodic (anticholinergic/musculotropic)
+hyoscyamine,Antispasmodic (anticholinergic/musculotropic),0.9,llm,pharmacology knowledge: Antispasmodic (anticholinergic/musculotropic)
+pinaverium bromide,Antispasmodic (anticholinergic/musculotropic),0.9,llm,pharmacology knowledge: Antispasmodic (anticholinergic/musculotropic)
+ethylmorphine,Opioid analgesic,0.9,llm,pharmacology knowledge: Opioid analgesic
+placenta extracts,Herbal / traditional extract,0.9,llm,pharmacology knowledge: Herbal / traditional extract
+chlorocresol,Antiseptic / disinfectant,0.9,llm,pharmacology knowledge: Antiseptic / disinfectant
+isoflurane,General anaesthetic,0.9,llm,pharmacology knowledge: General anaesthetic
+valethamate,Antispasmodic (anticholinergic/musculotropic),0.9,llm,pharmacology knowledge: Antispasmodic (anticholinergic/musculotropic)
+methocarbamol,Skeletal muscle relaxant,0.9,llm,pharmacology knowledge: Skeletal muscle relaxant
+succinyl choline chloride,Neuromuscular blocking agent,0.9,llm,pharmacology knowledge: Neuromuscular blocking agent
+oseltamivir phosphate,Antiviral (anti-influenza),0.9,llm,pharmacology knowledge: Antiviral (anti-influenza)
+hemocoagulase,Haemostatic (topical/systemic),0.9,llm,pharmacology knowledge: Haemostatic (topical/systemic)
+pamabrom,"Diuretic (mild, OTC)",0.9,llm,"pharmacology knowledge: Diuretic (mild, OTC)"
+tegaserod,5-HT4 receptor agonist (prokinetic),0.9,llm,pharmacology knowledge: 5-HT4 receptor agonist (prokinetic)
+l-methyl folate,Vitamin B9 (folate),0.9,llm,pharmacology knowledge: Vitamin B9 (folate)
+sodium feredetate,Iron supplement,0.9,llm,pharmacology knowledge: Iron supplement
+centchroman,SERM / anti-osteoporotic,0.9,llm,pharmacology knowledge: SERM / anti-osteoporotic
+protamine sulfate,Heparin antagonist,0.9,llm,pharmacology knowledge: Heparin antagonist
+diatrizoic acid,Radiographic contrast medium,0.9,llm,pharmacology knowledge: Radiographic contrast medium
+tannic acid,Astringent,0.9,llm,pharmacology knowledge: Astringent
+insulin aspart protamine,Insulin,0.9,llm,pharmacology knowledge: Insulin
+pidotimod,Immunostimulant,0.9,llm,pharmacology knowledge: Immunostimulant
+cabazitaxel,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+aprotinin,Antifibrinolytic (proteinase inhibitor),0.9,llm,pharmacology knowledge: Antifibrinolytic (proteinase inhibitor)
+adrenochrome monosemicarbazone,Haemostatic (topical/systemic),0.9,llm,pharmacology knowledge: Haemostatic (topical/systemic)
+l-alanyl-l-glutamine,Amino acid / nutritional,0.9,llm,pharmacology knowledge: Amino acid / nutritional
+zinc gluconate,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+benzoxonium chloride,Antiseptic / disinfectant,0.9,llm,pharmacology knowledge: Antiseptic / disinfectant
+collagen peptide,SYSADOA (osteoarthritis),0.9,llm,pharmacology knowledge: SYSADOA (osteoarthritis)
+human hepatitis b immunoglobulin,Immunoglobulin / antiserum,0.9,llm,pharmacology knowledge: Immunoglobulin / antiserum
+docusate,Stool softener,0.9,llm,pharmacology knowledge: Stool softener
+degarelix,Antineoplastic - hormonal,0.9,llm,pharmacology knowledge: Antineoplastic - hormonal
+buserelin,Antineoplastic - hormonal,0.9,llm,pharmacology knowledge: Antineoplastic - hormonal
+piribedil,Dopamine agonist (anti-parkinson),0.9,llm,pharmacology knowledge: Dopamine agonist (anti-parkinson)
+zinc sulphate monohydrate,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+pancuronium,Neuromuscular blocking agent,0.9,llm,pharmacology knowledge: Neuromuscular blocking agent
+cisatracurium,Neuromuscular blocking agent,0.9,llm,pharmacology knowledge: Neuromuscular blocking agent
+thymosin alpha,Immunostimulant,0.9,llm,pharmacology knowledge: Immunostimulant
+bendamustine,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+melphalan,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+enzalutamide,Antineoplastic - hormonal,0.9,llm,pharmacology knowledge: Antineoplastic - hormonal
+interferon beta-1a,Interferon,0.9,llm,pharmacology knowledge: Interferon
+interferon alpha 2a,Interferon,0.9,llm,pharmacology knowledge: Interferon
+pegylated interferon alpha 2a,Interferon,0.9,llm,pharmacology knowledge: Interferon
+rasburicase,Recombinant urate oxidase,0.9,llm,pharmacology knowledge: Recombinant urate oxidase
+hydroxyethyl starch,Plasma volume expander,0.9,llm,pharmacology knowledge: Plasma volume expander
+dextran 40,Plasma volume expander,0.9,llm,pharmacology knowledge: Plasma volume expander
+allium cepa,Herbal / traditional extract,0.9,llm,pharmacology knowledge: Herbal / traditional extract
+recombinant human epidermal growth factor,Growth factor (topical/systemic),0.9,llm,pharmacology knowledge: Growth factor (topical/systemic)
+zinc oxide,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+cetilistat,Lipase inhibitor (anti-obesity),0.9,llm,pharmacology knowledge: Lipase inhibitor (anti-obesity)
+benzonatate,Antitussive,0.9,llm,pharmacology knowledge: Antitussive
+salmonella typhi vaccine,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+rubella vaccine,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+recombinant,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+freeze-dried live attenuated hepatitis a vaccine,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+idebenone,Nootropic / neurotrophic,0.9,llm,pharmacology knowledge: Nootropic / neurotrophic
+pegaspargase,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+idarubicin,Cytotoxic chemotherapy,0.9,llm,pharmacology knowledge: Cytotoxic chemotherapy
+hyaluronidase,Enzyme (spreading factor),0.9,llm,pharmacology knowledge: Enzyme (spreading factor)
+phenolphthalein,Stimulant laxative,0.9,llm,pharmacology knowledge: Stimulant laxative
+triptorelin,Antineoplastic - hormonal,0.9,llm,pharmacology knowledge: Antineoplastic - hormonal
+dalfampridine,Neurodegenerative disease agent,0.9,llm,pharmacology knowledge: Neurodegenerative disease agent
+n-butyl-2-cyanoacrylate,Tissue adhesive,0.9,llm,pharmacology knowledge: Tissue adhesive
+haemophilus type b conjugate vaccine,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+hydroxyquinolines,Amoebicide,0.9,llm,pharmacology knowledge: Amoebicide
+carbazochrome,Haemostatic (topical/systemic),0.9,llm,pharmacology knowledge: Haemostatic (topical/systemic)
+policosanol,Lipid-lowering (nicotinic acid derivative),0.9,llm,pharmacology knowledge: Lipid-lowering (nicotinic acid derivative)
+tibolone,Tissue-selective estrogen (STEAR),0.9,llm,pharmacology knowledge: Tissue-selective estrogen (STEAR)
+acamprosate,Anti-craving agent (alcohol dependence),0.9,llm,pharmacology knowledge: Anti-craving agent (alcohol dependence)
+cyclopentolate,Mydriatic / cycloplegic,0.9,llm,pharmacology knowledge: Mydriatic / cycloplegic
+zinc carnosine,Mucosal protectant,0.9,llm,pharmacology knowledge: Mucosal protectant
+iohexol,Radiographic contrast medium,0.9,llm,pharmacology knowledge: Radiographic contrast medium
+acetic acid,Antiseptic (otic),0.9,llm,pharmacology knowledge: Antiseptic (otic)
+etomidate,General anaesthetic,0.9,llm,pharmacology knowledge: General anaesthetic
+suxamethonium,Neuromuscular blocking agent,0.9,llm,pharmacology knowledge: Neuromuscular blocking agent
+iguratimod,DMARD (small molecule),0.9,llm,pharmacology knowledge: DMARD (small molecule)
+univestin,SYSADOA (osteoarthritis),0.9,llm,pharmacology knowledge: SYSADOA (osteoarthritis)
+evening primrose oil,Herbal / traditional extract,0.9,llm,pharmacology knowledge: Herbal / traditional extract
+phenazopyridine,Urinary analgesic,0.9,llm,pharmacology knowledge: Urinary analgesic
+biotin,Vitamin B7 (biotin),0.9,llm,pharmacology knowledge: Vitamin B7 (biotin)
+docosahexaenoic acid,Omega-3 fatty acid,0.9,llm,pharmacology knowledge: Omega-3 fatty acid
+phenylalanine,Amino acid / nutritional,0.9,llm,pharmacology knowledge: Amino acid / nutritional
+vitamin b2,Vitamin B2 (riboflavin),0.9,llm,pharmacology knowledge: Vitamin B2 (riboflavin)
+alprostadil,Prostaglandin E1 (vasodilator),0.9,llm,pharmacology knowledge: Prostaglandin E1 (vasodilator)
+saccharomyces boulardii,Probiotic,0.9,llm,pharmacology knowledge: Probiotic
+lysine,Amino acid / nutritional,0.9,llm,pharmacology knowledge: Amino acid / nutritional
+zinc chloride,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+pramoxine,Local anaesthetic,0.9,llm,pharmacology knowledge: Local anaesthetic
+inactivated japanese encephalitis virus protein,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+equine rabies immunoglobulin,Immunoglobulin / antiserum,0.9,llm,pharmacology knowledge: Immunoglobulin / antiserum
+onabotulinumtoxina,Botulinum toxin,0.9,llm,pharmacology knowledge: Botulinum toxin
+rotavirus vaccine (live attenuated,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+oral),Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+magnesium bisglycinate,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+bacterial lysate,Herbal / traditional extract,0.9,llm,pharmacology knowledge: Herbal / traditional extract
+granulocyte colony stimulating factor,Colony-stimulating factor,0.9,llm,pharmacology knowledge: Colony-stimulating factor
+molgramostim,Colony-stimulating factor,0.9,llm,pharmacology knowledge: Colony-stimulating factor
+amifostine,Radioprotective / detox,0.9,llm,pharmacology knowledge: Radioprotective / detox
+ringer's lactate,IV fluid / parenteral nutrition,0.9,llm,pharmacology knowledge: IV fluid / parenteral nutrition
+pentosan polysulfate sodium,Pentosan (bladder GAG),0.9,llm,pharmacology knowledge: Pentosan (bladder GAG)
+lactobacillus sporogenes,Probiotic,0.9,llm,pharmacology knowledge: Probiotic
+sodium tauroglycocholate,Bile salt / digestive,0.9,llm,pharmacology knowledge: Bile salt / digestive
+varenicline,Smoking cessation aid,0.9,llm,pharmacology knowledge: Smoking cessation aid
+tetrahydrozoline,Ocular decongestant,0.9,llm,pharmacology knowledge: Ocular decongestant
+fluorescein,Diagnostic dye,0.9,llm,pharmacology knowledge: Diagnostic dye
+fenfluramine,Anorectic (withdrawn/controlled),0.9,llm,pharmacology knowledge: Anorectic (withdrawn/controlled)
+iopromide,Radiographic contrast medium,0.9,llm,pharmacology knowledge: Radiographic contrast medium
+polidocanol,Sclerosant,0.9,llm,pharmacology knowledge: Sclerosant
+phenylpropanolamine,Sympathomimetic (decongestant/anorectic),0.9,llm,pharmacology knowledge: Sympathomimetic (decongestant/anorectic)
+doxapram,Respiratory stimulant,0.9,llm,pharmacology knowledge: Respiratory stimulant
+purified vi polysaccharide typhoid vaccine,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+diphtheria immune globulin,Immunoglobulin / antiserum,0.9,llm,pharmacology knowledge: Immunoglobulin / antiserum
+haemophilus influenzae type b capsular polysaccharide,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+measles vaccine,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+pneumococcal 13 valent conjugate vaccine,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+human papillomavirus quadrivalent (types 6,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+and 18) vaccine,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+meningococcal vaccine (group a,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+w-135),Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+vi capsular polysaccharide of salmonella typhi,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+varicella vaccine attenuated,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+bacillus calmette-guerin strain,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+human papillomavirus bivalent vaccine,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+polio vaccine,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+pyridoxal-5-phasphate,Vitamin B6,0.9,llm,pharmacology knowledge: Vitamin B6
+pantothenic acid,Vitamin B5 (pantothenic acid),0.9,llm,pharmacology knowledge: Vitamin B5 (pantothenic acid)
+l-leucine,Amino acid / nutritional,0.9,llm,pharmacology knowledge: Amino acid / nutritional
+l-isoleucine,Amino acid / nutritional,0.9,llm,pharmacology knowledge: Amino acid / nutritional
+cinacalcet,Calcimimetic,0.9,llm,pharmacology knowledge: Calcimimetic
+sodium acid phosphate,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+dehydroemetine,Amoebicide,0.9,llm,pharmacology knowledge: Amoebicide
+lactic acid,Emollient / keratolytic,0.9,llm,pharmacology knowledge: Emollient / keratolytic
+urea,Emollient / keratolytic,0.9,llm,pharmacology knowledge: Emollient / keratolytic
+imiquimod,Immune response modifier (topical),0.9,llm,pharmacology knowledge: Immune response modifier (topical)
+testosterone propionate,Androgen,0.9,llm,pharmacology knowledge: Androgen
+cyproterone,Antineoplastic - hormonal,0.9,llm,pharmacology knowledge: Antineoplastic - hormonal
+glucagon,Antihypoglycaemic hormone,0.9,llm,pharmacology knowledge: Antihypoglycaemic hormone
+goserelin acetate,Antineoplastic - hormonal,0.9,llm,pharmacology knowledge: Antineoplastic - hormonal
+iopamidol,Radiographic contrast medium,0.9,llm,pharmacology knowledge: Radiographic contrast medium
+stannous fluoride,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+cetalkonium chloride,Antiseptic / disinfectant,0.9,llm,pharmacology knowledge: Antiseptic / disinfectant
+human rabies immunoglobulin,Immunoglobulin / antiserum,0.9,llm,pharmacology knowledge: Immunoglobulin / antiserum
+mumps virus vaccine,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+human gamma globulin,Immunoglobulin / antiserum,0.9,llm,pharmacology knowledge: Immunoglobulin / antiserum
+sodium fluoride,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+fosfestrol,Antineoplastic - hormonal,0.9,llm,pharmacology knowledge: Antineoplastic - hormonal
+sargramostim,Colony-stimulating factor,0.9,llm,pharmacology knowledge: Colony-stimulating factor
+plerixafor,Colony-stimulating factor,0.9,llm,pharmacology knowledge: Colony-stimulating factor
+low dextrans,IV fluid / parenteral nutrition,0.9,llm,pharmacology knowledge: IV fluid / parenteral nutrition
+adapting electrolyte solutions,IV fluid / parenteral nutrition,0.9,llm,pharmacology knowledge: IV fluid / parenteral nutrition
+glycine,IV fluid / parenteral nutrition,0.9,llm,pharmacology knowledge: IV fluid / parenteral nutrition
+invert sugar,IV fluid / parenteral nutrition,0.9,llm,pharmacology knowledge: IV fluid / parenteral nutrition
+xylitol,IV fluid / parenteral nutrition,0.9,llm,pharmacology knowledge: IV fluid / parenteral nutrition
+sorbitol solution,IV fluid / parenteral nutrition,0.9,llm,pharmacology knowledge: IV fluid / parenteral nutrition
+eltrombopag,Thrombopoietin receptor agonist,0.9,llm,pharmacology knowledge: Thrombopoietin receptor agonist
+menadione sodium bisulfite,Vitamin K,0.9,llm,pharmacology knowledge: Vitamin K
+saroglitazar,Dual PPAR agonist,0.9,llm,pharmacology knowledge: Dual PPAR agonist
+polycarbophil,Bulk-forming laxative,0.9,llm,pharmacology knowledge: Bulk-forming laxative
+lubiprostone,Chloride channel activator (laxative),0.9,llm,pharmacology knowledge: Chloride channel activator (laxative)
+atosiban,Tocolytic,0.9,llm,pharmacology knowledge: Tocolytic
+corticotropin,ACTH / corticotropin,0.9,llm,pharmacology knowledge: ACTH / corticotropin
+ganirelix,GnRH antagonist,0.9,llm,pharmacology knowledge: GnRH antagonist
+l-glutamate,Amino acid / nutritional,0.9,llm,pharmacology knowledge: Amino acid / nutritional
+flumazenil,Benzodiazepine antagonist,0.9,llm,pharmacology knowledge: Benzodiazepine antagonist
+fructo oligosaccharide,Prebiotic,0.9,llm,pharmacology knowledge: Prebiotic
+poractant alfa,Pulmonary surfactant,0.9,llm,pharmacology knowledge: Pulmonary surfactant
+seratrodast,Thromboxane A2 antagonist,0.9,llm,pharmacology knowledge: Thromboxane A2 antagonist
+tocoferol,Vitamin E,0.9,llm,pharmacology knowledge: Vitamin E
+magnesium carbonate,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+human premix,Insulin,0.9,llm,pharmacology knowledge: Insulin
+vitamin b3,Vitamin B3 (niacin),0.9,llm,pharmacology knowledge: Vitamin B3 (niacin)
+deferoxamine,Iron chelator,0.9,llm,pharmacology knowledge: Iron chelator
+saline,IV fluid / parenteral nutrition,0.9,llm,pharmacology knowledge: IV fluid / parenteral nutrition
+liver extract,Herbal / traditional extract,0.9,llm,pharmacology knowledge: Herbal / traditional extract
+liver fraction 2 derived from fresh liver 01,Herbal / traditional extract,0.9,llm,pharmacology knowledge: Herbal / traditional extract
+fibrinogen,Clotting factor / haemostatic protein,0.9,llm,pharmacology knowledge: Clotting factor / haemostatic protein
+thrombin,Clotting factor / haemostatic protein,0.9,llm,pharmacology knowledge: Clotting factor / haemostatic protein
+romiplostim,Thrombopoietin receptor agonist,0.9,llm,pharmacology knowledge: Thrombopoietin receptor agonist
+rutin,Bioflavonoid,0.9,llm,pharmacology knowledge: Bioflavonoid
+vitamin d,Vitamin D analogue,0.9,llm,pharmacology knowledge: Vitamin D analogue
+acipimox,Lipid-lowering (nicotinic acid derivative),0.9,llm,pharmacology knowledge: Lipid-lowering (nicotinic acid derivative)
+becaplermin,Growth factor (topical/systemic),0.9,llm,pharmacology knowledge: Growth factor (topical/systemic)
+camostat,Serine protease inhibitor,0.9,llm,pharmacology knowledge: Serine protease inhibitor
+myo-inositol,Amino acid / nutritional,0.9,llm,pharmacology knowledge: Amino acid / nutritional
+strontium ranelate,Anti-osteoporotic (other),0.9,llm,pharmacology knowledge: Anti-osteoporotic (other)
+propyl thiouracil,Antithyroid,0.9,llm,pharmacology knowledge: Antithyroid
+l-histidine hydrochloride,Amino acid / nutritional,0.9,llm,pharmacology knowledge: Amino acid / nutritional
+pegaptanib,Anti-VEGF (ophthalmic),0.9,llm,pharmacology knowledge: Anti-VEGF (ophthalmic)
+nartograstim,Colony-stimulating factor,0.9,llm,pharmacology knowledge: Colony-stimulating factor
+meglumine diatrizoate,Radiographic contrast medium,0.9,llm,pharmacology knowledge: Radiographic contrast medium
+sodium diatrizoate,Radiographic contrast medium,0.9,llm,pharmacology knowledge: Radiographic contrast medium
+halothane,General anaesthetic,0.9,llm,pharmacology knowledge: General anaesthetic
+sevoflurane,General anaesthetic,0.9,llm,pharmacology knowledge: General anaesthetic
+colfosceril palmitate,Pulmonary surfactant,0.9,llm,pharmacology knowledge: Pulmonary surfactant
+yellow fever virus (live,Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+attenuated),Vaccine,0.9,llm,pharmacology knowledge: Vaccine
+tetanus immunoglobulin,Immunoglobulin / antiserum,0.9,llm,pharmacology knowledge: Immunoglobulin / antiserum
+snake venom antiserum,Immunoglobulin / antiserum,0.9,llm,pharmacology knowledge: Immunoglobulin / antiserum
+human antitetanus immunoglobulin,Immunoglobulin / antiserum,0.9,llm,pharmacology knowledge: Immunoglobulin / antiserum
+clostridium botulinum type a toxin-haemagglutinin complex,Immunoglobulin / antiserum,0.9,llm,pharmacology knowledge: Immunoglobulin / antiserum
+thiomersal,Preservative / antimicrobial excipient,0.9,llm,pharmacology knowledge: Preservative / antimicrobial excipient
+luvistin,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+chromium,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+copper,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+manganese,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+chromium chloride,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+copper sulphate,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+manganese sulphate,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+selenious acid,Mineral / electrolyte supplement,0.9,llm,pharmacology knowledge: Mineral / electrolyte supplement
+calcium pantothenate,Vitamin B5 (pantothenic acid),0.9,llm,pharmacology knowledge: Vitamin B5 (pantothenic acid)

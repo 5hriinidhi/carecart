@@ -1,0 +1,26 @@
+# --- large / regenerable data-prep artifacts ---
+# Raw third-party medicine dataset (18 MB zip, ~354 MB unzipped). Obtain separately.
+gradient-ascend-mobile-app/project/dataset/medicine_data.csv.zip
+gradient-ascend-mobile-app/project/dataset/medicine_data.csv
+
+# Regenerable outputs of the data_prep scripts (rebuild with the scripts in that folder)
+gradient-ascend-mobile-app/project/dataset/data_prep/drug_classes.csv
+gradient-ascend-mobile-app/project/dataset/data_prep/food_ingredient_method_log.csv
+
+# Duplicate of packaged_foods_india.csv
+gradient-ascend-mobile-app/project/dataset/packaged_foods_india-Ieivcg.csv
+
+# Third-party proposal documents
+gradient-ascend-mobile-app/project/uploads/*.pdf
+
+# --- python ---
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# --- os / editor ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

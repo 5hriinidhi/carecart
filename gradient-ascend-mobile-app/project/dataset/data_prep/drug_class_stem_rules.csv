@@ -1,0 +1,75 @@
+order,pattern,position,drug_class,example
+1,prazole,suffix,Proton pump inhibitor,omeprazole
+2,nidazole,suffix,Nitroimidazole antimicrobial,metronidazole
+3,conazole,suffix,Azole antifungal,fluconazole
+4,imazole,suffix,Azole antifungal,clotrimazole
+5,floxacin,suffix,Fluoroquinolone,ciprofloxacin
+6,cillin,suffix,Penicillin,amoxycillin
+7,penem,suffix,Carbapenem,meropenem
+8,cef,prefix,Cephalosporin,cefixime
+9,ceph,prefix,Cephalosporin,cephalexin
+10,cycline,suffix,Tetracycline,doxycycline
+11,sartan,suffix,Angiotensin receptor blocker (ARB),telmisartan
+12,pril,suffix,ACE inhibitor,ramipril
+13,dipine,suffix,Calcium channel blocker (dihydropyridine),amlodipine
+14,olol,suffix,Beta blocker,atenolol
+15,alol,suffix,Beta blocker,labetalol
+16,ilol,suffix,Beta blocker,carvedilol
+17,statin,suffix,Statin (HMG-CoA reductase inhibitor),atorvastatin
+18,gliptin,suffix,DPP-4 inhibitor,sitagliptin
+19,gliflozin,suffix,SGLT2 inhibitor,dapagliflozin
+20,glitazone,suffix,Thiazolidinedione,pioglitazone
+21,glinide,suffix,Meglitinide,repaglinide
+22,parin,suffix,Heparin / low-molecular-weight heparin,enoxaparin
+23,xaban,suffix,Direct oral anticoagulant (factor Xa inhibitor),apixaban
+24,gatran,suffix,Direct oral anticoagulant (thrombin inhibitor),dabigatran
+25,triptan,suffix,Triptan (5-HT1B/1D agonist),sumatriptan
+26,setron,suffix,5-HT3 receptor antagonist,ondansetron
+27,afil,suffix,PDE5 inhibitor,sildenafil
+28,dronic acid,suffix,Bisphosphonate,zoledronic acid
+29,dronate,suffix,Bisphosphonate,risedronate
+30,coxib,suffix,NSAID (COX-2 selective),etoricoxib
+31,profen,suffix,NSAID,ibuprofen
+32,caine,suffix,Local anaesthetic,lignocaine
+33,azepam,suffix,Benzodiazepine,diazepam
+34,zolam,suffix,Benzodiazepine,alprazolam
+35,barbital,suffix,Barbiturate,phenobarbital
+36,triptyline,suffix,Tricyclic antidepressant,amitriptyline
+37,pramine,suffix,Tricyclic antidepressant,imipramine
+38,oxetine,suffix,SSRI,fluoxetine
+39,opram,suffix,SSRI,citalopram
+40,faxine,suffix,SNRI,venlafaxine
+41,azosin,suffix,Alpha-1 blocker,prazosin
+42,osin,suffix,Alpha-1 blocker (uroselective),tamsulosin
+43,terol,suffix,Beta-2 agonist (bronchodilator),formoterol
+44,butamol,suffix,Beta-2 agonist (bronchodilator),salbutamol
+45,tropium,suffix,Antimuscarinic bronchodilator,tiotropium
+46,lukast,suffix,Leukotriene receptor antagonist,montelukast
+47,phylline,suffix,Methylxanthine bronchodilator,theophylline
+48,pridone,suffix,Atypical antipsychotic,risperidone
+49,apine,suffix,Atypical antipsychotic,olanzapine
+50,peridol,suffix,Typical antipsychotic (butyrophenone),haloperidol
+51,azine,suffix,Phenothiazine,chlorpromazine
+52,tadine,suffix,Antihistamine (2nd generation),loratadine
+53,tidine,suffix,H2 receptor antagonist,ranitidine
+54,gabalin,suffix,Gabapentinoid,pregabalin
+55,gabapentin,suffix,Gabapentinoid,gabapentin
+56,racetam,suffix,Racetam nootropic / antiepileptic,levetiracetam
+57,azepine,suffix,Carboxamide anticonvulsant,carbamazepine
+58,toin,suffix,Hydantoin anticonvulsant,phenytoin
+59,prost,suffix,Prostaglandin analogue,latanoprost
+60,sone,suffix,Corticosteroid,prednisone
+61,solone,suffix,Corticosteroid,prednisolone
+62,asone,suffix,Corticosteroid,dexamethasone
+63,onide,suffix,Corticosteroid (topical/inhaled),budesonide
+64,cort,suffix,Corticosteroid,deflazacort
+65,tinib,suffix,Kinase inhibitor,imatinib
+66,ciclib,suffix,CDK4/6 inhibitor,palbociclib
+67,mab,suffix,Monoclonal antibody,adalimumab
+68,navir,suffix,Antiretroviral (protease inhibitor),ritonavir
+69,tegravir,suffix,Antiretroviral (integrase inhibitor),dolutegravir
+70,ciclovir,suffix,Antiviral (nucleoside analogue),acyclovir
+71,vir,suffix,Antiviral,favipiravir
+72,bendazole,suffix,Anthelmintic (benzimidazole),albendazole
+73,mectin,suffix,Anthelmintic (avermectin),ivermectin
+74,quine,suffix,Antimalarial (aminoquinoline),chloroquine

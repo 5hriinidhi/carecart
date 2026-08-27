@@ -1,0 +1,1001 @@
+active_ingredient,medicine_count,drug_class,method,top_sub_category
+paracetamol,13332,Analgesic / antipyretic (aniline),lookup,Anti Rheumatics Non Steroidal Systemic
+clavulanic acid,9970,Beta-lactamase inhibitor,lookup,Broad Spectrum Penicillins
+amoxycillin,8478,Penicillin,lookup,Broad Spectrum Penicillins
+domperidone,7223,Dopamine antagonist antiemetic,lookup,Gastroprokinetics
+cefixime,6802,Cephalosporin,lookup,Cephalosporins
+diclofenac,6229,NSAID,lookup,Anti Rheumatics Non Steroidal Systemic
+cefpodoxime proxetil,6163,Cephalosporin,lookup,Cephalosporins
+ofloxacin,6148,Fluoroquinolone,stem,Intestinal Anti Infective Antidiarrhoeals
+cefuroxime,5552,Cephalosporin,lookup,Cephalosporins
+rabeprazole,5390,Proton pump inhibitor,lookup,Gastroprokinetics
+metformin,4830,Biguanide (antidiabetic),lookup,Oral Antidiabetics
+pantoprazole,4648,Proton pump inhibitor,lookup,Gastroprokinetics
+aceclofenac,4375,NSAID,lookup,Anti Rheumatics Non Steroidal Systemic
+levocetirizine,3650,Antihistamine (2nd generation),lookup,Systemic Antihistamines
+montelukast,3235,Leukotriene receptor antagonist,lookup,Systemic Antihistamines
+azithromycin,3171,Macrolide,lookup,Macrolides And Similar Types
+chlorpheniramine maleate,3076,Antihistamine (1st generation),lookup,Other Cough Cold Preparations
+clonazepam,3037,Benzodiazepine,lookup,Anti Epileptics
+phenylephrine,3033,Nasal / systemic decongestant (sympathomimetic),lookup,Other Cough Cold Preparations
+itraconazole,2940,Azole antifungal,lookup,Ophthalmological Anti Infectives Medicines
+methylcobalamin,2460,Vitamin B12,lookup,Anti Epileptics
+esomeprazole,2400,Proton pump inhibitor,lookup,Gastroprokinetics
+levosulpiride,2209,Prokinetic (dopamine D2 antagonist),lookup,Anti Ulcerants Acid Pump Inhibitors
+serratiopeptidase,2160,Proteolytic / anti-inflammatory enzyme,lookup,Anti Rheumatics Non Steroidal Systemic
+nimesulide,2123,NSAID,lookup,Anti Rheumatics Non Steroidal Systemic
+glimepiride,2100,Sulfonylurea (antidiabetic),lookup,Oral Antidiabetics
+ornidazole,2051,Nitroimidazole antimicrobial,lookup,Intestinal Anti Infective Antidiarrhoeals
+mefenamic acid,2031,NSAID,lookup,Anti Rheumatics Non Steroidal Systemic
+chlorzoxazone,2022,Skeletal muscle relaxant,lookup,Anti Rheumatics Non Steroidal Systemic
+metronidazole,1805,Nitroimidazole antimicrobial,lookup,Intestinal Anti Infective Antidiarrhoeals
+omeprazole,1693,Proton pump inhibitor,lookup,Anti Ulcerants Acid Pump Inhibitors
+clindamycin,1655,Lincosamide,lookup,Macrolides And Similar Types
+ibuprofen,1617,NSAID,lookup,Anti Rheumatics Non Steroidal Systemic
+pregabalin,1616,Gabapentinoid,lookup,Anti Epileptics
+dextromethorphan hydrobromide,1603,Antitussive,lookup,Other Cough Cold Preparations
+thiocolchicoside,1564,Skeletal muscle relaxant,lookup,Anti Rheumatics Non Steroidal Systemic
+deflazacort,1560,Corticosteroid,lookup,Anti Rheumatics Corticosteroid Combinations Systemic
+ambroxol,1539,Mucolytic / expectorant,lookup,Other Cough Cold Preparations
+escitalopram oxalate,1531,SSRI,lookup,Anti Depressants And Mood Stabilisers
+clotrimazole,1505,Azole antifungal,lookup,Topical Corticosteroid Combinations
+etoricoxib,1438,NSAID (COX-2 selective),lookup,Anti Rheumatics Non Steroidal Systemic
+ciprofloxacin,1431,Fluoroquinolone,stem,Intestinal Anti Infective Antidiarrhoeals
+cetirizine,1393,Antihistamine (2nd generation),lookup,Systemic Antihistamines
+dicyclomine,1364,Antispasmodic (anticholinergic/musculotropic),lookup,Antispasmodic Analgesic Combinations
+sulbactam,1330,Beta-lactamase inhibitor,lookup,Cephalosporins
+ondansetron,1299,5-HT3 receptor antagonist,lookup,Antacids Antiflatulents And Carminatives
+guaifenesin,1276,Mucolytic / expectorant,lookup,Other Cough Cold Preparations
+terbinafine,1262,Allylamine antifungal,lookup,Systemic Agents For Fungal Infections
+bromelain,1248,Proteolytic / anti-inflammatory enzyme,lookup,Anti Inflammatory Enzymes
+fexofenadine,1244,Antihistamine (2nd generation),lookup,Systemic Antihistamines
+ceftriaxone,1236,Cephalosporin,lookup,Cephalosporins
+cefalexin,1236,Cephalosporin,lookup,Cephalosporins
+cefotaxime,1234,Cephalosporin,lookup,Cephalosporins
+rutoside,1213,Proteolytic / anti-inflammatory enzyme,lookup,Anti Inflammatory Enzymes
+clobetasol,1208,Corticosteroid,lookup,Topical Corticosteroid Combinations
+gabapentin,1183,Gabapentinoid,lookup,Anti Epileptics
+telmisartan,1166,Angiotensin receptor blocker (ARB),lookup,Angiotensin Ii Antagonists Calcium Antagonists
+nandrolone decanoate,1155,Anabolic steroid,lookup,Anabolic Hormones Systemic
+trypsin,1132,Proteolytic / anti-inflammatory enzyme,lookup,Anti Inflammatory Enzymes
+ivermectin,1080,Anthelmintic,lookup,Anthelmintics Excluding Schistosomicides
+moxifloxacin,1068,Fluoroquinolone,stem,Ophthalmological Anti Infectives Medicines
+fluconazole,978,Azole antifungal,lookup,Systemic Agents For Fungal Infections
+vitamin b6,952,Vitamin B6,lookup,Methylcobalamin Combinations
+amitriptyline,949,Tricyclic antidepressant,lookup,Other Anti Malarials
+trypsin chymotrypsin,946,Proteolytic / anti-inflammatory enzyme,lookup,Anti Inflammatory Enzymes
+neomycin,924,Aminoglycoside,lookup,Topical Corticosteroid Combinations
+chlordiazepoxide,902,Benzodiazepine,lookup,Other Anti Malarials
+simethicone,891,Antiflatulent,lookup,All Other Anti Ulcerants
+terbutaline,883,Beta-2 agonist (bronchodilator),lookup,Other Cough Cold Preparations
+tinidazole,882,Nitroimidazole antimicrobial,lookup,Intestinal Anti Infective Antidiarrhoeals
+cyproheptadine,850,Antihistamine (1st generation),lookup,Appetite Stimulants
+sitagliptin,840,DPP-4 inhibitor,lookup,Oral Antidiabetics
+vildagliptin,840,DPP-4 inhibitor,lookup,Oral Antidiabetics
+naproxen,840,NSAID,lookup,Anti Rheumatics Non Steroidal Systemic
+nortriptyline,836,Tricyclic antidepressant,lookup,Anti Epileptics
+ampicillin,816,Penicillin,lookup,Broad Spectrum Penicillins
+cloxacillin,816,Penicillin,lookup,Broad Spectrum Penicillins
+levofloxacin,803,Fluoroquinolone,stem,Ophthalmological Anti Infectives Medicines
+piperacillin,784,Penicillin,lookup,Medium And Narrow Spectrum Penicillins
+amlodipine,778,Calcium channel blocker (dihydropyridine),lookup,Angiotensin Ii Antagonists Calcium Antagonists
+beclometasone,773,Corticosteroid,lookup,Topical Corticosteroid Combinations
+caffeine,769,Stimulant / wakefulness agent,lookup,Systemic Antihistamines
+tramadol,764,Opioid analgesic,lookup,Antifibrinolytics
+tazobactum,756,Beta-lactamase inhibitor,lookup,Medium And Narrow Spectrum Penicillins
+progesterone,752,Progestogen,lookup,Progestogens Excluding G3 A G3 F
+bromhexine,751,Mucolytic / expectorant,lookup,Other Cough Cold Preparations
+tranexamic acid,748,Antifibrinolytic / haemostatic,lookup,Antifibrinolytics
+alprazolam,743,Benzodiazepine,lookup,Tranquillisers
+methylprednisolone,728,Corticosteroid,lookup,Systemic Corticosteroids Plain
+olanzapine,704,Atypical antipsychotic,lookup,Atypical Antipsychotics
+oxetacaine,702,Mucosal protectant,lookup,All Other Anti Ulcerants
+dexamethasone,693,Corticosteroid,lookup,Systemic Corticosteroids Plain
+acyclovir,691,Antiviral (nucleoside analogue),lookup,Ophthalmological Anti Infectives Medicines
+acetylcysteine,688,Mucolytic / expectorant,lookup,Anti Rheumatics Non Steroidal Systemic
+aluminium hydroxide,678,Antacid,lookup,All Other Anti Ulcerants
+fluoxetine,644,SSRI,lookup,Anti Depressants And Mood Stabilisers
+norfloxacin,642,Fluoroquinolone,stem,Intestinal Anti Infective Antidiarrhoeals
+folic acid,638,Vitamin B9,lookup,Other Antiemetics And Antinauseants
+risperidone,637,Atypical antipsychotic,lookup,Atypical Antipsychotics
+salbutamol,634,Beta-2 agonist (bronchodilator),lookup,Other Cough Cold Preparations
+gentamicin,632,Aminoglycoside,lookup,Topical Corticosteroid Combinations
+ketoconazole,632,Azole antifungal,lookup,Topical Dermatological Antifungals
+rifaximin,632,Rifamycin,lookup,Intestinal Anti Infective Antidiarrhoeals
+teneligliptin,630,DPP-4 inhibitor,lookup,Oral Antidiabetics
+gliclazide,630,Sulfonylurea (antidiabetic),lookup,Oral Antidiabetics
+ketorolac,627,NSAID,lookup,Opthalmological Nsaids
+ramipril,621,ACE inhibitor,lookup,Ace Inhibitors Plain
+hydroxyzine,620,Antihistamine (1st generation),lookup,Systemic Antihistamines
+cefadroxil,618,Cephalosporin,lookup,Cephalosporins
+cefoperazone,617,Cephalosporin,lookup,Cephalosporins
+clopidogrel,616,Antiplatelet (P2Y12 inhibitor),lookup,Platelet Aggregation Inhibitors
+cefditoren,615,Cephalosporin,lookup,Cephalosporins
+quiniodochlor,612,Amphenicol,lookup,Cephalosporins
+lumefantrine,612,Antimalarial,lookup,Other Anti Malarials
+levosalbutamol,612,Beta-2 agonist (bronchodilator),lookup,Bronchodilators
+drotaverine,609,Antispasmodic (anticholinergic/musculotropic),lookup,Antispasmodics Combined With Other Products
+albendazole,600,Anthelmintic,lookup,Anthelmintics Excluding Schistosomicides
+chloramphenicol,593,Amphenicol,lookup,Otological Anti Infectives
+febuxostat,588,Xanthine oxidase inhibitor,lookup,Anti Gout Preparations
+acebrophylline,583,Methylxanthine bronchodilator,lookup,Non Steroidal Respiratory Anti Inflammatories
+linezolid,576,Oxazolidinone (weak MAO inhibitor),lookup,Macrolides And Similar Types
+meropenem,576,Carbapenem,lookup,Other Beta Lactam Antibacterials Excluding Penicillins Cephalosporins
+luliconazole,572,Azole antifungal,lookup,Topical Dermatological Antifungals
+tricholine citrate,570,Nootropic / neurotrophic,lookup,Appetite Stimulants
+aspirin,553,NSAID,lookup,Platelet Aggregation Inhibitors
+trihexyphenidyl,533,Anticholinergic (anti-parkinson),lookup,Atypical Antipsychotics
+faropenem,512,Penem (oral),lookup,Other Beta Lactam Antibacterials Excluding Penicillins Cephalosporins
+metoclopramide,512,Dopamine antagonist antiemetic,lookup,Gastroprokinetics
+itopride,512,Prokinetic (dopamine D2 antagonist),lookup,Gastroprokinetics
+miconazole,511,Azole antifungal,lookup,Topical Corticosteroid Combinations
+artemether,510,Antimalarial,lookup,Other Anti Malarials
+sucralfate,510,Mucosal protectant,lookup,All Other Anti Ulcerants
+cinnarizine,510,Calcium channel blocker (antivertigo/migraine),lookup,Antivertigo Products
+ursodeoxycholic acid,508,Bile acid,lookup,Bile Therapy And Cholagogues Bile Stone Therapy
+piracetam,506,Nootropic / neurotrophic,lookup,Nootropics
+fluticasone propionate,499,Corticosteroid,lookup,Bronchodilators
+theophylline,497,Methylxanthine bronchodilator,lookup,Other Cough Cold Preparations
+isoniazid,496,Antitubercular,lookup,Antitubercular Products
+polymyxin b,487,Polymyxin,lookup,Ophthalmological Anti Infectives Medicines
+betamethasone,486,Corticosteroid,lookup,Topical Corticosteroid Combinations
+norethisterone,484,Progestogen,lookup,Hormonal Contraceptives Systemic
+paracetamol/acetaminophen,476,Analgesic / antipyretic (aniline),lookup,Antifibrinolytics
+milk of magnesia,469,Antacid,lookup,All Other Anti Ulcerants
+tamsulosin,461,Alpha-1 blocker (uroselective),lookup,Benign Prostatic Hypertrophy Bph Products
+sertraline,455,SSRI,lookup,Anti Depressants And Mood Stabilisers
+clarithromycin,450,Macrolide,lookup,Macrolides And Similar Types
+povidone iodine,447,Antiseptic / disinfectant,lookup,Eye Ear Anti Infectives
+rifampicin,437,Rifamycin,lookup,Antitubercular Products
+doxycycline,432,Tetracycline,lookup,Tetracyclines And Combinations
+dexlansoprazole,421,Proton pump inhibitor,lookup,Anti Ulcerants Acid Pump Inhibitors
+dapagliflozin,420,SGLT2 inhibitor,lookup,Oral Antidiabetics
+remogliflozin etabonate,420,SGLT2 inhibitor,lookup,Oral Antidiabetics
+empagliflozin,420,SGLT2 inhibitor,lookup,Oral Antidiabetics
+atropine,420,Antispasmodic (anticholinergic/musculotropic),lookup,Intestinal Anti Infective Antidiarrhoeals
+linagliptin,419,DPP-4 inhibitor,lookup,Oral Antidiabetics
+mesalazine,419,Aminosalicylate,lookup,Antacids Antiflatulents And Carminatives
+etofylline,415,Methylxanthine bronchodilator,lookup,Other Cough Cold Preparations
+sildenafil,414,PDE5 inhibitor,lookup,Erectile Dysfunction Products
+lorazepam,414,Benzodiazepine,lookup,Systemic Antihistamines
+carboxymethylcellulose,413,Ocular lubricant,lookup,Artificial Tears And Ocular Lubricants
+bilastine,413,Antihistamine (2nd generation),lookup,Systemic Antihistamines
+pheniramine,412,Antihistamine (1st generation),lookup,Systemic Antihistamines
+citicoline,407,Nootropic / neurotrophic,lookup,Nootropics
+tizanidine,403,Skeletal muscle relaxant,lookup,Anti Rheumatics Non Steroidal Systemic
+etizolam,398,Benzodiazepine,lookup,Hypnotics Sedatives
+metaxalone,390,Skeletal muscle relaxant,lookup,Anti Rheumatics Non Steroidal Systemic
+paroxetine,388,SSRI,lookup,Anti Depressants And Mood Stabilisers
+betahistine,388,Antivertigo (histamine analogue),lookup,Antivertigo Products
+sorbitol,387,Osmotic laxative,lookup,Appetite Stimulants
+doxylamine,384,Antihistamine (1st generation),lookup,Other Antiemetics And Antinauseants
+indomethacin,379,NSAID,lookup,Anti Rheumatics Non Steroidal Systemic
+budesonide,378,Corticosteroid,lookup,Bronchodilators
+lidocaine,375,Local anaesthetic,lookup,Anaesthetics Local
+propranolol,369,Beta blocker,lookup,Tranquillisers
+methotrexate,364,Immunosuppressant / DMARD,lookup,Antimetabolites
+dimethicone,364,Antiflatulent,lookup,Antacids Antiflatulents And Carminatives
+amikacin,361,Aminoglycoside,lookup,Ophthalmological Anti Infectives Medicines
+ranitidine,361,H2 receptor antagonist,lookup,Anti Ulcerants H2 Antagonists
+tacrolimus,360,Immunosuppressant (calcineurin / mTOR),lookup,Immunosuppressive Agents
+artesunate,357,Antimalarial,lookup,Other Anti Malarials
+ethinyl estradiol,347,Estrogen,lookup,Hormonal Contraceptives Systemic
+chloroquine,346,Antimalarial,lookup,Ophthalmological Anti Infectives Medicines
+framycetin,346,Aminoglycoside,lookup,Ophthalmological Anti Infectives Medicines
+erythromycin,346,Macrolide,lookup,Ophthalmological Anti Infectives Medicines
+clomiphene,340,Selective estrogen receptor modulator,lookup,Gonadotrophins Including Other Ovulation Stimulants
+formoterol,336,Beta-2 agonist (bronchodilator),lookup,Bronchodilators
+magnesium,334,Mineral / electrolyte supplement,llm,All Other Anti Ulcerants
+cilnidipine,328,Calcium channel blocker (dihydropyridine),lookup,Angiotensin Ii Antagonists Calcium Antagonists
+quetiapine,320,Atypical antipsychotic,lookup,Atypical Antipsychotics
+diphenoxylate,316,Antimotility agent,lookup,Intestinal Anti Infective Antidiarrhoeals
+hydrocortisone,312,Corticosteroid,lookup,Ophthalmological Anti Infectives Medicines
+prednisolone,309,Corticosteroid,lookup,Eye Ear Corticosteroids
+piroxicam,306,NSAID,lookup,Topical Anti Rheumatic Non Steroidal
+ethambutol,304,Antitubercular,lookup,Antitubercular Products
+flunarizine,300,Calcium channel blocker (antivertigo/migraine),lookup,Antivertigo Products
+levetiracetam,296,Antiepileptic,lookup,Anti Epileptics
+divalproex,296,Antiepileptic,lookup,Anti Epileptics
+diphenhydramine,291,Antihistamine (1st generation),lookup,Systemic Antihistamines
+lincomycin,288,Lincosamide,lookup,Macrolides And Similar Types
+metoprolol succinate,288,Beta blocker,llm,Angiotensin Ii Antagonists Beta Blockers
+thyroxine,288,Thyroid hormone,lookup,Thyroid Preparation
+lansoprazole,287,Proton pump inhibitor,lookup,Anti Ulcerants Acid Pump Inhibitors
+dutasteride,287,5-alpha reductase inhibitor,lookup,Benign Prostatic Hypertrophy Bph Products
+niacinamide,278,Vitamin B3 (niacin),llm,Methylcobalamin Combinations
+melatonin,277,Melatonergic hypnotic,llm,Hypnotics Sedatives
+dicloxacillin,272,Penicillin,lookup,Broad Spectrum Penicillins
+ethamsylate,272,Antifibrinolytic / haemostatic,lookup,Antifibrinolytics
+dimenhydrinate,270,Antihistamine (1st generation),lookup,Antivertigo Products
+hydrochlorothiazide,269,Thiazide / thiazide-like diuretic,lookup,Ace Inhibitors Combined With Diuretics
+flupenthixol,266,Typical antipsychotic,lookup,Conventional Antipsychotics
+levonorgestrel,264,Progestogen,lookup,Hormonal Contraceptives Systemic
+glucosamine,260,SYSADOA (osteoarthritis),llm,Products For Treatment Of Osteoarthritis
+cinitapride,256,Prokinetic,subcategory,Gastroprokinetics
+aripiprazole,256,Atypical antipsychotic,lookup,Atypical Antipsychotics
+arteether,255,Antimalarial,lookup,Other Anti Malarials
+griseofulvin,250,Antifungal (griseofulvin),lookup,Systemic Agents For Fungal Infections
+fusidic acid,250,Topical antibacterial (acne/skin),lookup,Topical Antibiotics And Or Sulphonamids
+bacitracin,249,,unmapped,Ophthalmological Anti Infectives Medicines
+nicotinamide,248,Vitamin B3 (niacin),llm,Topical Anti Acne Preparations
+zolpidem,247,Z-drug hypnotic,lookup,Hypnotics Sedatives
+stanozolol,245,Anabolic steroid,lookup,Anabolic Hormones Systemic
+codeine,240,Opioid analgesic,lookup,Antitussives With Codeine
+trifluoperazine,237,Typical antipsychotic,lookup,Conventional Antipsychotics
+pyrazinamide,228,Antitubercular,lookup,Antitubercular Products
+menthol,228,Counterirritant / topical analgesic,llm,Other Cough Cold Preparations
+penicillin g,224,Penicillin,lookup,Medium And Narrow Spectrum Penicillins
+enoxaparin,224,Heparin / low-molecular-weight heparin,stem,Heparins
+isoxsuprine,224,Tocolytic,llm,Labour Inhibitors
+nepafenac,224,NSAID (ophthalmic),llm,Opthalmological Nsaids
+silodosin,220,Alpha-1 blocker (uroselective),lookup,Benign Prostatic Hypertrophy Bph Products
+adapalene,219,Topical retinoid,lookup,Topical Anti Acne Preparations
+ammonium chloride,219,Expectorant,llm,Other Cough Cold Preparations
+benfotiamine,217,Vitamin B1,lookup,Methylcobalamin Combinations
+lactulose,216,Osmotic laxative,lookup,Softners Emollients
+mometasone,214,Corticosteroid,lookup,Topical Dermatological Antifungals
+diazepam,213,Benzodiazepine,lookup,Tranquillisers
+mupirocin,211,Topical antibacterial (acne/skin),lookup,Topical Antibiotics And Or Sulphonamids
+taurine,210,Amino acid / nutritional,lookup,Oral Antidiabetics
+voglibose,210,Alpha-glucosidase inhibitor,lookup,Oral Antidiabetics
+glipizide,210,Sulfonylurea (antidiabetic),lookup,Oral Antidiabetics
+canagliflozin,210,SGLT2 inhibitor,lookup,Oral Antidiabetics
+salicylic acid,210,Keratolytic,lookup,Topical Corticosteroid Combinations
+salmeterol,210,Beta-2 agonist (bronchodilator),lookup,Bronchodilators
+enalapril,208,ACE inhibitor,lookup,Ace Inhibitors Plain
+olmesartan medoxomil,208,Angiotensin receptor blocker (ARB),llm,Angiotensin Ii Antagonists Calcium Antagonists
+clidinium,207,Antispasmodic (anticholinergic/musculotropic),lookup,Antispasmodic Ataractic Combinations
+desloratadine,207,Antihistamine (2nd generation),lookup,Systemic Antihistamines
+sodium citrate,205,Electrolyte / rehydration,lookup,Other Cough Cold Preparations
+loratadine,205,Antihistamine (2nd generation),lookup,Systemic Antihistamines
+pyrimethamine,204,Antimalarial,lookup,Other Anti Malarials
+sulphadoxine,204,,unmapped,Other Anti Malarials
+human chorionic gonadotropin,204,Gonadotropin,llm,Gonadotrophins Including Other Ovulation Stimulants
+sodium picosulfate,203,Stimulant laxative,lookup,Contact Laxatives
+levo-carnitine,198,Amino acid / nutritional,llm,Other Nutrients
+prochlorperazine,198,Dopamine antagonist antiemetic,lookup,Other Antiemetics And Antinauseants
+dapoxetine,198,SSRI,stem,Erectile Dysfunction Products
+recombinant human erythropoietin alfa,196,Erythropoiesis-stimulating agent,llm,Erythropoietin Products
+tadalafil,195,PDE5 inhibitor,lookup,Erectile Dysfunction Products
+mirtazapine,194,Atypical antidepressant,lookup,Anti Depressants And Mood Stabilisers
+duloxetine,194,SNRI,lookup,Anti Depressants And Mood Stabilisers
+desvenlafaxine,194,SNRI,lookup,Anti Depressants And Mood Stabilisers
+melitracen,190,Tricyclic antidepressant,llm,Conventional Antipsychotics
+pancreatin,189,Digestive enzyme (pancreatic),lookup,Pancreatic Enzymes
+lactobacillus,188,Tetracycline,subcategory,Tetracyclines And Combinations
+methyl sulfonyl methane,180,SYSADOA (osteoarthritis),llm,Products For Treatment Of Osteoarthritis
+doxofylline,177,Methylxanthine bronchodilator,lookup,Bronchodilators
+rosuvastatin,176,Statin (HMG-CoA reductase inhibitor),lookup,Platelet Aggregation Inhibitors
+medroxyprogesterone acetate,176,Progestogen,llm,Hormonal Contraceptives Systemic
+ipratropium,174,Antimuscarinic bronchodilator,lookup,Bronchodilators
+paclitaxel,170,Cytotoxic chemotherapy,llm,Vinca Alkaloids And Other Plant Products
+diacerein,170,NSAID,lookup,Products For Treatment Of Osteoarthritis
+tolnaftate,168,Topical antifungal,llm,Topical Corticosteroid Combinations
+sodium chloride,167,Electrolyte / rehydration,lookup,Respiratory Stimulants
+donepezil,165,Cholinesterase inhibitor,lookup,Anti Alzheimer Products
+tobramycin,165,Aminoglycoside,lookup,Eye Ear Anti Infectives
+hydroxypropylmethylcellulose,163,Ocular lubricant,llm,Opthalmological Surgical Aids
+loteprednol etabonate,162,Corticosteroid,llm,Eye Ear Anti Infectives Corticosteroid Combinations
+trimethoprim,160,Dihydrofolate reductase inhibitor,lookup,Trimethoprim And Similar Formulations
+letrozole,160,Aromatase inhibitor,lookup,Cytostatic Hormone Antagonists
+racecadotril,160,Antimotility agent,lookup,All Other Antidiarrhoeals
+magaldrate,160,Antacid,lookup,All Other Anti Ulcerants
+colistin sulphate,158,Polymyxin,llm,Intestinal Anti Infective Antidiarrhoeals
+furazolidone,158,Nitrofuran antibacterial,lookup,Intestinal Anti Infective Antidiarrhoeals
+colistimethate sodium,158,Polymyxin,llm,Intestinal Anti Infective Antidiarrhoeals
+clioquinol,156,Amphenicol,lookup,Topical Corticosteroid Combinations
+tolperisone,156,Skeletal muscle relaxant,lookup,Muscle Relaxants Centrally Acting
+nitazoxanide,154,Antiprotozoal (other),lookup,Schistosomicides
+vitamin d3,152,Vitamin D analogue,lookup,Other Vitamins
+mycophenolate mofetil,150,Immunosuppressant / DMARD,lookup,Immunosuppressive Agents
+lactitol,149,Osmotic laxative,lookup,Bulk Producers
+phenytoin,148,Antiepileptic,lookup,Anti Epileptics
+clobazam,148,Benzodiazepine,lookup,Anti Epileptics
+oxcarbazepine,148,Antiepileptic,lookup,Anti Epileptics
+carbamazepine,148,Antiepileptic,lookup,Anti Epileptics
+phenobarbitone,148,Barbiturate,lookup,Anti Epileptics
+topiramate,148,Antiepileptic,lookup,Anti Epileptics
+orlistat,147,Lipase inhibitor (anti-obesity),llm,Antiobesity Preparations Excluding Dietetics
+levodropropizine,147,Antitussive,llm,Other Cough Cold Preparations
+roxithromycin,144,Macrolide,lookup,Macrolides And Similar Types
+hydroxyurea,144,Cytotoxic chemotherapy,llm,All Other Antineoplastics
+promethazine,144,Antihistamine (1st generation),lookup,Other Antiemetics And Antinauseants
+losartan,142,Angiotensin receptor blocker (ARB),lookup,Angiotensin Ii Antagonists Calcium Antagonists
+xylometazoline,142,Nasal / systemic decongestant (sympathomimetic),lookup,Topical Nasal Preparations Non Steroidal
+sulfamethoxazole,136,Sulfonamide antibacterial,lookup,Trimethoprim And Similar Formulations
+liquid paraffin,136,Emollient / barrier,lookup,Contact Laxatives
+methylphenidate,136,Stimulant / wakefulness agent,lookup,Nootropics
+midazolam,136,Benzodiazepine,lookup,Tranquillisers
+secnidazole,135,Nitroimidazole antimicrobial,lookup,Gynaecological Antibiotics Sulphonamides
+benzoyl peroxide,135,Keratolytic,lookup,Topical Anti Acne Preparations
+azelastine,135,Antihistamine H1 (ocular),lookup,Topical Nasal Preparations Steroidal
+misoprostol,134,Prostaglandin analogue (GI),lookup,Anti Ulcerants Prostaglandins
+haloperidol,133,Typical antipsychotic,lookup,Conventional Antipsychotics
+flavoxate,132,Overactive bladder agent,lookup,Fluoroquinolones
+ticagrelor,132,Antiplatelet (P2Y12 inhibitor),lookup,Platelet Aggregation Inhibitors
+chlorpromazine,132,Typical antipsychotic,lookup,Conventional Antipsychotics
+clozapine,128,Atypical antipsychotic,lookup,Atypical Antipsychotics
+amisulpride,128,Atypical antipsychotic,lookup,Atypical Antipsychotics
+naphazoline,127,Nasal / systemic decongestant (sympathomimetic),lookup,Ocular Anti Allergics Decongestants Antiseptics
+l-ornithine l-aspartate,126,Hepatoprotective,lookup,Hepatic Protectors Lipotropics
+pentazocine,126,Opioid analgesic,lookup,Non Narcotics And Anti Pyretics
+sodium bicarbonate,124,Antacid,lookup,Antacids Antiflatulents And Carminatives
+olopatadine,124,Antihistamine H1 (ocular),lookup,Opthalmological Nsaids
+atorvastatin,121,Statin (HMG-CoA reductase inhibitor),lookup,Platelet Aggregation Inhibitors
+memantine,121,NMDA receptor antagonist,lookup,Anti Alzheimer Products
+tenofovir disoproxil fumarate,120,Antiretroviral,lookup,Hiv Antivirals
+cyclophosphamide,120,Cytotoxic chemotherapy,llm,Alkylating Agents
+loperamide,120,Antimotility agent,lookup,Motility Inhibitors
+mebeverine,120,Antispasmodic (anticholinergic/musculotropic),lookup,Plain Antispasmodics And Anticholinergics
+timolol,120,Beta blocker,stem,Miotics And Antiglaucoma Preparations
+dosulepin,119,Tricyclic antidepressant,lookup,All Other Cns Drugs
+finasteride,119,5-alpha reductase inhibitor,lookup,Benign Prostatic Hypertrophy Bph Products
+sevelamer,114,Phosphate binder,lookup,Hyperkalaemia Hyperphosphataemia Products
+nitrofurantoin,114,Nitrofuran antibacterial,lookup,Urinary Anti Infectives And Antiseptics
+fosfomycin,112,Fosfomycin,lookup,Other Antibacterials
+doxorubicin,112,Cytotoxic chemotherapy,llm,Antineoplastic Antibiotics
+silymarin,112,Hepatoprotective,lookup,Hepatic Protectors Lipotropics
+famotidine,110,H2 receptor antagonist,lookup,Anti Ulcerants H2 Antagonists
+ferric carboxymaltose,110,Iron supplement,lookup,Haematinics Iron And All Combinations
+iron sucrose,110,Iron supplement,llm,Haematinics Iron And All Combinations
+chlorthalidone,105,Thiazide / thiazide-like diuretic,lookup,Angiotensin Ii Antagonists Combined With Anti Hypertensives
+cerebroprotein hydrolysate,105,Nootropic / neurotrophic,llm,All Other Cns Drugs
+amorolfine,104,Topical antifungal,llm,Topical Dermatological Antifungals
+sertaconazole,104,Azole antifungal,lookup,Topical Dermatological Antifungals
+primaquine,102,Antimalarial,lookup,Other Anti Malarials
+glycopyrrolate,102,Antimuscarinic bronchodilator,lookup,Plain Antispasmodics And Anticholinergics
+ademetionine,102,Hepatoprotective,lookup,Other Nutrients
+buclizine,100,Antihistamine (1st generation),lookup,Appetite Stimulants
+mifepristone,99,Antiprogestogen,llm,Other Sex Hormones And Similar Products
+potassium citrate,99,Electrolyte / rehydration,lookup,All Other Urological Products
+estradiol,97,Estrogen,lookup,Hormonal Contraceptives Systemic
+imipramine,97,Tricyclic antidepressant,lookup,Anti Depressants And Mood Stabilisers
+lithium carbonate,97,Mood stabiliser,lookup,Anti Depressants And Mood Stabilisers
+imipenem,96,Carbapenem,lookup,Other Beta Lactam Antibacterials Excluding Penicillins Cephalosporins
+cilastatin,96,Statin (HMG-CoA reductase inhibitor),stem,Other Beta Lactam Antibacterials Excluding Penicillins Cephalosporins
+camylofin,96,Antispasmodic (anticholinergic/musculotropic),lookup,Plain Antispasmodics And Anticholinergics
+baclofen,96,Skeletal muscle relaxant,lookup,Muscle Relaxants Centrally Acting
+choline salicylate,96,,unmapped,Other Stomatologicals
+benzocaine,95,Local anaesthetic,lookup,Other Otologicals
+polyethylene glycol,94,Osmotic laxative,lookup,Artificial Tears And Ocular Lubricants
+armodafinil,92,Stimulant / wakefulness agent,lookup,Nootropics
+propylene glycol,91,Ocular lubricant,llm,Artificial Tears And Ocular Lubricants
+imatinib mesylate,90,Kinase inhibitor,llm,All Other Antineoplastics
+etoposide,90,Cytotoxic chemotherapy,llm,Vinca Alkaloids And Other Plant Products
+levodopa,90,Dopaminergic anti-parkinson,lookup,Anti Parkinson Drugs
+tapentadol,90,Opioid analgesic,lookup,Narcotics
+temozolomide,88,Cytotoxic chemotherapy,llm,Alkylating Agents
+iron,88,Iron supplement,llm,Haematinics Iron And All Combinations
+dydrogesterone,88,Progestogen,lookup,Hormonal Contraceptives Systemic
+hydroxyprogesterone,88,Progestogen,lookup,Hormonal Contraceptives Systemic
+allylestrenol,88,Progestogen,lookup,Hormonal Contraceptives Systemic
+mirabegron,88,Overactive bladder agent,lookup,Urinary Incontinence Products
+benzathine penicillin g,84,Penicillin,subcategory,Medium And Narrow Spectrum Penicillins
+darbepoetin alfa,84,Erythropoiesis-stimulating agent,llm,Erythropoietin Products
+granisetron,84,5-HT3 receptor antagonist,lookup,Serotonin Antagonist Antiemetics Antinauseants
+orciprenaline,84,Beta-2 agonist (bronchodilator),llm,Bronchodilators
+coenzyme q10,82,Antioxidant / micronutrient,lookup,Gonadotrophins Including Other Ovulation Stimulants
+carbidopa,81,Dopaminergic anti-parkinson,lookup,Anti Parkinson Drugs
+pramipexole,81,Dopaminergic anti-parkinson,lookup,Anti Parkinson Drugs
+levocloperastine,81,Antitussive,llm,Antitussive Bronchodilator Expectorant
+pyrantel pamoate,80,Anthelmintic,lookup,Anthelmintics Excluding Schistosomicides
+vancomycin,80,Glycopeptide,lookup,Other Antibacterials
+heparin,80,Heparin / low-molecular-weight heparin,stem,Heparins
+fluorometholone,80,Corticosteroid,llm,Eye Ear Anti Infectives Corticosteroid Combinations
+disodium hydrogen citrate,80,Electrolyte / rehydration,lookup,All Other Urological Products
+calcium,79,Mineral / electrolyte supplement,llm,Calcium Products
+ispaghula,78,Bulk laxative,lookup,Bulk Producers
+benzydamine,77,,unmapped,Topical Anti Rheumatic Non Steroidal
+diethylcarbamazine,76,Anthelmintic,lookup,Other Anti Parasitic Agents
+perindopril erbumine,76,ACE inhibitor,llm,Ace Inhibitors Plain
+tretinoin,76,Topical retinoid,lookup,Topical Anti Acne Preparations
+nadifloxacin,76,Topical antibacterial (acne/skin),lookup,Topical Antibiotics And Or Sulphonamids
+methylergometrine,76,Ergot alkaloid,lookup,Labour Inducers
+nitrazepam,76,Benzodiazepine,lookup,Hypnotics Sedatives
+caspofungin,76,Echinocandin antifungal,lookup,Varicose Therapy Systemic
+netilmicin,75,Aminoglycoside,lookup,Aminoglycosides
+testosterone,74,Androgen,llm,All Other Therapeutic Products
+chlorbutol,73,Antiseptic / disinfectant,llm,Other Otologicals
+efavirenz,72,Antiretroviral,lookup,Hiv Antivirals
+lamivudine,72,Antiretroviral,lookup,Hiv Antivirals
+teicoplanin,72,Glycopeptide,lookup,Other Antibacterials
+tamoxifen,72,Selective estrogen receptor modulator,lookup,Cytostatic Hormone Antagonists
+hyoscine butylbromide,72,Antispasmodic (anticholinergic/musculotropic),lookup,Plain Antispasmodics And Anticholinergics
+meclizine,72,Antihistamine (1st generation),lookup,Other Antiemetics And Antinauseants
+paradichlorobenzene,72,Antiseptic / disinfectant,llm,Other Otologicals
+turpentine oil,72,Counterirritant / topical analgesic,llm,Other Otologicals
+bisacodyl,70,Stimulant laxative,lookup,Contact Laxatives
+zinc sulfate,70,Corticosteroid,subcategory,Systemic Corticosteroids Plain
+brimonidine,70,Alpha-2 adrenergic agonist (antiglaucoma),llm,Miotics And Antiglaucoma Preparations
+meloxicam,68,NSAID,lookup,Topical Anti Rheumatic Non Steroidal
+alfuzosin,68,Alpha-1 blocker (uroselective),lookup,Benign Prostatic Hypertrophy Bph Products
+dehydroepiandrosterone,66,Androgen,llm,Androgens Excluding G3 E G3 F
+diloxanide,65,,unmapped,Amebicides
+capecitabine,65,Cytotoxic chemotherapy,llm,Antimetabolites
+vitamin c,65,Vitamin C,lookup,Haematinics Iron And All Combinations
+fluticasone furoate,65,Corticosteroid,lookup,Topical Nasal Preparations Steroidal
+ertapenem,64,Carbapenem,lookup,Other Beta Lactam Antibacterials Excluding Penicillins Cephalosporins
+minocycline,64,Tetracycline,lookup,Tetracyclines And Combinations
+amlexanox,64,,unmapped,All Other Anti Ulcerants
+lurasidone,64,Atypical antipsychotic,lookup,Atypical Antipsychotics
+phenazone,63,Analgesic / antipyretic,subcategory,Non Narcotics And Anti Pyretics
+resveratrol,63,Antioxidant / cytoprotective,llm,Methylcobalamin Combinations
+albumin,62,Plasma volume expander,llm,Dextrans
+lisinopril,62,ACE inhibitor,lookup,Ace Inhibitors Plain
+vinpocetine,61,Nootropic / neurotrophic,lookup,Vinca Alkaloids And Other Plant Products
+azathioprine,60,Immunosuppressant / DMARD,lookup,Immunosuppressive Agents
+chlorhexidine gluconate,60,Antiseptic / disinfectant,llm,Topical Corticosteroid Combinations
+rebamipide,60,Mucosal protectant,lookup,Antacids Antiflatulents And Carminatives
+travoprost,60,Prostaglandin analogue (ophthalmic),lookup,Miotics And Antiglaucoma Preparations
+bimatoprost,60,Prostaglandin analogue (ophthalmic),lookup,Miotics And Antiglaucoma Preparations
+oxymetazoline,60,Nasal / systemic decongestant (sympathomimetic),lookup,Other Opthalmologicals
+eperisone,60,Skeletal muscle relaxant,lookup,Muscle Relaxants Centrally Acting
+hyaluronic acid,60,SYSADOA (osteoarthritis),llm,Products For Treatment Of Osteoarthritis
+fluorouracil,58,Cytotoxic chemotherapy,llm,Alkylating Agents
+octreotide acetate,58,Somatostatin analogue,llm,Antigrowth Hormones
+streptomycin,57,Aminoglycoside,lookup,Antitubercular Products
+disulfiram,57,Alcohol deterrent (ALDH inhibitor),llm,Drugs Used In Alcohol Dependence
+prulifloxacin,56,Fluoroquinolone,stem,Fluoroquinolones
+entecavir,56,Antiviral (anti-hepatitis),lookup,Hiv Antivirals
+tenofovir alafenamide,56,Antiretroviral,lookup,Hiv Antivirals
+emtricitabine,56,Antiretroviral,lookup,Hiv Antivirals
+tigecycline,56,Tetracycline,lookup,Other Antibacterials
+dextrose,56,IV fluid / parenteral nutrition,llm,Standard Solutions
+glycerin,56,,unmapped,Solutions For Osmotic Therapy
+glutathione,56,Antioxidant / cytoprotective,llm,Hepatic Protectors Lipotropics
+ritodrine,56,Tocolytic,llm,Labour Inhibitors
+triprolidine,56,Antihistamine (1st generation),lookup,Antitussives With Codeine
+valacyclovir,55,Antiviral (nucleoside analogue),lookup,Antivirals Excluding Hiv Products
+tocilizumab,54,Biologic DMARD (anti-TNF / interleukin),lookup,All Other Antineoplastics
+bevacizumab,54,Monoclonal antibody,stem,All Other Antineoplastics
+abiraterone acetate,54,Antineoplastic - hormonal,llm,All Other Antineoplastics
+colchicine,54,Anti-gout (acute),lookup,Anti Gout Preparations
+tolvaptan,54,Vasopressin V2 receptor antagonist,llm,All Other Urological Products
+selenium,53,Antioxidant / micronutrient,lookup,Topical Dermatological Antifungals
+citric acid,53,,unmapped,All Other Urological Products
+phenoxyethanol,52,Preservative / antimicrobial excipient,llm,Topical Dermatological Antifungals
+eberconazole,52,Azole antifungal,lookup,Topical Dermatological Antifungals
+cetrimide,52,Antiseptic / disinfectant,lookup,Topical Dermatological Antifungals
+oxiconazole,52,Azole antifungal,lookup,Topical Dermatological Antifungals
+oxychloro complex,52,Ophthalmic preservative / oxidant,llm,Artificial Tears And Ocular Lubricants
+allopurinol,52,Xanthine oxidase inhibitor,lookup,Anti Gout Preparations
+inactivated influenza vaccine,52,Vaccine,llm,Pure Vaccines
+arterolane,51,Antimalarial,lookup,Other Anti Malarials
+piperaquine,51,Antimalarial,lookup,Other Anti Malarials
+mefloquine,51,Antimalarial,lookup,Other Anti Malarials
+quinine,51,Antimalarial,lookup,Other Anti Malarials
+fenticonazole,51,Azole antifungal,lookup,Topical Dermatological Antifungals
+leuprolide,51,Antineoplastic - hormonal,llm,Gonadotrophins Including Other Ovulation Stimulants
+atracurium,51,Neuromuscular blocking agent,llm,Muscle Relaxants Peripherally Acting
+sofosbuvir,50,Antiviral (anti-hepatitis),lookup,Antivirals Excluding Hiv Products
+voriconazole,50,Azole antifungal,lookup,Systemic Agents For Fungal Infections
+docetaxel,50,Cytotoxic chemotherapy,llm,Vinca Alkaloids And Other Plant Products
+dorzolamide,50,Carbonic anhydrase inhibitor,lookup,Miotics And Antiglaucoma Preparations
+calcitonin,50,Calcitonin,llm,Medicines For Osteoporosis
+human normal immunoglobulin,50,Immunoglobulin / antiserum,llm,Polyvalent Immunoglobulins Intramuscular
+latanoprost,49,Prostaglandin analogue (ophthalmic),lookup,Miotics And Antiglaucoma Preparations
+anastrozole,48,Aromatase inhibitor,lookup,Cytostatic Hormone Antagonists
+cyclobenzaprine,48,Skeletal muscle relaxant,lookup,Muscle Relaxants Centrally Acting
+apremilast,48,Immunosuppressant / DMARD,lookup,Products For Treatment Of Rheumatoid Arthritis
+pirfenidone,48,Antifibrotic,llm,Respiratory Stimulants
+alpha ketoanalogue,48,,unmapped,Urinary Incontinence Products
+solifenacin,48,Overactive bladder agent,lookup,Urinary Incontinence Products
+coal tar,47,Keratolytic,lookup,Topical Corticosteroid Combinations
+filgrastim,46,Colony-stimulating factor,llm,Immunostimulating Agents Excluding Interferons
+modafinil,46,Stimulant / wakefulness agent,lookup,Nootropics
+pyritinol,46,Nootropic / neurotrophic,subcategory,Nootropics
+famciclovir,45,Antiviral (nucleoside analogue),lookup,Antivirals Excluding Hiv Products
+flurbiprofen,45,NSAID,lookup,Opthalmological Nsaids
+zoledronic acid,45,Bisphosphonate,lookup,Medicines For Osteoporosis
+leflunomide,45,Immunosuppressant / DMARD,lookup,Products For Treatment Of Rheumatoid Arthritis
+magnesium citrate,45,Mineral / electrolyte supplement,llm,All Other Urological Products
+tetracycline,44,Tetracycline,lookup,Tetracyclines And Combinations
+prasugrel,44,Antiplatelet (P2Y12 inhibitor),lookup,Platelet Aggregation Inhibitors
+caroverine,44,Antispasmodic (anticholinergic/musculotropic),llm,Antispasmodics Combined With Other Products
+dienogest,44,Progestogen,llm,Hormonal Contraceptives Systemic
+estriol,44,Estrogen,lookup,Hormonal Contraceptives Systemic
+conjugated estrogens,44,Estrogen,lookup,Hormonal Contraceptives Systemic
+ginkgo biloba,44,Nootropic / neurotrophic,lookup,Nootropics
+bromfenac,44,NSAID (ophthalmic),llm,Opthalmological Nsaids
+mitomycin,42,Cytotoxic chemotherapy,llm,Antineoplastic Antibiotics
+calcium leucovorin,42,Folinic acid rescue / detox agent,llm,Detoxifying Agents For Antineoplastic Treatment
+desogestrel,42,Progestogen,lookup,Oestrogen With Progestogen Combinations Excluding G3 A
+bupropion,42,Atypical antidepressant,lookup,Anti Smoking Products
+tiotropium,42,Antimuscarinic bronchodilator,lookup,Bronchodilators
+indacaterol,42,Beta-2 agonist (bronchodilator),lookup,Bronchodilators
+dithranol,41,Antipsoriatic,llm,Topical Corticosteroid Combinations
+sodium cromoglycate,41,Mast cell stabiliser,lookup,Topical Nasal Preparations Non Steroidal
+insulin isophane/nph,40,Insulin,llm,Human Insulins And Analogues
+human insulin/soluble insulin,40,Insulin,llm,Human Insulins And Analogues
+mebendazole,40,Anthelmintic,lookup,Anthelmintics Excluding Schistosomicides
+levamisole,40,Anthelmintic,lookup,Anthelmintics Excluding Schistosomicides
+vitamin k,40,Vitamin K,lookup,Antifibrinolytics
+fluocinolone acetonide,40,Corticosteroid (topical/inhaled),stem,Topical Corticosteroid Combinations
+terlipressin,40,Vasopressin analogue,llm,Antidiuretic Hormones
+camphor,40,Counterirritant / topical analgesic,llm,Ocular Anti Allergics Decongestants Antiseptics
+alendronic acid,40,Bisphosphonate,lookup,Medicines For Osteoporosis
+oxaceprol,40,SYSADOA (osteoarthritis),llm,Products For Treatment Of Osteoarthritis
+menadione,39,Vitamin K,lookup,Antifibrinolytics
+clobetasone,39,Corticosteroid,lookup,Topical Corticosteroid Combinations
+sodium fusidate,38,Topical antibacterial (acne/skin),lookup,Topical Antibiotics And Or Sulphonamids
+drospirenone,38,Progestogen,lookup,Oestrogen With Progestogen Combinations Excluding G3 A
+haloperidol decanoate,38,Typical antipsychotic,llm,Conventional Antipsychotics
+potassium chloride,37,Electrolyte / rehydration,lookup,Standard Solutions
+sulphacetamide,37,,unmapped,Topical Antibiotics And Or Sulphonamids
+lenalidomide,36,Immunomodulatory imide (IMiD),llm,Drugs For Treatment Of Lepra
+nintedanib,36,Kinase inhibitor,llm,All Other Antineoplastics
+sorafenib,36,Kinase inhibitor,llm,All Other Antineoplastics
+rituximab,36,Biologic DMARD (anti-TNF / interleukin),lookup,All Other Antineoplastics
+lenvatinib,36,Kinase inhibitor,stem,All Other Antineoplastics
+trastuzumab,36,Monoclonal antibody,stem,All Other Antineoplastics
+aprepitant,36,NK1 receptor antagonist,lookup,Other Antiemetics And Antinauseants
+danazol,36,Androgen,llm,Androgens Excluding G3 E G3 F
+ropinirole,36,Dopaminergic anti-parkinson,lookup,Anti Parkinson Drugs
+bethanechol,36,Cholinomimetic (bladder/GI),llm,All Other Urological Products
+human insulin,35,Insulin,lookup,Human Insulin Rapid
+velpatasvir,35,Antiviral (anti-hepatitis),lookup,Antivirals Excluding Hiv Products
+atomoxetine,35,Stimulant / wakefulness agent,lookup,All Other Cns Drugs
+morphine,35,Opioid analgesic,lookup,Narcotics
+fentanyl,35,Opioid analgesic,lookup,Narcotics
+tribasic calcium phosphate,34,Mineral / electrolyte supplement,llm,Antifibrinolytics
+citrus bioflavonoid,34,Bioflavonoid,llm,Antifibrinolytics
+menotrophin,34,Gonadotropin,llm,Gonadotrophins Including Other Ovulation Stimulants
+riluzole,34,Neurodegenerative disease agent,llm,Tranquillisers
+buspirone,34,Anxiolytic (azapirone),lookup,Tranquillisers
+ketoprofen,34,NSAID,lookup,Topical Anti Rheumatic Non Steroidal
+clofazimine,33,,unmapped,Drugs For Treatment Of Lepra
+ferrous ascorbate,33,Iron supplement,lookup,Haematinics Iron And All Combinations
+pyridostigmine,33,Cholinesterase inhibitor,llm,Anti Alzheimer Products
+gatifloxacin,33,Fluoroquinolone,stem,Eye Ear Anti Infectives Corticosteroid Combinations
+aztreonam,32,,unmapped,Other Beta Lactam Antibacterials Excluding Penicillins Cephalosporins
+pegylated interferon alpha 2b,32,Interferon,llm,Interferons
+magnesium trisilicate,32,Antacid,llm,All Other Anti Ulcerants
+rizatriptan,32,Triptan (5-HT1B/1D agonist),lookup,Anti Migraine Preparations
+nicotine,32,Smoking cessation aid,llm,Anti Smoking Products
+tropicamide,32,Mydriatic / cycloplegic,llm,Mydriatics And Cyclopegics
+pralidoxime,32,Cholinesterase reactivator,llm,Antidotes
+ibandronic acid,32,Bisphosphonate,stem,Medicines For Osteoporosis
+tolterodine,32,Overactive bladder agent,lookup,Urinary Incontinence Products
+oxybutynin,32,Overactive bladder agent,lookup,Urinary Incontinence Products
+epalrestat,31,Aldose reductase inhibitor,llm,Other Drugs Used In Diabetes
+insulin isophane,30,Insulin,lookup,Human Insulin Basal
+thalidomide,30,Immunomodulatory imide (IMiD),llm,Drugs For Treatment Of Lepra
+mannitol,30,Osmotic diuretic,llm,Solutions For Osmotic Therapy
+azelaic acid,30,Topical anti-acne,llm,Topical Anti Acne Preparations
+sumatriptan,30,Triptan (5-HT1B/1D agonist),lookup,Anti Migraine Preparations
+propofol,30,General anaesthetic,llm,Anaesthetics General Injectables
+nifedipine,30,Calcium channel blocker (dihydropyridine),lookup,Anaesthetics Local
+glucosamine sulfate potassium chloride,30,SYSADOA (osteoarthritis),llm,Products For Treatment Of Osteoarthritis
+chondroitin,30,SYSADOA (osteoarthritis),llm,Products For Treatment Of Osteoarthritis
+anti rh d immunoglobulin,30,Immunoglobulin / antiserum,llm,Polyvalent Immunoglobulins Intramuscular
+buprenorphine,29,Opioid analgesic,lookup,Drugs Used In Opioid Dependence
+tetanus toxoid,29,Vaccine,llm,All Other Vaccines
+insulin aspart,28,Insulin,lookup,Human Insulins And Analogues
+balofloxacin,28,Fluoroquinolone,stem,Fluoroquinolones
+penicillin v,28,Penicillin,lookup,Medium And Narrow Spectrum Penicillins
+ifosfamide,28,Cytotoxic chemotherapy,llm,Alkylating Agents
+bleomycin,28,Cytotoxic chemotherapy,llm,Antineoplastic Antibiotics
+epirubicin,28,Cytotoxic chemotherapy,llm,Antineoplastic Antibiotics
+oxytocin,28,Uterotonic,llm,Labour Inducers
+cabergoline,28,Dopamine agonist (prolactin inhibitor),llm,Prolactin Inhibitors
+fludrocortisone,28,Corticosteroid,stem,Systemic Corticosteroids Plain
+stabilized oxychloro,28,Ophthalmic preservative / oxidant,llm,Miotics And Antiglaucoma Preparations
+bromocriptine,27,Dopamine agonist (prolactin inhibitor),llm,Anti Parkinson Drugs
+vecuronium,27,Neuromuscular blocking agent,llm,Muscle Relaxants Peripherally Acting
+ulinastatin,27,Statin (HMG-CoA reductase inhibitor),stem,All Other Urological Products
+lapatinib,26,Kinase inhibitor,stem,Antimetabolites
+mesna,26,Uroprotectant (chemotherapy),llm,Detoxifying Agents For Antineoplastic Treatment
+calcipotriol,26,Antipsoriatic,llm,Topical Antipsoriasis Products
+ciclosporin,26,Immunosuppressant (calcineurin / mTOR),lookup,Artificial Tears And Ocular Lubricants
+boric acid,26,Antiseptic / disinfectant,lookup,Ocular Anti Allergics Decongestants Antiseptics
+ketamine,26,General anaesthetic,llm,Anaesthetics General Injectables
+thiamine,25,Vitamin B1,lookup,B Complex
+acitretin,25,Antipsoriatic,llm,Systemic Antipsoriasis Prodcuts
+choline,25,Nootropic / neurotrophic,llm,Appetite Stimulants
+ritonavir,24,Antiretroviral,lookup,Hiv Antivirals
+lopinavir,24,Antiretroviral,lookup,Hiv Antivirals
+chlorambucil,24,Cytotoxic chemotherapy,llm,Alkylating Agents
+lomustine,24,Cytotoxic chemotherapy,llm,Alkylating Agents
+bicalutamide,24,Antineoplastic - hormonal,llm,Cytostatic Hormone Antagonists
+interferon alpha 2b,24,Interferon,llm,Interferons
+benzyl nicotinate,24,Rubefacient / peripheral vasodilator,llm,Heparins
+dextropropoxyphene,24,Opioid analgesic,llm,Antispasmodic Analgesic Combinations
+sulfasalazine,24,Aminosalicylate,lookup,Intestinal Anti Inflammatory Agents
+otilonium bromide,24,Antispasmodic (anticholinergic/musculotropic),llm,Plain Antispasmodics And Anticholinergics
+palonosetron,24,5-HT3 receptor antagonist,lookup,Serotonin Antagonist Antiemetics Antinauseants
+carboprost,24,Prostaglandin analogue,stem,Labour Inducers
+prilocaine,24,Local anaesthetic,lookup,Anaesthetics Local
+darifenacin,24,Overactive bladder agent,lookup,Urinary Incontinence Products
+rabies vaccine,24,Vaccine,llm,Pure Vaccines
+human,24,,unmapped,Pure Vaccines
+allantoin,23,Hydantoin anticonvulsant,stem,Topical Anti Acne Preparations
+nitroglycerin,23,Nitrate vasodilator,lookup,Nitrites And Nitrates
+neostigmine,23,Cholinesterase inhibitor,llm,Plain Antispasmodics And Anticholinergics
+carbimazole,23,Antithyroid,lookup,Anti Thyroid Preparation
+sulbutiamine,23,Nootropic / neurotrophic,subcategory,Nootropics
+pegfilgrastim,22,Colony-stimulating factor,llm,Immunostimulating Agents Excluding Interferons
+iron isomaltoside,22,Iron supplement,llm,Haematinics Iron And All Combinations
+desmopressin,22,Vasopressin analogue,llm,Antidiuretic Hormones
+somatostatin,22,Statin (HMG-CoA reductase inhibitor),stem,Antigrowth Hormones
+alpha glycerylphosphorylcholine,22,Nootropic / neurotrophic,llm,Anti Alzheimer Products
+rivastigmine,22,Cholinesterase inhibitor,lookup,Anti Alzheimer Products
+kanamycin,21,Aminoglycoside,lookup,Aminoglycosides
+dapsone,21,Corticosteroid,stem,Drugs For Treatment Of Lepra
+mitoxantrone,21,Cytotoxic chemotherapy,llm,Antineoplastic Antibiotics
+daunorubicin,21,Cytotoxic chemotherapy,llm,Antineoplastic Antibiotics
+calcium chloride,21,Mineral / electrolyte supplement,llm,Standard Solutions
+teriparatide,21,Parathyroid hormone analogue,llm,Anti Osteoporotic Products
+vitamin a,21,Vitamin A,lookup,Other Vitamins
+insulin glargine,20,Insulin,lookup,Insulin Analogues Basal
+amantadine,20,Dopaminergic anti-parkinson,lookup,Antivirals Excluding Hiv Products
+vincristine,20,Cytotoxic chemotherapy,llm,Vinca Alkaloids And Other Plant Products
+vinblastine,20,Cytotoxic chemotherapy,llm,Vinca Alkaloids And Other Plant Products
+sodium lactate,20,Mineral / electrolyte supplement,llm,Standard Solutions
+indapamide,20,Thiazide / thiazide-like diuretic,lookup,Ace Inhibitors Combined With Diuretics
+acetazolamide,20,Carbonic anhydrase inhibitor,lookup,Miotics And Antiglaucoma Preparations
+pilocarpine,20,Cholinergic miotic,llm,Miotics And Antiglaucoma Preparations
+denosumab,20,Monoclonal antibody,stem,Medicines For Osteoporosis
+butorphanol,20,Opioid analgesic,llm,Narcotics
+amylmetacresol,20,Antiseptic lozenge,llm,Antitussives Without Codeine
+vitamin b,20,B-complex (multi),llm,B Complex
+cyanocobalamin,19,Vitamin B12,lookup,Haematinics Iron And All Combinations
+ezetimibe,19,Other lipid-lowering,lookup,All Other Cholesterol Triglyceride Regulators
+cetrorelix,19,GnRH antagonist,llm,Antigonadotrphin Releasing Hormones
+zuclopenthixol,19,Typical antipsychotic,lookup,Conventional Antipsychotics
+thioridazine,19,Typical antipsychotic,lookup,Conventional Antipsychotics
+triclofos,19,Sedative-hypnotic (chloral group),llm,Hypnotics Sedatives
+oxazepam,19,Benzodiazepine,lookup,Hypnotics Sedatives
+brinzolamide,19,Carbonic anhydrase inhibitor,lookup,Miotics And Antiglaucoma Preparations
+insulin lispro,18,Insulin,lookup,Human Insulins And Analogues
+pazopanib,18,Kinase inhibitor,llm,All Other Antineoplastics
+ribociclib,18,CDK4/6 inhibitor,stem,All Other Antineoplastics
+gefitinib,18,Kinase inhibitor,stem,All Other Antineoplastics
+nivolumab,18,Monoclonal antibody,stem,All Other Antineoplastics
+pembrolizumab,18,Monoclonal antibody,stem,All Other Antineoplastics
+ruxolitinib,18,Kinase inhibitor,stem,All Other Antineoplastics
+dasatinib,18,Kinase inhibitor,stem,All Other Antineoplastics
+erlotinib,18,Kinase inhibitor,stem,All Other Antineoplastics
+enalaprilat,18,ACE inhibitor,subcategory,Ace Inhibitors Plain
+isosorbide mononitrate,18,Nitrate vasodilator,lookup,Nitrites And Nitrates
+benzoic acid,18,Preservative / antimicrobial excipient,llm,Softners Emollients
+magnesium sulphate,18,Electrolyte / rehydration,lookup,Softners Emollients
+vasopressin,18,Vasopressin analogue,llm,Antidiuretic Hormones
+tetrabenazine,18,Phenothiazine,stem,Anti Parkinson Drugs
+rasagiline,18,Dopaminergic anti-parkinson,lookup,Anti Parkinson Drugs
+thiopental sodium,18,General anaesthetic,llm,Anaesthetics General Injectables
+probenecid,18,Uricosuric,lookup,Anti Gout Preparations
+rocuronium,18,Neuromuscular blocking agent,llm,Muscle Relaxants Peripherally Acting
+pertussis toxoid,18,Vaccine,llm,All Other Vaccines
+megestrol,17,Progestogen,llm,Cytostatic Hormones
+astaxanthin,17,Antioxidant / micronutrient,lookup,Gonadotrophins Including Other Ovulation Stimulants
+enclomiphene,17,,unmapped,Gonadotrophins Including Other Ovulation Stimulants
+urofollitropin,17,Gonadotropin,llm,Gonadotrophins Including Other Ovulation Stimulants
+recombinant follicle stimulating hormone,17,Gonadotropin,llm,Gonadotrophins Including Other Ovulation Stimulants
+raloxifene,17,Selective estrogen receptor modulator,lookup,Selective Oestrogen Receptor Modulators Serms
+d-panthenol,17,Vitamin B5 (pantothenic acid),llm,Products For Treatment Of Osteoarthritis
+terpin hydrate,17,Antitussive,llm,Antitussive Bronchodilator Expectorant
+zidovudine,16,Antiretroviral,lookup,Hiv Antivirals
+nevirapine,16,Antiretroviral,lookup,Hiv Antivirals
+lymecycline,16,Tetracycline,stem,Tetracyclines And Combinations
+dalteparin,16,Heparin / low-molecular-weight heparin,stem,Heparins
+deferasirox,16,Antidote / chelator,lookup,Iron Chelating Agents
+nebivolol,16,Beta blocker,lookup,Angiotensin Ii Antagonists Beta Blockers
+atenolol,16,Beta blocker,lookup,Angiotensin Ii Antagonists Beta Blockers
+calcitriol,16,Vitamin D analogue,lookup,Other Vitamins
+isopropamide,16,Antispasmodic (anticholinergic/musculotropic),llm,Antispasmodic Ataractic Combinations
+dinoprostone,16,Prostaglandin (obstetric),llm,Labour Inducers
+metadoxine,16,Alcohol metabolism modifier,llm,Drugs Used In Alcohol Dependence
+homatropine,16,Mydriatic / cycloplegic,llm,Mydriatics And Cyclopegics
+pneumococcal polysaccharide vaccine,16,Vaccine,llm,Pure Vaccines
+cefepime,15,Cephalosporin,lookup,Aminoglycosides
+ganciclovir,15,Antiviral (nucleoside analogue),lookup,Antivirals Excluding Hiv Products
+mycophenolate sodium,15,Immunosuppressant / DMARD,lookup,Immunosuppressive Agents
+dimethyl fumarate,15,Multiple sclerosis immunomodulator,llm,Immunosuppressive Agents
+mesterolone,15,Androgen,llm,Androgens Excluding G3 E G3 F
+risedronate,15,Bisphosphonate,lookup,Medicines For Osteoporosis
+roflumilast,15,PDE4 inhibitor,llm,Pde4 Inhibitors For Asthma Copd
+hepatitis b vaccine,15,Vaccine,llm,Pure Vaccines
+garenoxacin,14,Fluoroquinolone,llm,Fluoroquinolones
+dactinomycin,14,Cytotoxic chemotherapy,llm,Antineoplastic Antibiotics
+ornithine,14,Amino acid / nutritional,llm,Hepatic Protectors Lipotropics
+edaravone,14,Neurodegenerative disease agent,llm,All Other Cns Drugs
+diphtheria toxoid,14,Vaccine,llm,All Other Vaccines
+ticarcillin,13,Penicillin,stem,Carbenicillin And Similar Types
+mercaptopurine,13,Cytotoxic chemotherapy,llm,Antimetabolites
+azacitidine,13,H2 receptor antagonist,stem,Antimetabolites
+tegafur,13,Cytotoxic chemotherapy,llm,Antimetabolites
+uracil,13,Cytotoxic chemotherapy,llm,Antimetabolites
+phytomenadione,13,Vitamin K,lookup,Vitamin K Antagonists
+proparacaine,13,Local anaesthetic,lookup,Opthalmological Local Anaesthetics
+l-arginine,13,Amino acid / nutritional,lookup,Other Nutrients
+amino acids,13,Amino acid / nutritional,lookup,Amino Acid Solutions Except Those Containing Fats
+insulin lispro protamine,12,Insulin,llm,Human Insulins And Analogues
+satranidazole,12,Nitroimidazole antimicrobial,lookup,Amebicides
+adalimumab,12,Biologic DMARD (anti-TNF / interleukin),lookup,Anti Tnf Products
+papaverine,12,Antispasmodic (anticholinergic/musculotropic),llm,Antispasmodic Analgesic Combinations
+hyoscyamine,12,Antispasmodic (anticholinergic/musculotropic),llm,Plain Antispasmodics And Anticholinergics
+pinaverium bromide,12,Antispasmodic (anticholinergic/musculotropic),llm,Plain Antispasmodics And Anticholinergics
+ethylmorphine,12,Opioid analgesic,llm,Plain Antispasmodics And Anticholinergics
+ramosetron,12,5-HT3 receptor antagonist,lookup,Serotonin Antagonist Antiemetics Antinauseants
+placenta extracts,12,Herbal / traditional extract,llm,Other Sex Hormones And Similar Products
+ketotifen,12,Mast cell stabiliser,lookup,Ocular Anti Allergics Decongestants Antiseptics
+chlorocresol,12,Antiseptic / disinfectant,llm,Otological Anti Infectives Corticosteroid Combinations
+isoflurane,12,General anaesthetic,llm,Anaesthetics General Inhalation
+valethamate,12,Antispasmodic (anticholinergic/musculotropic),llm,Muscle Relaxants Centrally Acting
+methocarbamol,12,Skeletal muscle relaxant,llm,Muscle Relaxants Centrally Acting
+succinyl choline chloride,12,Neuromuscular blocking agent,llm,Muscle Relaxants Centrally Acting
+oseltamivir phosphate,11,Antiviral (anti-influenza),llm,Anti Flu Drugs
+hemocoagulase,11,Haemostatic (topical/systemic),llm,Systemic Heamostatics
+pamabrom,11,"Diuretic (mild, OTC)",llm,Antispasmodic Analgesic Combinations
+lafutidine,11,H2 receptor antagonist,stem,Anti Ulcerants H2 Antagonists
+tegaserod,11,5-HT4 receptor agonist (prokinetic),llm,Gastro Intestinal Sensorimotor Modulators
+l-methyl folate,11,Vitamin B9 (folate),llm,B Complex
+sodium feredetate,11,Iron supplement,llm,Haematinics Iron And All Combinations
+centchroman,11,SERM / anti-osteoporotic,llm,Selective Oestrogen Receptor Modulators Serms
+protamine sulfate,11,Heparin antagonist,llm,Antidotes
+diatrizoic acid,11,Radiographic contrast medium,llm,Radiodiagnostic Agents
+tannic acid,11,Astringent,llm,Other Stomatologicals
+insulin aspart protamine,10,Insulin,llm,Human Insulins And Analogues
+pidotimod,10,Immunostimulant,llm,All Other Anti Infectives
+valganciclovir,10,Antiviral (nucleoside analogue),lookup,Antivirals Excluding Hiv Products
+cabazitaxel,10,Cytotoxic chemotherapy,llm,Vinca Alkaloids And Other Plant Products
+aprotinin,10,Antifibrinolytic (proteinase inhibitor),llm,Proteinase Inhibitors
+adrenochrome monosemicarbazone,10,Haemostatic (topical/systemic),llm,Systemic Heamostatics
+l-alanyl-l-glutamine,10,Amino acid / nutritional,llm,Neurotonics Other Miscellaneous Drugs
+levobunolol,10,Beta blocker,stem,Miotics And Antiglaucoma Preparations
+betaxolol,10,Beta blocker,lookup,Miotics And Antiglaucoma Preparations
+zinc gluconate,10,Mineral / electrolyte supplement,llm,Antidotes
+benzoxonium chloride,10,Antiseptic / disinfectant,llm,Anaesthetics Local
+bupivacaine,10,Local anaesthetic,lookup,Anaesthetics Local
+nalbuphine,10,Opioid analgesic,lookup,Narcotics
+pethidine,10,Opioid analgesic,lookup,Narcotics
+collagen peptide,10,SYSADOA (osteoarthritis),llm,Products For Treatment Of Osteoarthritis
+sodium hyaluronate,10,Ocular lubricant,lookup,Products For Treatment Of Osteoarthritis
+human hepatitis b immunoglobulin,10,Immunoglobulin / antiserum,llm,Specific Immunoglobulins Antiviral
+isosorbide dinitrate,9,Nitrate vasodilator,lookup,Nitrites And Nitrates
+docusate,9,Stool softener,llm,Softners Emollients
+calcium dobesilate,9,Local haemorrhoid preparation,lookup,Softners Emollients
+degarelix,9,Antineoplastic - hormonal,llm,Antigonadotrphin Releasing Hormones
+buserelin,9,Antineoplastic - hormonal,llm,Gonadotrophin Releasing Hormones Not Used As Cytostatics
+safinamide,9,Dopaminergic anti-parkinson,lookup,Anti Parkinson Drugs
+entacapone,9,Dopaminergic anti-parkinson,lookup,Anti Parkinson Drugs
+selegiline,9,Dopaminergic anti-parkinson,lookup,Anti Parkinson Drugs
+benserazide,9,Dopaminergic anti-parkinson,lookup,Anti Parkinson Drugs
+piribedil,9,Dopamine agonist (anti-parkinson),llm,Anti Parkinson Drugs
+zinc sulphate monohydrate,9,Mineral / electrolyte supplement,llm,Ocular Anti Allergics Decongestants Antiseptics
+difluprednate,9,Corticosteroid,lookup,Ophthalmological Corticosteroids
+pancuronium,9,Neuromuscular blocking agent,llm,Muscle Relaxants Peripherally Acting
+cisatracurium,9,Neuromuscular blocking agent,llm,Muscle Relaxants Peripherally Acting
+calcium polystyrene sulphonate,9,Potassium binder,lookup,All Other Urological Products
+thymosin alpha,8,Immunostimulant,llm,Hiv Antivirals
+stavudine,8,,unmapped,Hiv Antivirals
+dolutegravir,8,Antiretroviral,lookup,Hiv Antivirals
+bendamustine,8,Cytotoxic chemotherapy,llm,Alkylating Agents
+melphalan,8,Cytotoxic chemotherapy,llm,Alkylating Agents
+exemestane,8,Aromatase inhibitor,lookup,Cytostatic Hormone Antagonists
+enzalutamide,8,Antineoplastic - hormonal,llm,Cytostatic Hormone Antagonists
+interferon beta-1a,8,Interferon,llm,Interferons
+interferon alpha 2a,8,Interferon,llm,Interferons
+pegylated interferon alpha 2a,8,Interferon,llm,Interferons
+rasburicase,8,Recombinant urate oxidase,llm,Detoxifying Agents For Antineoplastic Treatment
+hydroxyethyl starch,8,Plasma volume expander,llm,Dextrans
+dextran 40,8,Plasma volume expander,llm,Dextrans
+allium cepa,8,Herbal / traditional extract,llm,Heparins
+recombinant human epidermal growth factor,8,Growth factor (topical/systemic),llm,Growth Hormones
+zinc oxide,8,Mineral / electrolyte supplement,llm,Antidotes
+cetilistat,8,Lipase inhibitor (anti-obesity),llm,Antiobesity Preparations Excluding Dietetics
+benzonatate,8,Antitussive,llm,Antitussives Without Codeine
+salmonella typhi vaccine,8,Vaccine,llm,All Other Vaccines
+rubella vaccine,8,Vaccine,llm,Combination Of Vaccines
+recombinant,8,Vaccine,llm,Pure Vaccines
+freeze-dried live attenuated hepatitis a vaccine,8,Vaccine,llm,Pure Vaccines
+nicotinic acid,8,Other lipid-lowering,lookup,B Complex
+idebenone,8,Nootropic / neurotrophic,llm,Modern Anti Oxidants
+pegaspargase,7,Cytotoxic chemotherapy,llm,Antineoplastic Antibiotics
+idarubicin,7,Cytotoxic chemotherapy,llm,Antineoplastic Antibiotics
+hyaluronidase,7,Enzyme (spreading factor),llm,Hyaluronidase
+phenolphthalein,7,Stimulant laxative,llm,Contact Laxatives
+triptorelin,7,Antineoplastic - hormonal,llm,Gonadotrophin Releasing Hormones Not Used As Cytostatics
+dalfampridine,7,Neurodegenerative disease agent,llm,All Other Cns Drugs
+naloxone,7,Opioid antagonist,lookup,Drugs Used In Opioid Dependence
+naltrexone,7,Opioid antagonist,lookup,Drugs Used In Opioid Dependence
+n-butyl-2-cyanoacrylate,7,Tissue adhesive,llm,All Other Non Therapeutic Products
+penicillamine,7,Antidote / chelator,lookup,Specific Anti Rheumatic Agents Systemic
+haemophilus type b conjugate vaccine,7,Vaccine,llm,All Other Vaccines
+insulin degludec,6,Insulin,lookup,Human Insulins And Analogues
+hydroxyquinolines,6,Amoebicide,llm,Amebicides
+praziquantel,6,Anthelmintic,lookup,Schistosomicides
+carbazochrome,6,Haemostatic (topical/systemic),llm,Antagonists Antidotes To Anticoagulants
+apixaban,6,Direct oral anticoagulant,lookup,Direct Factor Xa Inhibitors
+policosanol,6,Lipid-lowering (nicotinic acid derivative),llm,All Other Cholesterol Triglyceride Regulators
+tibolone,6,Tissue-selective estrogen (STEAR),llm,Other Sex Hormones And Similar Products
+methimazole,6,Antithyroid,lookup,Anti Thyroid Preparation
+zolmitriptan,6,Triptan (5-HT1B/1D agonist),lookup,Anti Migraine Preparations
+acamprosate,6,Anti-craving agent (alcohol dependence),llm,Drugs Used In Alcohol Dependence
+cyclopentolate,6,Mydriatic / cycloplegic,llm,Other Opthalmologicals
+zinc carnosine,6,Mucosal protectant,llm,Antidotes
+lanthanum carbonate,6,Phosphate binder,lookup,Hyperkalaemia Hyperphosphataemia Products
+iohexol,6,Radiographic contrast medium,llm,Low Osmolar Angio Urography
+acetic acid,6,Antiseptic (otic),llm,Otological Anti Infectives Corticosteroid Combinations
+etomidate,6,General anaesthetic,llm,Anaesthetics General Injectables
+suxamethonium,6,Neuromuscular blocking agent,llm,Muscle Relaxants Peripherally Acting
+iguratimod,6,DMARD (small molecule),llm,Products For Treatment Of Rheumatoid Arthritis
+baricitinib,6,Immunosuppressant / DMARD,lookup,Products For Treatment Of Rheumatoid Arthritis
+infliximab,6,Biologic DMARD (anti-TNF / interleukin),lookup,Products For Treatment Of Rheumatoid Arthritis
+univestin,6,SYSADOA (osteoarthritis),llm,Products For Treatment Of Rheumatoid Arthritis
+etanercept,6,Biologic DMARD (anti-TNF / interleukin),lookup,Specific Anti Rheumatic Agents Systemic
+evening primrose oil,6,Herbal / traditional extract,llm,All Other Therapeutic Products
+phenazopyridine,6,Urinary analgesic,llm,Urinary Anti Infectives And Antiseptics
+biotin,6,Vitamin B7 (biotin),llm,B Complex
+docosahexaenoic acid,6,Omega-3 fatty acid,llm,Other Nutrients
+phenylalanine,6,Amino acid / nutritional,llm,Other Nutrients
+ribavirin,5,Antiviral (nucleoside analogue),lookup,Antivirals Excluding Hiv Products
+vitamin b2,5,Vitamin B2 (riboflavin),llm,Modern Anti Oxidants
+alprostadil,5,Prostaglandin E1 (vasodilator),llm,All Other Cardiac Preparations
+halobetasol,5,Corticosteroid,lookup,Plain Topical Corticosteroids
+desonide,5,Corticosteroid,lookup,Plain Topical Corticosteroids
+saccharomyces boulardii,5,Probiotic,llm,All Other Antidiarrhoeals
+balsalazide,5,Aminosalicylate,lookup,Intestinal Anti Inflammatory Agents
+lysine,5,Amino acid / nutritional,llm,Other Vitamins
+dibucaine,5,Local anaesthetic,stem,Anaesthetics Local
+zinc chloride,5,Mineral / electrolyte supplement,llm,Anaesthetics Local
+pramoxine,5,Local anaesthetic,llm,Anaesthetics Local
+inactivated japanese encephalitis virus protein,5,Vaccine,llm,All Other Vaccines
+equine rabies immunoglobulin,5,Immunoglobulin / antiserum,llm,Antitoxic Sera
+onabotulinumtoxina,5,Botulinum toxin,llm,Specific Immunoglobulins Antibacterial
+rotavirus vaccine (live attenuated,5,Vaccine,llm,Specific Immunoglobulins Antiviral
+oral),5,Vaccine,llm,Specific Immunoglobulins Antiviral
+magnesium bisglycinate,5,Mineral / electrolyte supplement,llm,Other Mineral Supplements
+insulin glulisine,4,Insulin,lookup,Insulin Analogues Rapid
+bacterial lysate,4,Herbal / traditional extract,llm,All Other Anti Infectives
+procaine,4,Local anaesthetic,stem,Other Anti Parasitic Agents
+sodium aminosalicylate,4,,unmapped,Systemic Sulphonamides Excluding Trimethoprim Combinations
+sulfamethopyrazine,4,Phenothiazine,stem,Trimethoprim And Similar Formulations
+granulocyte colony stimulating factor,4,Colony-stimulating factor,llm,Immunostimulating Agents Excluding Interferons
+molgramostim,4,Colony-stimulating factor,llm,Immunostimulating Agents Excluding Interferons
+amifostine,4,Radioprotective / detox,llm,Detoxifying Agents For Antineoplastic Treatment
+ringer's lactate,4,IV fluid / parenteral nutrition,llm,Electrolyte Solutions
+pentosan polysulfate sodium,4,Pentosan (bladder GAG),llm,Other Antithrombotic Agents Blood
+valsartan,4,Angiotensin receptor blocker (ARB),lookup,Angiotensin Ii Antagonists Ace Inhibitors
+lactobacillus sporogenes,4,Probiotic,llm,Antidiarrhoeal Micro Organisms
+sodium tauroglycocholate,4,Bile salt / digestive,llm,Pancreatic Enzymes
+ergotamine,4,Ergot alkaloid,lookup,Anti Migraine Preparations
+almotriptan,4,Triptan (5-HT1B/1D agonist),lookup,Anti Migraine Preparations
+eletriptan,4,Triptan (5-HT1B/1D agonist),lookup,Anti Migraine Preparations
+varenicline,4,Smoking cessation aid,llm,Anti Smoking Products
+tetrahydrozoline,4,Ocular decongestant,llm,Ocular Anti Allergics Decongestants Antiseptics
+epinastine,4,Antihistamine H1 (ocular),lookup,Ocular Anti Allergics Decongestants Antiseptics
+fluorescein,4,Diagnostic dye,llm,Opthalmological Diagnostic Agents
+zinc acetate,4,Electrolyte / rehydration,lookup,Antidotes
+fenfluramine,4,Anorectic (withdrawn/controlled),llm,Antiobesity Preparations Excluding Dietetics
+iopromide,4,Radiographic contrast medium,llm,Low Osmolar Angio Urography
+polidocanol,4,Sclerosant,llm,Varicose Therapy Systemic
+phenylpropanolamine,4,Sympathomimetic (decongestant/anorectic),llm,Antitussives Without Codeine
+pseudoephedrine,4,Nasal / systemic decongestant (sympathomimetic),lookup,Antitussives Without Codeine
+doxapram,4,Respiratory stimulant,llm,Respiratory Stimulants
+purified vi polysaccharide typhoid vaccine,4,Vaccine,llm,All Other Vaccines
+diphtheria immune globulin,4,Immunoglobulin / antiserum,llm,Antitoxic Sera
+haemophilus influenzae type b capsular polysaccharide,4,Vaccine,llm,Antitoxic Sera
+measles vaccine,4,Vaccine,llm,Combination Of Vaccines
+pneumococcal 13 valent conjugate vaccine,4,Vaccine,llm,Pure Vaccines
+human papillomavirus quadrivalent (types 6,4,Vaccine,llm,Pure Vaccines
+and 18) vaccine,4,Vaccine,llm,Pure Vaccines
+meningococcal vaccine (group a,4,Vaccine,llm,Pure Vaccines
+w-135),4,Vaccine,llm,Pure Vaccines
+vi capsular polysaccharide of salmonella typhi,4,Vaccine,llm,Pure Vaccines
+varicella vaccine attenuated,4,Vaccine,llm,Pure Vaccines
+bacillus calmette-guerin strain,4,Vaccine,llm,Pure Vaccines
+human papillomavirus bivalent vaccine,4,Vaccine,llm,Pure Vaccines
+polio vaccine,4,Vaccine,llm,Pure Vaccines
+hydroxocobalamin,4,Vitamin B12,lookup,B Complex
+pyridoxal-5-phasphate,4,Vitamin B6,llm,B Complex
+vitamin e,4,Vitamin E,lookup,Modern Anti Oxidants
+pantothenic acid,4,Vitamin B5 (pantothenic acid),llm,Modern Anti Oxidants
+l-leucine,4,Amino acid / nutritional,llm,Other Vitamins
+l-isoleucine,4,Amino acid / nutritional,llm,Other Vitamins
+cinacalcet,4,Calcimimetic,llm,Other Vitamins
+sodium acid phosphate,4,Mineral / electrolyte supplement,llm,Other Vitamins
+alfacalcidol,4,Vitamin D analogue,lookup,Other Vitamins
+dehydroemetine,3,Amoebicide,llm,Amebicides
+hydralazine,3,Antihypertensive (direct vasodilator),lookup,Nitrites And Nitrates
+lactic acid,3,Emollient / keratolytic,llm,Plain Topical Corticosteroids
+urea,3,Emollient / keratolytic,llm,Plain Topical Corticosteroids
+imiquimod,3,Immune response modifier (topical),llm,Topical Antivirals
+live freeze dried lactic acid bacteria and bifidobacteria,3,,unmapped,Intestinal Anti Inflammatory Agents
+testosterone propionate,3,Androgen,llm,Androgens Excluding G3 E G3 F
+cyproterone,3,Antineoplastic - hormonal,llm,Other Sex Hormones And Similar Products
+glucagon,3,Antihypoglycaemic hormone,llm,Glucagon
+goserelin acetate,3,Antineoplastic - hormonal,llm,Gonadotrophin Releasing Hormones Not Used As Cytostatics
+ranibizumab,3,Monoclonal antibody,stem,Ocular Antineovascularisation Products
+iopamidol,3,Radiographic contrast medium,llm,Low Osmolar Angio Urography
+tofacitinib,3,Immunosuppressant / DMARD,lookup,Products For Treatment Of Rheumatoid Arthritis
+stannous fluoride,3,Mineral / electrolyte supplement,llm,Other Stomatologicals
+cetalkonium chloride,3,Antiseptic / disinfectant,llm,Other Stomatologicals
+human rabies immunoglobulin,3,Immunoglobulin / antiserum,llm,Antitoxic Sera
+mumps virus vaccine,3,Vaccine,llm,Combination Of Vaccines
+human gamma globulin,3,Immunoglobulin / antiserum,llm,Homologous Immunologically Active Globulins Intravenous
+sodium fluoride,2,Mineral / electrolyte supplement,llm,Other Anti Parasitic Agents
+sodium stibogluconate,2,Antiprotozoal (other),lookup,Other Anti Parasitic Agents
+sulfadiazine,2,Sulfonamide antibacterial,lookup,Systemic Sulphonamides Excluding Trimethoprim Combinations
+nimorazole,2,Nitroimidazole antimicrobial,lookup,Trichomonacides
+fosfestrol,2,Antineoplastic - hormonal,llm,Cytostatic Hormones
+sargramostim,2,Colony-stimulating factor,llm,Immunostimulating Agents Excluding Interferons
+plerixafor,2,Colony-stimulating factor,llm,Immunostimulating Agents Excluding Interferons
+carbomer,2,Ocular lubricant,lookup,Antagonists Antidotes To Anticoagulants
+low dextrans,2,IV fluid / parenteral nutrition,llm,Dextrans
+adapting electrolyte solutions,2,IV fluid / parenteral nutrition,llm,Electrolyte Solutions
+deferiprone,2,Antidote / chelator,lookup,Iron Chelating Agents
+glycine,2,IV fluid / parenteral nutrition,llm,Irrigating Solutions
+invert sugar,2,IV fluid / parenteral nutrition,llm,Standard Solutions
+xylitol,2,IV fluid / parenteral nutrition,llm,Standard Solutions
+sorbitol solution,2,IV fluid / parenteral nutrition,llm,Standard Solutions
+eltrombopag,2,Thrombopoietin receptor agonist,llm,Systemic Heamostatics
+menadione sodium bisulfite,2,Vitamin K,llm,Systemic Heamostatics
+saroglitazar,2,Dual PPAR agonist,llm,All Other Cholesterol Triglyceride Regulators
+triamcinolone,2,Corticosteroid,lookup,Plain Topical Corticosteroids
+minoxidil,2,Antihypertensive (direct vasodilator),lookup,Skin Dermal Epidermal Preparations
+polycarbophil,2,Bulk-forming laxative,llm,Bulk Producers
+lubiprostone,2,Chloride channel activator (laxative),llm,Other Laxatives
+atosiban,2,Tocolytic,llm,Other Gynaecological Products
+corticotropin,2,ACTH / corticotropin,llm,Acth
+ganirelix,2,GnRH antagonist,llm,Antigonadotrphin Releasing Hormones
+l-glutamate,2,Amino acid / nutritional,llm,Other Anabolic Agents Systemic
+flumazenil,2,Benzodiazepine antagonist,llm,Antidotes
+dimercaprol,2,Antidote / chelator,lookup,Antidotes
+fructo oligosaccharide,2,Prebiotic,llm,Sweetener
+poractant alfa,2,Pulmonary surfactant,llm,Lung Surfactants
+seratrodast,2,Thromboxane A2 antagonist,llm,Pde4 Inhibitors For Asthma Copd
+tocoferol,2,Vitamin E,llm,All Other Therapeutic Products
+zinc,2,Antioxidant / micronutrient,lookup,Calcium Products
+calcium gluconate,2,Calcium supplement,lookup,Calcium Products
+magnesium carbonate,2,Mineral / electrolyte supplement,llm,Other Mineral Supplements
+human premix,1,Insulin,llm,Human Insulin Premix
+insulin detemir,1,Insulin,lookup,Insulin Analogues Basal
+co-trimoxazole,1,Sulfonamide antibacterial,lookup,Systemic Sulphonamides Excluding Trimethoprim Combinations
+oxytetracycline,1,Tetracycline,stem,Systemic Sulphonamides Excluding Trimethoprim Combinations
+vitamin b3,1,Vitamin B3 (niacin),llm,Systemic Sulphonamides Excluding Trimethoprim Combinations
+itolizumab,1,Monoclonal antibody,stem,Anti Tnf Products
+deferoxamine,1,Iron chelator,llm,Iron Chelating Agents
+saline,1,IV fluid / parenteral nutrition,llm,Irrigating Solutions
+liver extract,1,Herbal / traditional extract,llm,Liver Extracts And Combinations With B12
+liver fraction 2 derived from fresh liver 01,1,Herbal / traditional extract,llm,Liver Extracts And Combinations With B12
+fibrinogen,1,Clotting factor / haemostatic protein,llm,Proteinase Inhibitors
+thrombin,1,Clotting factor / haemostatic protein,llm,Proteinase Inhibitors
+romiplostim,1,Thrombopoietin receptor agonist,llm,Systemic Heamostatics
+rutin,1,Bioflavonoid,llm,Systemic Heamostatics
+vitamin d,1,Vitamin D analogue,llm,Systemic Heamostatics
+calcium phosphate,1,Calcium supplement,lookup,Systemic Heamostatics
+acipimox,1,Lipid-lowering (nicotinic acid derivative),llm,All Other Cholesterol Triglyceride Regulators
+becaplermin,1,Growth factor (topical/systemic),llm,Skin Dermal Epidermal Preparations
+camostat,1,Serine protease inhibitor,llm,Drugs For Pancreatic Disorder
+pepsin,1,Digestive enzyme (pancreatic),lookup,Enzyme Combinations
+diastase,1,Digestive enzyme (pancreatic),lookup,Enzyme Combinations
+myo-inositol,1,Amino acid / nutritional,llm,Other Gynaecological Products
+strontium ranelate,1,Anti-osteoporotic (other),llm,Anti Osteoporotic Products
+propyl thiouracil,1,Antithyroid,llm,Anti Thyroid Preparation
+arginine,1,Amino acid / nutritional,lookup,Other Anabolic Agents Systemic
+l-histidine hydrochloride,1,Amino acid / nutritional,llm,Other Anabolic Agents Systemic
+pegaptanib,1,Anti-VEGF (ophthalmic),llm,Ocular Antineovascularisation Products
+nartograstim,1,Colony-stimulating factor,llm,Allergens
+meglumine diatrizoate,1,Radiographic contrast medium,llm,Radiodiagnostic Agents
+sodium diatrizoate,1,Radiographic contrast medium,llm,Radiodiagnostic Agents
+halothane,1,General anaesthetic,llm,Anaesthetics General Inhalation
+sevoflurane,1,General anaesthetic,llm,Anaesthetics General Inhalation
+colfosceril palmitate,1,Pulmonary surfactant,llm,Lung Surfactants
+yellow fever virus (live,1,Vaccine,llm,All Other Vaccines
+attenuated),1,Vaccine,llm,All Other Vaccines
+tetanus immunoglobulin,1,Immunoglobulin / antiserum,llm,Antitoxic Sera
+snake venom antiserum,1,Immunoglobulin / antiserum,llm,Antitoxic Sera
+human antitetanus immunoglobulin,1,Immunoglobulin / antiserum,llm,Antitoxic Sera
+clostridium botulinum type a toxin-haemagglutinin complex,1,Immunoglobulin / antiserum,llm,Antitoxic Sera
+thiomersal,1,Preservative / antimicrobial excipient,llm,Combination Of Vaccines
+calcium lactate,1,Calcium supplement,lookup,Calcium Others
+luvistin,1,Mineral / electrolyte supplement,llm,Calcium Others
+chromium,1,Mineral / electrolyte supplement,llm,Other Mineral Supplements
+copper,1,Mineral / electrolyte supplement,llm,Other Mineral Supplements
+manganese,1,Mineral / electrolyte supplement,llm,Other Mineral Supplements
+chromium chloride,1,Mineral / electrolyte supplement,llm,Other Mineral Supplements
+copper sulphate,1,Mineral / electrolyte supplement,llm,Other Mineral Supplements
+manganese sulphate,1,Mineral / electrolyte supplement,llm,Other Mineral Supplements
+selenious acid,1,Mineral / electrolyte supplement,llm,Other Mineral Supplements
+calcium pantothenate,1,Vitamin B5 (pantothenic acid),llm,Traditional Antioxidants Multivit Multimineral

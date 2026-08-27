@@ -1,0 +1,672 @@
+ingredient_clean,risk_compounds,confidence,method,rationale
+edible vegetable oil,saturated_fat,0.4,llm,unspecified 'vegetable oil' in Indian packaged food is frequently palm - low-confidence saturated_fat
+acidity regulators,sodium,0.35,llm,often sodium-based salts (citrate/bicarbonate) - low-confidence sodium
+vanilla cake,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+natural,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+nature identical,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+artificial,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+starch,rapid_carb,0.7,llm,refined starch - rapidly digested
+flavour enhancers,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+sunflower oil,none,,llm,liquid unsaturated seed/olive oil - not a saturated_fat driver
+rice bran oil,none,,llm,liquid unsaturated seed/olive oil - not a saturated_fat driver
+tomato,potassium,0.3,llm,fresh tomato - modest potassium
+palm,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+colours,none,,llm,reviewed (colours (permitted)) - no food-drug risk compound
+onion powder,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+garlic powder,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+chocolate,added_sugar;saturated_fat,0.6,llm,chocolate/compound coating - sugar plus cocoa-butter/tropical fat; trace caffeine
+urad dal,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+baking powder,sodium,0.6,llm,baking powder contains sodium bicarbonate
+gram flour,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+added flavours,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+rice,rapid_carb,0.6,llm,milled rice / rice product - medium-high glycaemic index
+red chilli powder,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+bengal gram flour,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+vitamins,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+coconut,none,,llm,coconut - excluded from nut_allergen by design (low cross-reactivity); revisit per user allergy profile
+carbonated water,none,,llm,carbonated water - no material risk compound
+cocoa mass,caffeine,0.3,llm,cocoa solids carry small amounts of caffeine/theobromine
+edible vegetable fat,saturated_fat,0.8,llm,solid/tropical/interesterified fat - high in saturated fatty acids
+chana dal,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+nature-identical,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+hydrolysed vegetable protein,sodium,0.6,llm,"HVP - manufactured with salt, high free glutamate; sodium load"
+strawberry,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+besan,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+lemon juice,added_sugar,0.55,llm,single-strength fruit juice - free sugars with fibre removed
+green peas,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+refined sunflower oil,none,,llm,liquid unsaturated seed/olive oil - not a saturated_fat driver
+orange,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+vitamin c,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+mustard oil,mustard_allergen,0.5,llm,mustard oil - refined form is low-protein; flag low for mustard-allergic users
+leavening agents,sodium,0.35,llm,often sodium-based salts (citrate/bicarbonate) - low-confidence sodium
+tomato powder,potassium,0.5,llm,concentrated tomato - notable potassium
+carrot,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+hydrogenated vegetable fat,saturated_fat;trans_fat,0.7,llm,"hydrogenated fat - saturated, possible residual trans fat"
+minerals,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+cumin powder,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+black pepper powder,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+turmeric powder,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+nuts,nut_allergen,0.85,llm,'nuts' plural / mixed-nut blend
+garam masala powder,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+olive oil,none,,llm,liquid unsaturated seed/olive oil - not a saturated_fat driver
+mango,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+ginger powder,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+of vegetable origin,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+rolled oats,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+mango pulp,added_sugar,0.4,llm,"fruit pulp/puree - intrinsic sugars, some fibre retained"
+maltitol,none,,llm,sugar alcohol / high-intensity sweetener - not a free-sugar or glycaemic driver
+added flavour,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+synthetic food colours,none,,llm,reviewed (colours (permitted)) - no food-drug risk compound
+fractionated fat,saturated_fat,0.8,llm,solid/tropical/interesterified fat - high in saturated fatty acids
+sweetener,none,,llm,sugar alcohol / high-intensity sweetener - not a free-sugar or glycaemic driver
+hydrolyzed vegetable protein,sodium,0.6,llm,"HVP - manufactured with salt, high free glutamate; sodium load"
+oregano,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+desiccated coconut,none,,llm,coconut - excluded from nut_allergen by design (low cross-reactivity); revisit per user allergy profile
+interesterified vegetable fat,saturated_fat,0.8,llm,solid/tropical/interesterified fat - high in saturated fatty acids
+mineral,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+cake gel,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+mustard seeds,mustard_allergen,0.85,llm,mustard seed / powder / paste - labelled allergen
+dough conditioner,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+pectin,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+millets,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+corn,rapid_carb,0.8,llm,corn starch / glucose / maltose syrup - high glycaemic
+malic acid,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+humectants,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+papaya,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+vegetable oil,saturated_fat,0.4,llm,unspecified 'vegetable oil' in Indian packaged food is frequently palm - low-confidence saturated_fat
+nature identical flavour,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+dark chocolate,added_sugar;saturated_fat,0.6,llm,chocolate/compound coating - sugar plus cocoa-butter/tropical fat; trace caffeine
+stevia,none,,llm,sugar alcohol / high-intensity sweetener - not a free-sugar or glycaemic driver
+refined vegetable oil,saturated_fat,0.4,llm,unspecified 'vegetable oil' in Indian packaged food is frequently palm - low-confidence saturated_fat
+cardamom powder,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+tomatoes,potassium,0.3,llm,fresh tomato - modest potassium
+moong dal,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+mono,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+oats flour,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+sunflower,none,,llm,liquid unsaturated seed/olive oil - not a saturated_fat driver
+apple,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+apple juice concentrate,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+flour,rapid_carb;gluten_allergen,0.7,llm,unqualified 'flour' in biscuits/bakery is refined wheat flour
+fennel seeds,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+chillies,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+jowar flour,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+eggs,egg_allergen,0.95,llm,plural of egg - word-boundary alias missed it
+sweeteners,none,,llm,sugar alcohol / high-intensity sweetener - not a free-sugar or glycaemic driver
+dietary fiber,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+leavening agent,sodium,0.35,llm,often sodium-based salts (citrate/bicarbonate) - low-confidence sodium
+hydrogenated,saturated_fat;trans_fat,0.7,llm,"hydrogenated fat - saturated, possible residual trans fat"
+improver,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+nature-identical flavouring substances,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+pineapple,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+apple juice,added_sugar,0.55,llm,single-strength fruit juice - free sugars with fibre removed
+jowar,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+clove powder,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+fruit pulp,added_sugar,0.4,llm,"fruit pulp/puree - intrinsic sugars, some fibre retained"
+celery,none,,llm,celery - naturally sodium-bearing but quantities here are trivial
+chicken meat,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+green cardamom,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+dry fruits,nut_allergen;added_sugar,0.45,llm,in Indian usage 'dry fruits' usually means nuts + dried sweetened fruit
+peas,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+chicken,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+green chilies,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+capsicum,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+grated coconut,none,,llm,coconut - excluded from nut_allergen by design (low cross-reactivity); revisit per user allergy profile
+rice flakes,rapid_carb,0.6,llm,milled rice / rice product - medium-high glycaemic index
+red chillies,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+oats,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+fatty acid esters of glycerol,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+nata de coco,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+purified water,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+corn meal,rapid_carb,0.8,llm,corn starch / glucose / maltose syrup - high glycaemic
+corn grits,rapid_carb,0.8,llm,corn starch / glucose / maltose syrup - high glycaemic
+rice bran,none,,llm,liquid unsaturated seed/olive oil - not a saturated_fat driver
+centre filling,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+flavouring,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+black cardamom,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+noodles,rapid_carb;sodium,0.55,llm,"wheat noodle block - refined carb, salted"
+oil,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+chhena,milk_allergen,0.85,llm,milk-derived solid / typo of 'milk solids'
+chickpeas,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+onions,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+chili powder,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+green chili,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+beans,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+artificial flavouring substance,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+edible vegetable oils,saturated_fat,0.4,llm,unspecified 'vegetable oil' in Indian packaged food is frequently palm - low-confidence saturated_fat
+rosemary extract,none,,llm,reviewed (antioxidants/preservatives (non-sodium)) - no food-drug risk compound
+glycerine,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+natural food colour,none,,llm,reviewed (colours (permitted)) - no food-drug risk compound
+hydrogenated vegetable fats,saturated_fat;trans_fat,0.7,llm,"hydrogenated fat - saturated, possible residual trans fat"
+cinnamon powder,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+nature identical flavouring substance,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+flavoring substances,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+raspberry,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+guava pulp,added_sugar,0.4,llm,"fruit pulp/puree - intrinsic sugars, some fibre retained"
+vitamin e,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+nature-identical flavouring substance,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+acidulant,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+allergen information,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+vegetable fat,saturated_fat,0.8,llm,solid/tropical/interesterified fat - high in saturated fatty acids
+dehydrated onion,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+makhana,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+aniseed,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+basil,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+cotton seed oil,none,,llm,liquid unsaturated seed/olive oil - not a saturated_fat driver
+basmati rice,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+hot water,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+arhar dal,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+bottle gourd,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+chickpea flour,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+dark chocolate chips,added_sugar;saturated_fat,0.6,llm,chocolate/compound coating - sugar plus cocoa-butter/tropical fat; trace caffeine
+custard powder,rapid_carb,0.8,llm,corn starch / glucose / maltose syrup - high glycaemic
+glucose,rapid_carb,0.8,llm,corn starch / glucose / maltose syrup - high glycaemic
+orange peel,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+orange powder,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+diacetyltartaric,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+artificial vanilla cake,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+riboflavin,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+flour treatment agents,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+orange juice,added_sugar,0.55,llm,single-strength fruit juice - free sugars with fibre removed
+orange pulp,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+vitamin d2,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+ergocalciferol,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+guava,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+stabilizing agent,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+artificial flavour,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+vegetables,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+cookies,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+acetic acid,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+rice grits,rapid_carb,0.6,llm,milled rice / rice product - medium-high glycaemic index
+garlic paste,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+fenugreek powder,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+dried ginger powder,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+nutmeg powder,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+fractionated vegetable fat,saturated_fat,0.8,llm,solid/tropical/interesterified fat - high in saturated fatty acids
+low fat cocoa powder,none,,llm,"defatted cocoa powder - negligible sugar/fat, trace stimulant"
+nature identical and artificial,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+center,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+cocoa nibs,caffeine,0.3,llm,cocoa solids carry small amounts of caffeine/theobromine
+added nature identical flavouring substance,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+cereal extract,none,,llm,generic 'cereal' - too vague to assign; often whole grain
+pumpkin,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+dehydrated vegetables,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+cloves,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+seeds,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+carrots,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+cucumber,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+fish,fish_allergen,0.9,llm,finned fish protein
+sweet,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+green chillies,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+red onion,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+low fat,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+sev,sodium;saturated_fat,0.5,llm,sev - deep-fried salted besan noodles
+fresh coconut,none,,llm,coconut - excluded from nut_allergen by design (low cross-reactivity); revisit per user allergy profile
+raw rice,rapid_carb,0.6,llm,milled rice / rice product - medium-high glycaemic index
+pomegranate,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+toor dal,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+di-glycerides of fatty acids,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+carrageenan,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+oats fibre,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+chocolate chips,added_sugar;saturated_fat,0.6,llm,chocolate/compound coating - sugar plus cocoa-butter/tropical fat; trace caffeine
+diglycerides of fatty acids,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+cranberry,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+ammonium bicarbonate,none,,llm,ammonium (not sodium) leavening salt
+fructooligosaccharide,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+quinoa,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+vanilla cake essence,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+cherry,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+cumin seeds,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+improvers,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+lemon juice concentrate,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+class preservatives,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+orange juice concentrate,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+synthetic colour,none,,llm,reviewed (colours (permitted)) - no food-drug risk compound
+vitamin b2,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+added water,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+rice meal,rapid_carb,0.6,llm,milled rice / rice product - medium-high glycaemic index
+refined rice bran oil,none,,llm,liquid unsaturated seed/olive oil - not a saturated_fat driver
+herb,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+natural flavouring substance,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+lemon powder,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+degermed corn grits,rapid_carb,0.8,llm,corn starch / glucose / maltose syrup - high glycaemic
+cumin seed powder,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+mustard powder,mustard_allergen,0.85,llm,mustard seed / powder / paste - labelled allergen
+sorghum,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+dried garlic,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+coriander leaves,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+carom seeds,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+mint leaves,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+protein,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+bay leaves,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+500ii,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+artificial vanilla cake flavouring substances,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+flavourings,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+watermelon,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+rice starch,rapid_carb,0.7,llm,refined starch - rapidly digested
+and added flavour,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+as ascorbic acid,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+artificial food colours,none,,llm,reviewed (colours (permitted)) - no food-drug risk compound
+and flavouring substances,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+dehydrated herb,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+masala tastemaker,sodium,0.6,llm,snack/noodle 'tastemaker' seasoning - salt + MSG heavy
+edible vegetable fat-interesterified,saturated_fat,0.8,llm,solid/tropical/interesterified fat - high in saturated fatty acids
+bengal gram,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+sweet corn,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+added flavour - nature identical,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+outer layer,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+inner layer,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+khoa,milk_allergen,0.85,llm,milk-derived solid / typo of 'milk solids'
+amchur powder,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+dough,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+malai,milk_allergen;saturated_fat,0.8,llm,cream / malai - milk protein plus milk fat
+khus khus,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+edible gum,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+filling,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+thick poha,rapid_carb,0.6,llm,milled rice / rice product - medium-high glycaemic index
+sambar powder,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+aloo,potassium;rapid_carb,0.5,llm,potato - potassium plus high-GI starch
+green,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+sorghum flour,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+ridge gourd,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+mono and diglycerides of fatty acids,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+quinoa flour,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+choco covering,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+nature-identical flavour,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+cranberries,potassium;added_sugar;sulphite_allergen,0.4,llm,dried fruit - potassium; usually sweetened; often sulphited
+bajra flour,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+fructooligosaccharides,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+oat flour,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+cereal products,none,,llm,generic 'cereal' - too vague to assign; often whole grain
+processing aid,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+sodium,sodium,0.75,llm,explicit sodium salt / 'iodised' fragment
+oat flakes,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+blueberry,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+citrus fiber,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+stevia glycosides,none,,llm,sugar alcohol / high-intensity sweetener - not a free-sugar or glycaemic driver
+natural flavoring substances,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+juice concentrate,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+food colors,none,,llm,reviewed (colours (permitted)) - no food-drug risk compound
+pineapple pulp,added_sugar,0.4,llm,"fruit pulp/puree - intrinsic sugars, some fibre retained"
+litchi pulp,added_sugar,0.4,llm,"fruit pulp/puree - intrinsic sugars, some fibre retained"
+pomegranate juice,added_sugar,0.55,llm,single-strength fruit juice - free sugars with fibre removed
+concentrated mixed fruit juice,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+alphonso mango pulp,added_sugar,0.4,llm,"fruit pulp/puree - intrinsic sugars, some fibre retained"
+mix berry juice,added_sugar,0.55,llm,single-strength fruit juice - free sugars with fibre removed
+synthetic colours,none,,llm,reviewed (colours (permitted)) - no food-drug risk compound
+taurine,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+acid,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+mineral salts,sodium,0.35,llm,often sodium-based salts (citrate/bicarbonate) - low-confidence sodium
+flavour emulsion,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+acetate,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+mik solids,milk_allergen,0.85,llm,milk-derived solid / typo of 'milk solids'
+vitamin b1,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+potable water,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+millet,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+mixed fruit jam,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+high maltose syrup,rapid_carb,0.8,llm,corn starch / glucose / maltose syrup - high glycaemic
+enzyme,none,,llm,reviewed (enzymes) - no food-drug risk compound
+xylanase,none,,llm,reviewed (enzymes) - no food-drug risk compound
+and,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+dark choco chips,added_sugar;saturated_fat,0.6,llm,chocolate/compound coating - sugar plus cocoa-butter/tropical fat; trace caffeine
+sodium acetate,sodium,0.75,llm,explicit sodium salt / 'iodised' fragment
+vegetable,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+corn grit,rapid_carb,0.8,llm,corn starch / glucose / maltose syrup - high glycaemic
+paprika extract,none,,llm,reviewed (antioxidants/preservatives (non-sodium)) - no food-drug risk compound
+gram meal,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+fat powder,saturated_fat,0.8,llm,solid/tropical/interesterified fat - high in saturated fatty acids
+dry mango,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+cereals,none,,llm,generic 'cereal' - too vague to assign; often whole grain
+bengal gram grits,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+tartaric acid,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+dehydrated vegetable powder,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+seasoning mix,sodium,0.6,llm,snack/noodle 'tastemaker' seasoning - salt + MSG heavy
+whole grain jowar,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+jalapeno,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+foxnut,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+paprika,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+energy,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+dried mango powder,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+gram pulse flour,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+flavouring substance,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+sal fat,saturated_fat,0.8,llm,solid/tropical/interesterified fat - high in saturated fatty acids
+centre,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+chia seeds,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+wafer,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+palm kernel,saturated_fat,0.8,llm,solid/tropical/interesterified fat - high in saturated fatty acids
+cocoa beans,caffeine,0.3,llm,cocoa solids carry small amounts of caffeine/theobromine
+acacia gum,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+glazing agents,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+strawberry fruit powder^,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+citric acid contains permitted synthetic food colour,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+isomalt,none,,llm,sugar alcohol / high-intensity sweetener - not a free-sugar or glycaemic driver
+acidifying agent,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+lactic acid,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+cottonseed,none,,llm,liquid unsaturated seed/olive oil - not a saturated_fat driver
+fos,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+coconut powder,none,,llm,coconut - excluded from nut_allergen by design (low cross-reactivity); revisit per user allergy profile
+kewra water,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+shallots,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+star anise powder,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+capsicum extract,none,,llm,reviewed (antioxidants/preservatives (non-sodium)) - no food-drug risk compound
+cumin extract,none,,llm,reviewed (antioxidants/preservatives (non-sodium)) - no food-drug risk compound
+green chilli powder,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+ginger paste,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+paprika oleoresin,none,,llm,reviewed (antioxidants/preservatives (non-sodium)) - no food-drug risk compound
+pumpkin seeds,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+whole grains,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+brown rice flakes,rapid_carb,0.6,llm,milled rice / rice product - medium-high glycaemic index
+chilli flakes,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+ins1442,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+chilli paste,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+nature identical vanilla cake flavouring substances,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+vegetable protein,sodium,0.6,llm,"HVP - manufactured with salt, high free glutamate; sodium load"
+dried fruits,nut_allergen;added_sugar,0.45,llm,in Indian usage 'dry fruits' usually means nuts + dried sweetened fruit
+chenna,milk_allergen,0.85,llm,milk-derived solid / typo of 'milk solids'
+besan flour,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+bread crumbs,rapid_carb;gluten_allergen,0.65,llm,wheat-based crumb / batter / vermicelli
+chole,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+avocado oil,none,,llm,liquid unsaturated seed/olive oil - not a saturated_fat driver
+cinnamon stick,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+pigeon peas,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+bitter gourd,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+nigella seeds,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+mushroom,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+green beans,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+poppy seeds,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+arbi ke patte,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+baby corn,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+french beans,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+marinade,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+split urad dal,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+idli rice,rapid_carb,0.6,llm,milled rice / rice product - medium-high glycaemic index
+fenugreek seeds,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+drumsticks,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+cooked rice,rapid_carb,0.6,llm,milled rice / rice product - medium-high glycaemic index
+pearl millet flour,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+dried mango,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+gobi,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+dry coconut,none,,llm,coconut - excluded from nut_allergen by design (low cross-reactivity); revisit per user allergy profile
+raw papaya,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+brinjal,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+brown rice,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+prawns,crustacean_shellfish_allergen,0.9,llm,crustacean / mollusc protein
+fructo oligosaccharides,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+fruit products,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+mixed fruit,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+xanthan gum,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+coconut products,none,,llm,coconut - excluded from nut_allergen by design (low cross-reactivity); revisit per user allergy profile
+dried yeast,none,,llm,reviewed (enzymes) - no food-drug risk compound
+refined oil,saturated_fat,0.4,llm,unspecified 'vegetable oil' in Indian packaged food is frequently palm - low-confidence saturated_fat
+choco creme,added_sugar;saturated_fat,0.6,llm,chocolate/compound coating - sugar plus cocoa-butter/tropical fat; trace caffeine
+sucralose,none,,llm,sugar alcohol / high-intensity sweetener - not a free-sugar or glycaemic driver
+natural identical,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+choco chips,added_sugar;saturated_fat,0.6,llm,chocolate/compound coating - sugar plus cocoa-butter/tropical fat; trace caffeine
+bha,none,,llm,reviewed (antioxidants/preservatives (non-sodium)) - no food-drug risk compound
+vitamin premix,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+thiamine mononitrate,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+cyanocobalamin,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+vanilla cake flavour,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+whole cumin,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+gum acacia,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+protein blend,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+diacetyl tartaric,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+sulphites,sulphite_allergen,0.9,llm,sulphite preservative
+rice crisps,rapid_carb,0.6,llm,milled rice / rice product - medium-high glycaemic index
+rising agent,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+udid flour,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+refined oils,saturated_fat,0.4,llm,unspecified 'vegetable oil' in Indian packaged food is frequently palm - low-confidence saturated_fat
+flour treatment agents ins,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+refined palm,saturated_fat,0.8,llm,solid/tropical/interesterified fat - high in saturated fatty acids
+dehydrated vegetable,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+vitamin,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+diacetyl tartaric acid ester of mono-diglycerides,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+ammonium salts of phosphatidic acid,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+lychee juice concentrate,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+valencia orange juice,added_sugar,0.55,llm,single-strength fruit juice - free sugars with fibre removed
+vitamin c - antioxidant,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+pomegranate juice concentrate,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+food colours,none,,llm,reviewed (colours (permitted)) - no food-drug risk compound
+lychee juice,added_sugar,0.55,llm,single-strength fruit juice - free sugars with fibre removed
+lychee,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+synthetic,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+added flavor artificial,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+passion fruit,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+orange concentrate,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+concentrate,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+carrot juice concentrate,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+cola,caffeine;added_sugar,0.6,llm,cola - caffeinated sweetened beverage base
+betacarotene,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+inositol,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+lime juice,added_sugar,0.55,llm,single-strength fruit juice - free sugars with fibre removed
+vitamin a,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+thiamine chloride hydrochloride,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+belgian chocolate,added_sugar;saturated_fat,0.6,llm,chocolate/compound coating - sugar plus cocoa-butter/tropical fat; trace caffeine
+emulsifying agents,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+stabilizing agents,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+flavour nature-identical flavouring substances,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+bajra,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+rose,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+cake gel ins,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+vanilla cake flavouring substances,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+fruit cuts,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+and stabilizers,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+cake mix,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+cake,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+enzyme xylanase,none,,llm,reviewed (enzymes) - no food-drug risk compound
+vanilla cake concentrate,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+candied fruits,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+candied papaya,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+grape,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+added artificial flavouring substance,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+and stabilizer,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+strawberry powder,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+sorbitol,none,,llm,sugar alcohol / high-intensity sweetener - not a free-sugar or glycaemic driver
+glycerol,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+sodium propionate,sodium,0.75,llm,explicit sodium salt / 'iodised' fragment
+all-purpose flour,rapid_carb;gluten_allergen,0.7,llm,unqualified 'flour' in biscuits/bakery is refined wheat flour
+supergrain blend,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+foxtail millet,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+nature identical flavours,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+cottonseed oil,none,,llm,liquid unsaturated seed/olive oil - not a saturated_fat driver
+refined cotton seed oil,none,,llm,liquid unsaturated seed/olive oil - not a saturated_fat driver
+anticaking agents,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+corn oil,none,,llm,liquid unsaturated seed/olive oil - not a saturated_fat driver
+roasted bengal gram flour,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+asafoetida powder,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+dry ginger powder,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+pulses mix rice grits,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+pea grits,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+and improver,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+amylases,none,,llm,reviewed (enzymes) - no food-drug risk compound
+mango juice powder,added_sugar,0.55,llm,single-strength fruit juice - free sugars with fibre removed
+tomato solids,potassium,0.5,llm,concentrated tomato - notable potassium
+moth flour,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+fried gram flour,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+emulsifying,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+pulses blend flour,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+whole grain oats,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+urad,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+ajwain powder,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+chili,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+popped lotus seeds,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+dried ginger,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+onion flakes,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+kcal,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+total fat,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+saturated fat,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+trans fat,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+cholesterol,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+nature ldentical flavouring substances,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+red lentils,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+masur whole,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+poppy seed,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+dried chilli,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+nature identical flavouring substance vanillin,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+edible vegetable fats,saturated_fat,0.8,llm,solid/tropical/interesterified fat - high in saturated fatty acids
+palm fat,saturated_fat,0.8,llm,solid/tropical/interesterified fat - high in saturated fatty acids
+biscuit,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+brownie,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+artificial flavouring substance - vanillin,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+naturally farmed cacao,caffeine,0.3,llm,cocoa solids carry small amounts of caffeine/theobromine
+natural orange flavouring,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+artificial flavouring,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+natural flavouring,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+dark chocolates,added_sugar;saturated_fat,0.6,llm,chocolate/compound coating - sugar plus cocoa-butter/tropical fat; trace caffeine
+fructo-oligosaccharides,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+flavours natural,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+nature - identical,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+curry leaves powder,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+gum base,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+carnauba wax,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+cassia,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+iodised,sodium,0.75,llm,explicit sodium salt / 'iodised' fragment
+artificial flavours,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+fruit,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+strawberry flavour,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+orange fruit powder^,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+raw mango,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+menthol,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+natural colours,none,,llm,reviewed (colours (permitted)) - no food-drug risk compound
+fruit juice,added_sugar,0.55,llm,single-strength fruit juice - free sugars with fibre removed
+synthetic food colors,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+acesulfame,none,,llm,sugar alcohol / high-intensity sweetener - not a free-sugar or glycaemic driver
+fruit powders,added_sugar,0.4,llm,"fruit pulp/puree - intrinsic sugars, some fibre retained"
+candy masala,sodium,0.6,llm,snack/noodle 'tastemaker' seasoning - salt + MSG heavy
+ins33,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+green gram,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+vegetable powder,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+or sunflower oil,saturated_fat,0.4,llm,unspecified 'vegetable oil' in Indian packaged food is frequently palm - low-confidence saturated_fat
+added flavor,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+dry ginger,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+ash gourd,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+red chilly,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+green chilly,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+channa dal,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+leeks,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+toasted onion flakes,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+aniseed powder,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+dehydrated carrot,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+dehydrated garlic,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+tastemaker,sodium,0.6,llm,snack/noodle 'tastemaker' seasoning - salt + MSG heavy
+coriander extract,none,,llm,reviewed (antioxidants/preservatives (non-sodium)) - no food-drug risk compound
+bengal gram dal,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+instant noodles,sodium,0.6,llm,snack/noodle 'tastemaker' seasoning - salt + MSG heavy
+instant noodle powder,sodium,0.6,llm,snack/noodle 'tastemaker' seasoning - salt + MSG heavy
+spring onion,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+zinc,calcium_mineral_chelation,0.4,llm,fortification-level divalent mineral - minor drug-chelation flag
+folic acid,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+red chilli paste,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+sichuan peppercorn,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+olives,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+dehydrated herbs,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+spice mix,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+black gram,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+melon seed,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+tapioca flour,rapid_carb,0.7,llm,refined starch - rapidly digested
+jackfruit,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+added natural,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+cumin seed,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+coriander whole,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+alpha amylase,none,,llm,reviewed (enzymes) - no food-drug risk compound
+date powder,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+iron,calcium_mineral_chelation,0.4,llm,fortification-level divalent mineral - minor drug-chelation flag
+multigrain mix,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+quinoa flakes,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+chia,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+flax,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+chilli extract,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+green chilli paste,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+fruit pectin,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+concentrated lemon juice powder,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+ins1450,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+breadcrumbs,rapid_carb;gluten_allergen,0.65,llm,wheat-based crumb / batter / vermicelli
+batter,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+red chilli flakes,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+dehydrated garlic powder,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+bread improver,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+enzymes,none,,llm,reviewed (enzymes) - no food-drug risk compound
+jalapenos,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+leek,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+glass vermicelli,none,,llm,"mung-bean/rice glass noodle - not wheat, not high-risk"
+pea starch,rapid_carb,0.7,llm,refined starch - rapidly digested
+black fungus mushroom,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+lemon grass,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+fixative,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+mutton meat,none,,llm,"reviewed - unmatched generic/compound token, no single risk compound"
+starter culture,none,,llm,reviewed (enzymes) - no food-drug risk compound
+active cultures,none,,llm,reviewed (enzymes) - no food-drug risk compound
+gulkand,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+chocolate ripple,added_sugar;saturated_fat,0.6,llm,chocolate/compound coating - sugar plus cocoa-butter/tropical fat; trace caffeine
+artificial chocolate flavouring substances,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+apple concentrate,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+choco compound coating,added_sugar;saturated_fat,0.6,llm,chocolate/compound coating - sugar plus cocoa-butter/tropical fat; trace caffeine
+lentil flour,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+cauliflower,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+bell pepper,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+yellow mustard,mustard_allergen,0.85,llm,mustard seed / powder / paste - labelled allergen
+drumstick,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+eggplant,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+mixed vegetables,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+lobster,crustacean_shellfish_allergen,0.9,llm,crustacean / mollusc protein
+inulin,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+amaranth,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+millet flour,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+calcium,calcium_mineral_chelation,0.4,llm,fortification-level divalent mineral - minor drug-chelation flag
+cmc,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+pomegranate pulp,added_sugar,0.4,llm,"fruit pulp/puree - intrinsic sugars, some fibre retained"
+pineapple juice concentrate,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+concentrated apple juice,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+cranberry juice,added_sugar,0.55,llm,single-strength fruit juice - free sugars with fibre removed
+mango juice,added_sugar,0.4,llm,"fruit pulp/puree - intrinsic sugars, some fibre retained"
+guava juice,added_sugar,0.55,llm,single-strength fruit juice - free sugars with fibre removed
+ascorbic acid,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+phosphoric acid,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+niacin,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+artificial sweetener,none,,llm,sugar alcohol / high-intensity sweetener - not a free-sugar or glycaemic driver
+jam,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+grapes,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+cake improver,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+strawberry fruit powder,added_sugar,0.4,llm,"fruit pulp/puree - intrinsic sugars, some fibre retained"
+maize,rapid_carb,0.8,llm,corn starch / glucose / maltose syrup - high glycaemic
+flax seeds,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+carbohydrate,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+urad flour,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+dry fruit,nut_allergen;added_sugar,0.45,llm,in Indian usage 'dry fruits' usually means nuts + dried sweetened fruit
+ethyl vanillin,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+stevia extract,none,,llm,sugar alcohol / high-intensity sweetener - not a free-sugar or glycaemic driver
+orange flavour,none,,llm,reviewed (flavour name fragments (not the food)) - no food-drug risk compound
+kiwi,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+beeswax,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+serving size,none,,llm,reviewed (acids / misc GRAS) - no food-drug risk compound
+kodo millet,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+mono and diglycerides,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+sodium stearoyl lactylate,none,,llm,reviewed (emulsifiers/additives) - no food-drug risk compound
+sodium metabisulphite,sulphite_allergen,0.9,llm,sulphite preservative
+protease,none,,llm,reviewed (enzymes) - no food-drug risk compound
+anjeer,none,,llm,"reviewed (produce (fresh veg/fruit, low risk)) - no food-drug risk compound"
+date paste,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+finger millet,none,,llm,"whole grain / millet / pseudo-cereal - low-to-moderate GI, kept untagged"
+sunset yellow,none,,llm,reviewed (colours (permitted)) - no food-drug risk compound
+tartrazine,none,,llm,reviewed (colours (permitted)) - no food-drug risk compound
+brilliant blue,none,,llm,reviewed (colours (permitted)) - no food-drug risk compound
+chhana,milk_allergen,0.85,llm,milk-derived solid / typo of 'milk solids'
+poha,rapid_carb,0.6,llm,milled rice / rice product - medium-high glycaemic index
+rai,mustard_allergen,0.85,llm,mustard seed / powder / paste - labelled allergen
+guar gum,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+tuna,fish_allergen,0.9,llm,finned fish protein
+chaat masala,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+kabuli chana,none,,llm,"pulse / legume flour - low glycaemic index, not a standard allergen"
+thiamine,none,,llm,reviewed (vitamins/minerals (fortification)) - no food-drug risk compound
+dietary fibre,none,,llm,reviewed (gums/fibres) - no food-drug risk compound
+white pepper powder,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound
+papaya pulp,added_sugar,0.4,llm,"fruit pulp/puree - intrinsic sugars, some fibre retained"
+pineapple juice,added_sugar,0.55,llm,single-strength fruit juice - free sugars with fibre removed
+grape juice,added_sugar,0.55,llm,single-strength fruit juice - free sugars with fibre removed
+glucose oxidase,none,,llm,reviewed (enzymes) - no food-drug risk compound
+lipase,none,,llm,reviewed (enzymes) - no food-drug risk compound
+prawn,crustacean_shellfish_allergen,0.9,llm,crustacean / mollusc protein
+candied fruit,added_sugar,0.8,llm,juice concentrate / jam / candied fruit / syrup - concentrated free sugars
+lychee pulp,added_sugar,0.4,llm,"fruit pulp/puree - intrinsic sugars, some fibre retained"
+colors,none,,llm,reviewed (colours (permitted)) - no food-drug risk compound
+cocoa liquor,caffeine,0.3,llm,cocoa solids carry small amounts of caffeine/theobromine
+rose petals,none,,llm,reviewed (spices/herbs (trivial quantity)) - no food-drug risk compound

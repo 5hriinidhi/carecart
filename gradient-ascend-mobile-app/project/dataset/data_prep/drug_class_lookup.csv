@@ -1,0 +1,1040 @@
+active_ingredient,drug_class,source
+ cefazolin,Cephalosporin,seed:pharmacology-reference
+5-asa,Aminosalicylate,seed:pharmacology-reference
+abacavir,Antiretroviral,seed:pharmacology-reference
+acarbose,Alpha-glucosidase inhibitor,seed:pharmacology-reference
+acebrophylline,Methylxanthine bronchodilator,seed:pharmacology-reference
+acebutolol,Beta blocker,seed:pharmacology-reference
+aceclofenac,NSAID,seed:pharmacology-reference
+acenocoumarol,Anticoagulant (vitamin K antagonist),seed:pharmacology-reference
+acetaminophen,Analgesic / antipyretic (aniline),seed:pharmacology-reference
+acetazolamide,Carbonic anhydrase inhibitor,seed:pharmacology-reference
+acetyl-l-carnitine,Antioxidant / micronutrient,seed:pharmacology-reference
+acetylcysteine,Mucolytic / expectorant,seed:pharmacology-reference
+acetylsalicylic acid,NSAID,seed:pharmacology-reference
+aciclovir,Antiviral (nucleoside analogue),seed:pharmacology-reference
+aclidinium,Antimuscarinic bronchodilator,seed:pharmacology-reference
+acrivastine,Antihistamine (2nd generation),seed:pharmacology-reference
+activated dimethicone,Antiflatulent,seed:pharmacology-reference
+acyclovir,Antiviral (nucleoside analogue),seed:pharmacology-reference
+adalimumab,Biologic DMARD (anti-TNF / interleukin),seed:pharmacology-reference
+adapalene,Topical retinoid,seed:pharmacology-reference
+adefovir,Antiviral (anti-hepatitis),seed:pharmacology-reference
+ademetionine,Hepatoprotective,seed:pharmacology-reference
+agomelatine,Atypical antidepressant,seed:pharmacology-reference
+albendazole,Anthelmintic,seed:pharmacology-reference
+alcaftadine,Antihistamine H1 (ocular),seed:pharmacology-reference
+alendronate,Bisphosphonate,seed:pharmacology-reference
+alendronic acid,Bisphosphonate,seed:pharmacology-reference
+alfacalcidol,Vitamin D analogue,seed:pharmacology-reference
+alfuzosin,Alpha-1 blocker (uroselective),seed:pharmacology-reference
+allopurinol,Xanthine oxidase inhibitor,seed:pharmacology-reference
+allylestrenol,Progestogen,seed:pharmacology-reference
+almotriptan,Triptan (5-HT1B/1D agonist),seed:pharmacology-reference
+alogliptin,DPP-4 inhibitor,seed:pharmacology-reference
+alpha amylase (digestive),Digestive enzyme (pancreatic),seed:pharmacology-reference
+alpha lipoic acid,Antioxidant / micronutrient,seed:pharmacology-reference
+alpha tocopherol,Vitamin E,seed:pharmacology-reference
+alpha-beta arteether,Antimalarial,seed:pharmacology-reference
+alprazolam,Benzodiazepine,seed:pharmacology-reference
+alteplase,Fibrinolytic,seed:pharmacology-reference
+aluminium hydroxide,Antacid,seed:pharmacology-reference
+aluminium hydroxide gel,Antacid,seed:pharmacology-reference
+amantadine,Dopaminergic anti-parkinson,seed:pharmacology-reference
+ambrisentan,Pulmonary hypertension agent,seed:pharmacology-reference
+ambroxol,Mucolytic / expectorant,seed:pharmacology-reference
+amikacin,Aminoglycoside,seed:pharmacology-reference
+amiloride,Potassium-sparing diuretic / aldosterone antagonist,seed:pharmacology-reference
+amino acids,Amino acid / nutritional,seed:pharmacology-reference
+aminocaproic acid,Antifibrinolytic / haemostatic,seed:pharmacology-reference
+aminophylline,Methylxanthine bronchodilator,seed:pharmacology-reference
+amiodarone,Antiarrhythmic,seed:pharmacology-reference
+amisulpride,Atypical antipsychotic,seed:pharmacology-reference
+amitriptyline,Tricyclic antidepressant,seed:pharmacology-reference
+amlodipine,Calcium channel blocker (dihydropyridine),seed:pharmacology-reference
+amodiaquine,Antimalarial,seed:pharmacology-reference
+amoxapine,Tricyclic antidepressant,seed:pharmacology-reference
+amoxicillin,Penicillin,seed:pharmacology-reference
+amoxycillin,Penicillin,seed:pharmacology-reference
+amphetamine,Stimulant / wakefulness agent,seed:pharmacology-reference
+amphotericin b,Polyene antifungal,seed:pharmacology-reference
+ampicillin,Penicillin,seed:pharmacology-reference
+amylase,Digestive enzyme (pancreatic),seed:pharmacology-reference
+anastrozole,Aromatase inhibitor,seed:pharmacology-reference
+anidulafungin,Echinocandin antifungal,seed:pharmacology-reference
+apixaban,Direct oral anticoagulant,seed:pharmacology-reference
+apremilast,Immunosuppressant / DMARD,seed:pharmacology-reference
+aprepitant,NK1 receptor antagonist,seed:pharmacology-reference
+arformoterol,Beta-2 agonist (bronchodilator),seed:pharmacology-reference
+arginine,Amino acid / nutritional,seed:pharmacology-reference
+aripiprazole,Atypical antipsychotic,seed:pharmacology-reference
+armodafinil,Stimulant / wakefulness agent,seed:pharmacology-reference
+arteether,Antimalarial,seed:pharmacology-reference
+artemether,Antimalarial,seed:pharmacology-reference
+arterolane,Antimalarial,seed:pharmacology-reference
+artesunate,Antimalarial,seed:pharmacology-reference
+ascorbic acid,Vitamin C,seed:pharmacology-reference
+asenapine,Atypical antipsychotic,seed:pharmacology-reference
+aspirin,NSAID,seed:pharmacology-reference
+astaxanthin,Antioxidant / micronutrient,seed:pharmacology-reference
+atazanavir,Antiretroviral,seed:pharmacology-reference
+atenolol,Beta blocker,seed:pharmacology-reference
+atomoxetine,Stimulant / wakefulness agent,seed:pharmacology-reference
+atorvastatin,Statin (HMG-CoA reductase inhibitor),seed:pharmacology-reference
+atovaquone,Antimalarial,seed:pharmacology-reference
+atropine,Antispasmodic (anticholinergic/musculotropic),seed:pharmacology-reference
+avanafil,PDE5 inhibitor,seed:pharmacology-reference
+avibactam,Beta-lactamase inhibitor,seed:pharmacology-reference
+azathioprine,Immunosuppressant / DMARD,seed:pharmacology-reference
+azelastine,Antihistamine H1 (ocular),seed:pharmacology-reference
+azelastine (nasal),Decongestant / antiallergic (ocular/nasal steroid),seed:pharmacology-reference
+azilsartan,Angiotensin receptor blocker (ARB),seed:pharmacology-reference
+azithromycin,Macrolide,seed:pharmacology-reference
+baclofen,Skeletal muscle relaxant,seed:pharmacology-reference
+baloxavir,Antiviral (anti-influenza),seed:pharmacology-reference
+balsalazide,Aminosalicylate,seed:pharmacology-reference
+bambuterol,Beta-2 agonist (bronchodilator),seed:pharmacology-reference
+bamifylline,Methylxanthine bronchodilator,seed:pharmacology-reference
+baricitinib,Immunosuppressant / DMARD,seed:pharmacology-reference
+bazedoxifene,Selective estrogen receptor modulator,seed:pharmacology-reference
+beclometasone,Corticosteroid,seed:pharmacology-reference
+beclomethasone,Corticosteroid,seed:pharmacology-reference
+bempedoic acid,Other lipid-lowering,seed:pharmacology-reference
+benazepril,ACE inhibitor,seed:pharmacology-reference
+benfotiamine,Vitamin B1,seed:pharmacology-reference
+benidipine,Calcium channel blocker (dihydropyridine),seed:pharmacology-reference
+benserazide,Dopaminergic anti-parkinson,seed:pharmacology-reference
+benzbromarone,Uricosuric,seed:pharmacology-reference
+benzhexol,Anticholinergic (anti-parkinson),seed:pharmacology-reference
+benzocaine,Local anaesthetic,seed:pharmacology-reference
+benzoyl peroxide,Keratolytic,seed:pharmacology-reference
+benzyl benzoate,Antiscabietic / pediculicide,seed:pharmacology-reference
+benzylpenicillin,Penicillin,seed:pharmacology-reference
+bepotastine,Antihistamine (2nd generation),seed:pharmacology-reference
+betahistine,Antivertigo (histamine analogue),seed:pharmacology-reference
+betamethasone,Corticosteroid,seed:pharmacology-reference
+betaxolol,Beta blocker,seed:pharmacology-reference
+bezafibrate,Fibrate,seed:pharmacology-reference
+bilastine,Antihistamine (2nd generation),seed:pharmacology-reference
+bimatoprost,Prostaglandin analogue (ophthalmic),seed:pharmacology-reference
+biperiden,Anticholinergic (anti-parkinson),seed:pharmacology-reference
+biphasic isophane insulin,Insulin,seed:pharmacology-reference
+bisacodyl,Stimulant laxative,seed:pharmacology-reference
+bismuth subsalicylate,Mucosal protectant,seed:pharmacology-reference
+bisoprolol,Beta blocker,seed:pharmacology-reference
+blonanserin,Atypical antipsychotic,seed:pharmacology-reference
+boric acid,Antiseptic / disinfectant,seed:pharmacology-reference
+bosentan,Pulmonary hypertension agent,seed:pharmacology-reference
+brexpiprazole,Atypical antipsychotic,seed:pharmacology-reference
+brinzolamide,Carbonic anhydrase inhibitor,seed:pharmacology-reference
+brivaracetam,Antiepileptic,seed:pharmacology-reference
+bromelain,Proteolytic / anti-inflammatory enzyme,seed:pharmacology-reference
+bromhexine,Mucolytic / expectorant,seed:pharmacology-reference
+buclizine,Antihistamine (1st generation),seed:pharmacology-reference
+budesonide,Corticosteroid,seed:pharmacology-reference
+buflomedil,Vasodilator (peripheral),seed:pharmacology-reference
+bumetanide,Loop diuretic,seed:pharmacology-reference
+bupivacaine,Local anaesthetic,seed:pharmacology-reference
+buprenorphine,Opioid analgesic,seed:pharmacology-reference
+bupropion,Atypical antidepressant,seed:pharmacology-reference
+buspirone,Anxiolytic (azapirone),seed:pharmacology-reference
+butalbital,Barbiturate,seed:pharmacology-reference
+butamirate,Antitussive,seed:pharmacology-reference
+butoconazole,Azole antifungal,seed:pharmacology-reference
+caffeine,Stimulant / wakefulness agent,seed:pharmacology-reference
+calcifediol,Vitamin D analogue,seed:pharmacology-reference
+calcitriol,Vitamin D analogue,seed:pharmacology-reference
+calcium acetate (binder),Phosphate binder,seed:pharmacology-reference
+calcium carbonate,Calcium supplement,seed:pharmacology-reference
+calcium carbonate + magnesium,Antacid,seed:pharmacology-reference
+calcium citrate,Calcium supplement,seed:pharmacology-reference
+calcium disodium edetate,Antidote / chelator,seed:pharmacology-reference
+calcium dobesilate,Local haemorrhoid preparation,seed:pharmacology-reference
+calcium gluconate,Calcium supplement,seed:pharmacology-reference
+calcium lactate,Calcium supplement,seed:pharmacology-reference
+calcium phosphate,Calcium supplement,seed:pharmacology-reference
+calcium polystyrene sulphonate,Potassium binder,seed:pharmacology-reference
+camylofin,Antispasmodic (anticholinergic/musculotropic),seed:pharmacology-reference
+canagliflozin,SGLT2 inhibitor,seed:pharmacology-reference
+candesartan,Angiotensin receptor blocker (ARB),seed:pharmacology-reference
+captopril,ACE inhibitor,seed:pharmacology-reference
+carbamazepine,Antiepileptic,seed:pharmacology-reference
+carbenicillin,Penicillin,seed:pharmacology-reference
+carbidopa,Dopaminergic anti-parkinson,seed:pharmacology-reference
+carbimazole,Antithyroid,seed:pharmacology-reference
+carbocisteine,Mucolytic / expectorant,seed:pharmacology-reference
+carbomer,Ocular lubricant,seed:pharmacology-reference
+carbonyl iron,Iron supplement,seed:pharmacology-reference
+carboxymethyl cellulose,Ocular lubricant,seed:pharmacology-reference
+carboxymethylcellulose,Ocular lubricant,seed:pharmacology-reference
+cariprazine,Atypical antipsychotic,seed:pharmacology-reference
+carisoprodol,Skeletal muscle relaxant,seed:pharmacology-reference
+carnitine,Amino acid / nutritional,seed:pharmacology-reference
+carvedilol,Beta blocker,seed:pharmacology-reference
+caspofungin,Echinocandin antifungal,seed:pharmacology-reference
+castor oil,Stimulant laxative,seed:pharmacology-reference
+cefaclor,Cephalosporin,seed:pharmacology-reference
+cefadroxil,Cephalosporin,seed:pharmacology-reference
+cefalexin,Cephalosporin,seed:pharmacology-reference
+cefazolin,Cephalosporin,seed:pharmacology-reference
+cefdinir,Cephalosporin,seed:pharmacology-reference
+cefditoren,Cephalosporin,seed:pharmacology-reference
+cefepime,Cephalosporin,seed:pharmacology-reference
+cefixime,Cephalosporin,seed:pharmacology-reference
+cefoperazone,Cephalosporin,seed:pharmacology-reference
+cefotaxime,Cephalosporin,seed:pharmacology-reference
+cefpodoxime,Cephalosporin,seed:pharmacology-reference
+cefpodoxime proxetil,Cephalosporin,seed:pharmacology-reference
+cefprozil,Cephalosporin,seed:pharmacology-reference
+ceftaroline,Cephalosporin,seed:pharmacology-reference
+ceftazidime,Cephalosporin,seed:pharmacology-reference
+ceftibuten,Cephalosporin,seed:pharmacology-reference
+ceftriaxone,Cephalosporin,seed:pharmacology-reference
+cefuroxime,Cephalosporin,seed:pharmacology-reference
+celecoxib,NSAID (COX-2 selective),seed:pharmacology-reference
+cephalexin,Cephalosporin,seed:pharmacology-reference
+cerebroprotein,Nootropic / neurotrophic,seed:pharmacology-reference
+cetirizine,Antihistamine (2nd generation),seed:pharmacology-reference
+cetrimide,Antiseptic / disinfectant,seed:pharmacology-reference
+chenodeoxycholic acid,Bile acid,seed:pharmacology-reference
+chloramphenicol,Amphenicol,seed:pharmacology-reference
+chlordiazepoxide,Benzodiazepine,seed:pharmacology-reference
+chlorhexidine,Antiseptic / disinfectant,seed:pharmacology-reference
+chloroprocaine,Local anaesthetic,seed:pharmacology-reference
+chloroquine,Antimalarial,seed:pharmacology-reference
+chlorothiazide,Thiazide / thiazide-like diuretic,seed:pharmacology-reference
+chlorphenamine,Antihistamine (1st generation),seed:pharmacology-reference
+chlorpheniramine,Antihistamine (1st generation),seed:pharmacology-reference
+chlorpheniramine maleate,Antihistamine (1st generation),seed:pharmacology-reference
+chlorpromazine,Typical antipsychotic,seed:pharmacology-reference
+chlorthalidone,Thiazide / thiazide-like diuretic,seed:pharmacology-reference
+chlorzoxazone,Skeletal muscle relaxant,seed:pharmacology-reference
+cholecalciferol,Vitamin D analogue,seed:pharmacology-reference
+cholestyramine,Other lipid-lowering,seed:pharmacology-reference
+choline fenofibrate,Fibrate,seed:pharmacology-reference
+chymotrypsin,Proteolytic / anti-inflammatory enzyme,seed:pharmacology-reference
+ciclesonide,Corticosteroid,seed:pharmacology-reference
+ciclosporin,Immunosuppressant (calcineurin / mTOR),seed:pharmacology-reference
+cilnidipine,Calcium channel blocker (dihydropyridine),seed:pharmacology-reference
+cilostazol,Vasodilator (peripheral),seed:pharmacology-reference
+cimetidine,H2 receptor antagonist,seed:pharmacology-reference
+cinnarizine,Calcium channel blocker (antivertigo/migraine),seed:pharmacology-reference
+cinnarizine (antihistamine),H1 antihistamine (piperazine),seed:pharmacology-reference
+citalopram,SSRI,seed:pharmacology-reference
+citicoline,Nootropic / neurotrophic,seed:pharmacology-reference
+citrulline,Amino acid / nutritional,seed:pharmacology-reference
+clarithromycin,Macrolide,seed:pharmacology-reference
+clavulanic acid,Beta-lactamase inhibitor,seed:pharmacology-reference
+clemastine,Antihistamine (1st generation),seed:pharmacology-reference
+clevidipine,Calcium channel blocker (dihydropyridine),seed:pharmacology-reference
+clidinium,Antispasmodic (anticholinergic/musculotropic),seed:pharmacology-reference
+clindamycin,Lincosamide,seed:pharmacology-reference
+clindamycin (topical),Topical antibacterial (acne/skin),seed:pharmacology-reference
+clioquinol,Amphenicol,seed:pharmacology-reference
+clobazam,Benzodiazepine,seed:pharmacology-reference
+clobazam (adjunct),Antiepileptic,seed:pharmacology-reference
+clobetasol,Corticosteroid,seed:pharmacology-reference
+clobetasone,Corticosteroid,seed:pharmacology-reference
+clomifene,Selective estrogen receptor modulator,seed:pharmacology-reference
+clomiphene,Selective estrogen receptor modulator,seed:pharmacology-reference
+clomipramine,Tricyclic antidepressant,seed:pharmacology-reference
+clonazepam,Benzodiazepine,seed:pharmacology-reference
+clonidine,Antihypertensive (central alpha-2 agonist),seed:pharmacology-reference
+clopidogrel,Antiplatelet (P2Y12 inhibitor),seed:pharmacology-reference
+clorazepate,Benzodiazepine,seed:pharmacology-reference
+clotrimazole,Azole antifungal,seed:pharmacology-reference
+cloxacillin,Penicillin,seed:pharmacology-reference
+clozapine,Atypical antipsychotic,seed:pharmacology-reference
+co-trimoxazole,Sulfonamide antibacterial,seed:pharmacology-reference
+coal tar,Keratolytic,seed:pharmacology-reference
+cobalt,Haematinic (other),seed:pharmacology-reference
+codeine,Opioid analgesic,seed:pharmacology-reference
+codeine phosphate,Antitussive,seed:pharmacology-reference
+coenzyme q10,Antioxidant / micronutrient,seed:pharmacology-reference
+colchicine,Anti-gout (acute),seed:pharmacology-reference
+colesevelam,Other lipid-lowering,seed:pharmacology-reference
+colistimethate,Polymyxin,seed:pharmacology-reference
+colistin,Polymyxin,seed:pharmacology-reference
+colloidal ferric hydroxide,Iron supplement,seed:pharmacology-reference
+conjugated estrogens,Estrogen,seed:pharmacology-reference
+coral calcium,Calcium supplement,seed:pharmacology-reference
+cortisone,Corticosteroid,seed:pharmacology-reference
+cotrimoxazole,Sulfonamide antibacterial,seed:pharmacology-reference
+creatine,Amino acid / nutritional,seed:pharmacology-reference
+cromolyn,Mast cell stabiliser,seed:pharmacology-reference
+crotamiton,Antiscabietic / pediculicide,seed:pharmacology-reference
+cyanocobalamin,Vitamin B12,seed:pharmacology-reference
+cyclobenzaprine,Skeletal muscle relaxant,seed:pharmacology-reference
+cycloserine,Antitubercular,seed:pharmacology-reference
+cyclosporine,Immunosuppressant (calcineurin / mTOR),seed:pharmacology-reference
+cyproheptadine,Antihistamine (1st generation),seed:pharmacology-reference
+cyproheptadine (appetite),Laxative / appetite / misc GI,seed:pharmacology-reference
+dabigatran,Direct oral anticoagulant,seed:pharmacology-reference
+dabigatran etexilate,Direct oral anticoagulant,seed:pharmacology-reference
+daclatasvir,Antiviral (anti-hepatitis),seed:pharmacology-reference
+dapagliflozin,SGLT2 inhibitor,seed:pharmacology-reference
+darbepoetin,Erythropoiesis-stimulating agent,seed:pharmacology-reference
+darifenacin,Overactive bladder agent,seed:pharmacology-reference
+darunavir,Antiretroviral,seed:pharmacology-reference
+deferasirox,Antidote / chelator,seed:pharmacology-reference
+deferiprone,Antidote / chelator,seed:pharmacology-reference
+deflazacort,Corticosteroid,seed:pharmacology-reference
+demeclocycline,Tetracycline,seed:pharmacology-reference
+desferrioxamine,Antidote / chelator,seed:pharmacology-reference
+desloratadine,Antihistamine (2nd generation),seed:pharmacology-reference
+desogestrel,Progestogen,seed:pharmacology-reference
+desonide,Corticosteroid,seed:pharmacology-reference
+desvenlafaxine,SNRI,seed:pharmacology-reference
+dexamethasone,Corticosteroid,seed:pharmacology-reference
+dexamfetamine,Stimulant / wakefulness agent,seed:pharmacology-reference
+dexchlorpheniramine,Antihistamine (1st generation),seed:pharmacology-reference
+dexketoprofen,NSAID,seed:pharmacology-reference
+dexlansoprazole,Proton pump inhibitor,seed:pharmacology-reference
+dexrabeprazole,Proton pump inhibitor,seed:pharmacology-reference
+dextromethorphan,Antitussive,seed:pharmacology-reference
+dextromethorphan hydrobromide,Antitussive,seed:pharmacology-reference
+diacerein,NSAID,seed:pharmacology-reference
+diastase,Digestive enzyme (pancreatic),seed:pharmacology-reference
+diazepam,Benzodiazepine,seed:pharmacology-reference
+diclofenac,NSAID,seed:pharmacology-reference
+dicloxacillin,Penicillin,seed:pharmacology-reference
+dicyclomine,Antispasmodic (anticholinergic/musculotropic),seed:pharmacology-reference
+dicycloverine,Antispasmodic (anticholinergic/musculotropic),seed:pharmacology-reference
+diethylcarbamazine,Anthelmintic,seed:pharmacology-reference
+difluprednate,Corticosteroid,seed:pharmacology-reference
+digoxin,Cardiac glycoside,seed:pharmacology-reference
+dihydrocodeine,Opioid analgesic,seed:pharmacology-reference
+dihydroergotamine,Ergot alkaloid,seed:pharmacology-reference
+diloxanide furoate,Antiprotozoal (other),seed:pharmacology-reference
+diltiazem,Calcium channel blocker (non-dihydropyridine),seed:pharmacology-reference
+dimenhydrinate,Antihistamine (1st generation),seed:pharmacology-reference
+dimenhydrinate (antiemetic),Antiemetic (antihistamine),seed:pharmacology-reference
+dimercaprol,Antidote / chelator,seed:pharmacology-reference
+dimethicone,Antiflatulent,seed:pharmacology-reference
+dimethicone (topical),Emollient / barrier,seed:pharmacology-reference
+diphenhydramine,Antihistamine (1st generation),seed:pharmacology-reference
+diphenoxylate,Antimotility agent,seed:pharmacology-reference
+disodium hydrogen citrate,Electrolyte / rehydration,seed:pharmacology-reference
+divalproex,Antiepileptic,seed:pharmacology-reference
+dolutegravir,Antiretroviral,seed:pharmacology-reference
+domperidone,Dopamine antagonist antiemetic,seed:pharmacology-reference
+donepezil,Cholinesterase inhibitor,seed:pharmacology-reference
+doripenem,Carbapenem,seed:pharmacology-reference
+dorzolamide,Carbonic anhydrase inhibitor,seed:pharmacology-reference
+dosulepin,Tricyclic antidepressant,seed:pharmacology-reference
+dothiepin,Tricyclic antidepressant,seed:pharmacology-reference
+doxazosin,Alpha-1 blocker,seed:pharmacology-reference
+doxofylline,Methylxanthine bronchodilator,seed:pharmacology-reference
+doxycycline,Tetracycline,seed:pharmacology-reference
+doxylamine,Antihistamine (1st generation),seed:pharmacology-reference
+doxylamine (antiemetic),Antiemetic (antihistamine),seed:pharmacology-reference
+dronedarone,Antiarrhythmic,seed:pharmacology-reference
+drospirenone,Progestogen,seed:pharmacology-reference
+drotaverine,Antispasmodic (anticholinergic/musculotropic),seed:pharmacology-reference
+drotaverine hydrochloride,Antispasmodic xanthine / smooth muscle,seed:pharmacology-reference
+dulaglutide,GLP-1 receptor agonist,seed:pharmacology-reference
+duloxetine,SNRI,seed:pharmacology-reference
+dutasteride,5-alpha reductase inhibitor,seed:pharmacology-reference
+dydrogesterone,Progestogen,seed:pharmacology-reference
+ebastine,Antihistamine (2nd generation),seed:pharmacology-reference
+eberconazole,Azole antifungal,seed:pharmacology-reference
+edoxaban,Direct oral anticoagulant,seed:pharmacology-reference
+efavirenz,Antiretroviral,seed:pharmacology-reference
+eletriptan,Triptan (5-HT1B/1D agonist),seed:pharmacology-reference
+emedastine,Antihistamine H1 (ocular),seed:pharmacology-reference
+empagliflozin,SGLT2 inhibitor,seed:pharmacology-reference
+emtricitabine,Antiretroviral,seed:pharmacology-reference
+enalapril,ACE inhibitor,seed:pharmacology-reference
+entacapone,Dopaminergic anti-parkinson,seed:pharmacology-reference
+entecavir,Antiviral (anti-hepatitis),seed:pharmacology-reference
+eperisone,Skeletal muscle relaxant,seed:pharmacology-reference
+ephedrine,Nasal / systemic decongestant (sympathomimetic),seed:pharmacology-reference
+epinastine,Antihistamine H1 (ocular),seed:pharmacology-reference
+eplerenone,Potassium-sparing diuretic / aldosterone antagonist,seed:pharmacology-reference
+epoetin alfa,Erythropoiesis-stimulating agent,seed:pharmacology-reference
+erdosteine,Mucolytic / expectorant,seed:pharmacology-reference
+ergocalciferol,Vitamin D analogue,seed:pharmacology-reference
+ergometrine,Ergot alkaloid,seed:pharmacology-reference
+ergotamine,Ergot alkaloid,seed:pharmacology-reference
+ertapenem,Carbapenem,seed:pharmacology-reference
+ertugliflozin,SGLT2 inhibitor,seed:pharmacology-reference
+erythromycin,Macrolide,seed:pharmacology-reference
+erythromycin (topical),Topical antibacterial (acne/skin),seed:pharmacology-reference
+erythropoietin,Erythropoiesis-stimulating agent,seed:pharmacology-reference
+escitalopram,SSRI,seed:pharmacology-reference
+escitalopram oxalate,SSRI,seed:pharmacology-reference
+eslicarbazepine,Antiepileptic,seed:pharmacology-reference
+esmolol,Beta blocker,seed:pharmacology-reference
+esomeprazole,Proton pump inhibitor,seed:pharmacology-reference
+estradiol,Estrogen,seed:pharmacology-reference
+estradiol valerate,Estrogen,seed:pharmacology-reference
+estriol,Estrogen,seed:pharmacology-reference
+eszopiclone,Z-drug hypnotic,seed:pharmacology-reference
+etamsylate,Antifibrinolytic / haemostatic,seed:pharmacology-reference
+etanercept,Biologic DMARD (anti-TNF / interleukin),seed:pharmacology-reference
+ethambutol,Antitubercular,seed:pharmacology-reference
+ethamsylate,Antifibrinolytic / haemostatic,seed:pharmacology-reference
+ethinyl estradiol,Estrogen,seed:pharmacology-reference
+ethinylestradiol,Estrogen,seed:pharmacology-reference
+ethionamide,Antitubercular,seed:pharmacology-reference
+ethosuximide,Antiepileptic,seed:pharmacology-reference
+etidronate,Bisphosphonate,seed:pharmacology-reference
+etizolam,Benzodiazepine,seed:pharmacology-reference
+etodolac,NSAID,seed:pharmacology-reference
+etofylline,Methylxanthine bronchodilator,seed:pharmacology-reference
+etophylline,Methylxanthine bronchodilator,seed:pharmacology-reference
+etoricoxib,NSAID (COX-2 selective),seed:pharmacology-reference
+everolimus,Immunosuppressant (calcineurin / mTOR),seed:pharmacology-reference
+exemestane,Aromatase inhibitor,seed:pharmacology-reference
+exenatide,GLP-1 receptor agonist,seed:pharmacology-reference
+ezetimibe,Other lipid-lowering,seed:pharmacology-reference
+famciclovir,Antiviral (nucleoside analogue),seed:pharmacology-reference
+famotidine,H2 receptor antagonist,seed:pharmacology-reference
+faropenem,Penem (oral),seed:pharmacology-reference
+febuxostat,Xanthine oxidase inhibitor,seed:pharmacology-reference
+felodipine,Calcium channel blocker (dihydropyridine),seed:pharmacology-reference
+fenofibrate,Fibrate,seed:pharmacology-reference
+fenspiride,Respiratory anti-inflammatory (non-steroidal),seed:pharmacology-reference
+fentanyl,Opioid analgesic,seed:pharmacology-reference
+fenticonazole,Azole antifungal,seed:pharmacology-reference
+ferric carboxymaltose,Iron supplement,seed:pharmacology-reference
+ferrous ascorbate,Iron supplement,seed:pharmacology-reference
+ferrous bisglycinate,Iron supplement,seed:pharmacology-reference
+ferrous fumarate,Iron supplement,seed:pharmacology-reference
+ferrous gluconate,Iron supplement,seed:pharmacology-reference
+ferrous sulphate,Iron supplement,seed:pharmacology-reference
+fesoterodine,Overactive bladder agent,seed:pharmacology-reference
+fexofenadine,Antihistamine (2nd generation),seed:pharmacology-reference
+fidaxomicin,Macrolide,seed:pharmacology-reference
+finasteride,5-alpha reductase inhibitor,seed:pharmacology-reference
+flavoxate,Overactive bladder agent,seed:pharmacology-reference
+flecainide,Antiarrhythmic,seed:pharmacology-reference
+flucloxacillin,Penicillin,seed:pharmacology-reference
+fluconazole,Azole antifungal,seed:pharmacology-reference
+flunarizine,Calcium channel blocker (antivertigo/migraine),seed:pharmacology-reference
+fluocinolone,Corticosteroid,seed:pharmacology-reference
+fluoxetine,SSRI,seed:pharmacology-reference
+flupenthixol,Typical antipsychotic,seed:pharmacology-reference
+fluphenazine,Typical antipsychotic,seed:pharmacology-reference
+flurazepam,Benzodiazepine,seed:pharmacology-reference
+flurbiprofen,NSAID,seed:pharmacology-reference
+fluticasone,Corticosteroid,seed:pharmacology-reference
+fluticasone furoate,Corticosteroid,seed:pharmacology-reference
+fluticasone furoate (nasal),Decongestant / antiallergic (ocular/nasal steroid),seed:pharmacology-reference
+fluticasone propionate,Corticosteroid,seed:pharmacology-reference
+fluvastatin,Statin (HMG-CoA reductase inhibitor),seed:pharmacology-reference
+fluvoxamine,SSRI,seed:pharmacology-reference
+folate,Vitamin B9,seed:pharmacology-reference
+folic acid,Vitamin B9,seed:pharmacology-reference
+formoterol,Beta-2 agonist (bronchodilator),seed:pharmacology-reference
+fosaprepitant,NK1 receptor antagonist,seed:pharmacology-reference
+fosfomycin,Fosfomycin,seed:pharmacology-reference
+fosinopril,ACE inhibitor,seed:pharmacology-reference
+fosphenytoin,Antiepileptic,seed:pharmacology-reference
+framycetin,Aminoglycoside,seed:pharmacology-reference
+framycetin (topical),Topical antibacterial (acne/skin),seed:pharmacology-reference
+frovatriptan,Triptan (5-HT1B/1D agonist),seed:pharmacology-reference
+frusemide,Loop diuretic,seed:pharmacology-reference
+fungal diastase,Digestive enzyme (pancreatic),seed:pharmacology-reference
+furazolidone,Nitrofuran antibacterial,seed:pharmacology-reference
+furosemide,Loop diuretic,seed:pharmacology-reference
+fusidic acid,Topical antibacterial (acne/skin),seed:pharmacology-reference
+gabapentin,Gabapentinoid,seed:pharmacology-reference
+galantamine,Cholinesterase inhibitor,seed:pharmacology-reference
+gamma benzene hexachloride,Antiscabietic / pediculicide,seed:pharmacology-reference
+ganciclovir,Antiviral (nucleoside analogue),seed:pharmacology-reference
+gemfibrozil,Fibrate,seed:pharmacology-reference
+gemigliptin,DPP-4 inhibitor,seed:pharmacology-reference
+gentamicin,Aminoglycoside,seed:pharmacology-reference
+gestodene,Progestogen,seed:pharmacology-reference
+ginkgo biloba,Nootropic / neurotrophic,seed:pharmacology-reference
+glibenclamide,Sulfonylurea (antidiabetic),seed:pharmacology-reference
+gliclazide,Sulfonylurea (antidiabetic),seed:pharmacology-reference
+glimepiride,Sulfonylurea (antidiabetic),seed:pharmacology-reference
+glipizide,Sulfonylurea (antidiabetic),seed:pharmacology-reference
+gliquidone,Sulfonylurea (antidiabetic),seed:pharmacology-reference
+glutamine,Amino acid / nutritional,seed:pharmacology-reference
+glyburide,Sulfonylurea (antidiabetic),seed:pharmacology-reference
+glycerin (topical),Emollient / barrier,seed:pharmacology-reference
+glyceryl trinitrate,Nitrate vasodilator,seed:pharmacology-reference
+glycopyrrolate,Antimuscarinic bronchodilator,seed:pharmacology-reference
+glycopyrronium,Antimuscarinic bronchodilator,seed:pharmacology-reference
+golimumab,Biologic DMARD (anti-TNF / interleukin),seed:pharmacology-reference
+granisetron,5-HT3 receptor antagonist,seed:pharmacology-reference
+grape seed extract,Antioxidant / micronutrient,seed:pharmacology-reference
+griseofulvin,Antifungal (griseofulvin),seed:pharmacology-reference
+guaifenesin,Mucolytic / expectorant,seed:pharmacology-reference
+guaifenesin (expectorant),Expectorant (guaiacolate),seed:pharmacology-reference
+guaiphenesin,Mucolytic / expectorant,seed:pharmacology-reference
+halobetasol,Corticosteroid,seed:pharmacology-reference
+halofantrine,Antimalarial,seed:pharmacology-reference
+haloperidol,Typical antipsychotic,seed:pharmacology-reference
+human insulin,Insulin,seed:pharmacology-reference
+hydralazine,Antihypertensive (direct vasodilator),seed:pharmacology-reference
+hydrochlorothiazide,Thiazide / thiazide-like diuretic,seed:pharmacology-reference
+hydrocortisone,Corticosteroid,seed:pharmacology-reference
+hydrogen peroxide,Antiseptic / disinfectant,seed:pharmacology-reference
+hydromorphone,Opioid analgesic,seed:pharmacology-reference
+hydrotalcite,Antacid,seed:pharmacology-reference
+hydroxocobalamin,Vitamin B12,seed:pharmacology-reference
+hydroxychloroquine,Antimalarial,seed:pharmacology-reference
+hydroxychloroquine (DMARD),Immunosuppressant / DMARD,seed:pharmacology-reference
+hydroxyprogesterone,Progestogen,seed:pharmacology-reference
+hydroxypropyl methylcellulose,Ocular lubricant,seed:pharmacology-reference
+hydroxyzine,Antihistamine (1st generation),seed:pharmacology-reference
+hyoscine,Antispasmodic (anticholinergic/musculotropic),seed:pharmacology-reference
+hyoscine butylbromide,Antispasmodic (anticholinergic/musculotropic),seed:pharmacology-reference
+hypromellose,Ocular lubricant,seed:pharmacology-reference
+ibandronate,Bisphosphonate,seed:pharmacology-reference
+ibuprofen,NSAID,seed:pharmacology-reference
+ilaprazole,Proton pump inhibitor,seed:pharmacology-reference
+imidapril,ACE inhibitor,seed:pharmacology-reference
+imipenem,Carbapenem,seed:pharmacology-reference
+imipenem + cilastatin,Carbapenem,seed:pharmacology-reference
+imipramine,Tricyclic antidepressant,seed:pharmacology-reference
+indacaterol,Beta-2 agonist (bronchodilator),seed:pharmacology-reference
+indapamide,Thiazide / thiazide-like diuretic,seed:pharmacology-reference
+indomethacin,NSAID,seed:pharmacology-reference
+infliximab,Biologic DMARD (anti-TNF / interleukin),seed:pharmacology-reference
+insulin,Insulin,seed:pharmacology-reference
+insulin aspart,Insulin,seed:pharmacology-reference
+insulin degludec,Insulin,seed:pharmacology-reference
+insulin detemir,Insulin,seed:pharmacology-reference
+insulin glargine,Insulin,seed:pharmacology-reference
+insulin glulisine,Insulin,seed:pharmacology-reference
+insulin isophane,Insulin,seed:pharmacology-reference
+insulin lispro,Insulin,seed:pharmacology-reference
+ipratropium,Antimuscarinic bronchodilator,seed:pharmacology-reference
+irbesartan,Angiotensin receptor blocker (ARB),seed:pharmacology-reference
+iron hydroxide polymaltose,Iron supplement,seed:pharmacology-reference
+iron polymaltose,Iron supplement,seed:pharmacology-reference
+isabgol,Bulk laxative,seed:pharmacology-reference
+isavuconazole,Azole antifungal,seed:pharmacology-reference
+isoniazid,Antitubercular,seed:pharmacology-reference
+isophane insulin,Insulin,seed:pharmacology-reference
+isosorbide dinitrate,Nitrate vasodilator,seed:pharmacology-reference
+isosorbide mononitrate,Nitrate vasodilator,seed:pharmacology-reference
+isotretinoin,Topical retinoid,seed:pharmacology-reference
+ispaghula,Bulk laxative,seed:pharmacology-reference
+itopride,Prokinetic (dopamine D2 antagonist),seed:pharmacology-reference
+itraconazole,Azole antifungal,seed:pharmacology-reference
+ivabradine,Antiarrhythmic,seed:pharmacology-reference
+ivermectin,Anthelmintic,seed:pharmacology-reference
+josamycin,Macrolide,seed:pharmacology-reference
+kanamycin,Aminoglycoside,seed:pharmacology-reference
+ketoconazole,Azole antifungal,seed:pharmacology-reference
+ketoprofen,NSAID,seed:pharmacology-reference
+ketorolac,NSAID,seed:pharmacology-reference
+ketotifen,Mast cell stabiliser,seed:pharmacology-reference
+l-arginine,Amino acid / nutritional,seed:pharmacology-reference
+l-carnitine,Antioxidant / micronutrient,seed:pharmacology-reference
+l-glutamine,Amino acid / nutritional,seed:pharmacology-reference
+l-methylfolate,Vitamin B9,seed:pharmacology-reference
+l-ornithine,Amino acid / nutritional,seed:pharmacology-reference
+l-ornithine l-aspartate,Hepatoprotective,seed:pharmacology-reference
+l-thyroxine,Thyroid hormone,seed:pharmacology-reference
+labetalol,Beta blocker,seed:pharmacology-reference
+lacosamide,Antiepileptic,seed:pharmacology-reference
+lactic acid (topical),Keratolytic,seed:pharmacology-reference
+lactitol,Osmotic laxative,seed:pharmacology-reference
+lactulose,Osmotic laxative,seed:pharmacology-reference
+lamivudine,Antiretroviral,seed:pharmacology-reference
+lamotrigine,Antiepileptic,seed:pharmacology-reference
+lansoprazole,Proton pump inhibitor,seed:pharmacology-reference
+lanthanum carbonate,Phosphate binder,seed:pharmacology-reference
+latanoprost,Prostaglandin analogue (ophthalmic),seed:pharmacology-reference
+ledipasvir,Antiviral (anti-hepatitis),seed:pharmacology-reference
+leflunomide,Immunosuppressant / DMARD,seed:pharmacology-reference
+lercanidipine,Calcium channel blocker (dihydropyridine),seed:pharmacology-reference
+letrozole,Aromatase inhibitor,seed:pharmacology-reference
+levamisole,Anthelmintic,seed:pharmacology-reference
+levetiracetam,Antiepileptic,seed:pharmacology-reference
+levo-folinate,Haematinic (other),seed:pharmacology-reference
+levocetirizine,Antihistamine (2nd generation),seed:pharmacology-reference
+levocetirizine dihydrochloride,Antihistamine (2nd generation),seed:pharmacology-reference
+levodopa,Dopaminergic anti-parkinson,seed:pharmacology-reference
+levomefolic acid,Vitamin B9,seed:pharmacology-reference
+levomilnacipran,SNRI,seed:pharmacology-reference
+levonorgestrel,Progestogen,seed:pharmacology-reference
+levosalbutamol,Beta-2 agonist (bronchodilator),seed:pharmacology-reference
+levosulpiride,Prokinetic (dopamine D2 antagonist),seed:pharmacology-reference
+levosulpiride (antipsychotic use),Typical antipsychotic,seed:pharmacology-reference
+levothyroxine,Thyroid hormone,seed:pharmacology-reference
+lidocaine,Local anaesthetic,seed:pharmacology-reference
+lignocaine,Local anaesthetic,seed:pharmacology-reference
+lignocaine + hydrocortisone,Local haemorrhoid preparation,seed:pharmacology-reference
+linagliptin,DPP-4 inhibitor,seed:pharmacology-reference
+lincomycin,Lincosamide,seed:pharmacology-reference
+lindane,Antiscabietic / pediculicide,seed:pharmacology-reference
+linezolid,Oxazolidinone (weak MAO inhibitor),seed:pharmacology-reference
+liothyronine,Thyroid hormone,seed:pharmacology-reference
+lipase,Digestive enzyme (pancreatic),seed:pharmacology-reference
+liquid paraffin,Emollient / barrier,seed:pharmacology-reference
+liraglutide,GLP-1 receptor agonist,seed:pharmacology-reference
+lisinopril,ACE inhibitor,seed:pharmacology-reference
+lithium,Mood stabiliser,seed:pharmacology-reference
+lithium carbonate,Mood stabiliser,seed:pharmacology-reference
+lola,Hepatoprotective,seed:pharmacology-reference
+loperamide,Antimotility agent,seed:pharmacology-reference
+lopinavir,Antiretroviral,seed:pharmacology-reference
+loratadine,Antihistamine (2nd generation),seed:pharmacology-reference
+lorazepam,Benzodiazepine,seed:pharmacology-reference
+lornoxicam,NSAID,seed:pharmacology-reference
+losartan,Angiotensin receptor blocker (ARB),seed:pharmacology-reference
+loteprednol,Corticosteroid,seed:pharmacology-reference
+loxapine,Typical antipsychotic,seed:pharmacology-reference
+luliconazole,Azole antifungal,seed:pharmacology-reference
+lumefantrine,Antimalarial,seed:pharmacology-reference
+lurasidone,Atypical antipsychotic,seed:pharmacology-reference
+lycopene,Antioxidant / micronutrient,seed:pharmacology-reference
+macitentan,Pulmonary hypertension agent,seed:pharmacology-reference
+macrogol,Osmotic laxative,seed:pharmacology-reference
+magaldrate,Antacid,seed:pharmacology-reference
+magnesium hydroxide,Antacid,seed:pharmacology-reference
+magnesium sulphate,Electrolyte / rehydration,seed:pharmacology-reference
+mebendazole,Anthelmintic,seed:pharmacology-reference
+mebeverine,Antispasmodic (anticholinergic/musculotropic),seed:pharmacology-reference
+meclizine,Antihistamine (1st generation),seed:pharmacology-reference
+meclizine (antiemetic),Antiemetic (antihistamine),seed:pharmacology-reference
+mecobalamin,Vitamin B12,seed:pharmacology-reference
+medroxyprogesterone,Progestogen,seed:pharmacology-reference
+mefenamic acid,NSAID,seed:pharmacology-reference
+mefloquine,Antimalarial,seed:pharmacology-reference
+meloxicam,NSAID,seed:pharmacology-reference
+memantine,NMDA receptor antagonist,seed:pharmacology-reference
+menadione,Vitamin K,seed:pharmacology-reference
+menaquinone,Vitamin K,seed:pharmacology-reference
+meropenem,Carbapenem,seed:pharmacology-reference
+mesalamine,Aminosalicylate,seed:pharmacology-reference
+mesalazine,Aminosalicylate,seed:pharmacology-reference
+metaxalone,Skeletal muscle relaxant,seed:pharmacology-reference
+metformin,Biguanide (antidiabetic),seed:pharmacology-reference
+methadone,Opioid analgesic,seed:pharmacology-reference
+methandienone,Anabolic steroid,seed:pharmacology-reference
+methimazole,Antithyroid,seed:pharmacology-reference
+methotrexate,Immunosuppressant / DMARD,seed:pharmacology-reference
+methylcobalamin,Vitamin B12,seed:pharmacology-reference
+methylcobalamin (haematinic),Haematinic (other),seed:pharmacology-reference
+methyldopa,Antihypertensive (central alpha-2 agonist),seed:pharmacology-reference
+methylergometrine,Ergot alkaloid,seed:pharmacology-reference
+methylergometrine maleate,Ergot alkaloid,seed:pharmacology-reference
+methylphenidate,Stimulant / wakefulness agent,seed:pharmacology-reference
+methylprednisolone,Corticosteroid,seed:pharmacology-reference
+metoclopramide,Dopamine antagonist antiemetic,seed:pharmacology-reference
+metolazone,Thiazide / thiazide-like diuretic,seed:pharmacology-reference
+metoprolol,Beta blocker,seed:pharmacology-reference
+metronidazole,Nitroimidazole antimicrobial,seed:pharmacology-reference
+mexiletine,Antiarrhythmic,seed:pharmacology-reference
+micafungin,Echinocandin antifungal,seed:pharmacology-reference
+miconazole,Azole antifungal,seed:pharmacology-reference
+midazolam,Benzodiazepine,seed:pharmacology-reference
+miglitol,Alpha-glucosidase inhibitor,seed:pharmacology-reference
+milk of magnesia,Antacid,seed:pharmacology-reference
+milk of magnesia (laxative),Osmotic laxative,seed:pharmacology-reference
+milnacipran,SNRI,seed:pharmacology-reference
+miltefosine,Antiprotozoal (other),seed:pharmacology-reference
+minocycline,Tetracycline,seed:pharmacology-reference
+minoxidil,Antihypertensive (direct vasodilator),seed:pharmacology-reference
+mirabegron,Overactive bladder agent,seed:pharmacology-reference
+mirtazapine,Atypical antidepressant,seed:pharmacology-reference
+misoprostol,Prostaglandin analogue (GI),seed:pharmacology-reference
+modafinil,Stimulant / wakefulness agent,seed:pharmacology-reference
+mometasone,Corticosteroid,seed:pharmacology-reference
+mometasone furoate (nasal),Decongestant / antiallergic (ocular/nasal steroid),seed:pharmacology-reference
+montelukast,Leukotriene receptor antagonist,seed:pharmacology-reference
+montelukast (respiratory),Respiratory anti-inflammatory (non-steroidal),seed:pharmacology-reference
+morphine,Opioid analgesic,seed:pharmacology-reference
+moxonidine,Antihypertensive (central alpha-2 agonist),seed:pharmacology-reference
+mupirocin,Topical antibacterial (acne/skin),seed:pharmacology-reference
+mycophenolate mofetil,Immunosuppressant / DMARD,seed:pharmacology-reference
+mycophenolate sodium,Immunosuppressant / DMARD,seed:pharmacology-reference
+mycophenolic acid,Immunosuppressant / DMARD,seed:pharmacology-reference
+n-acetylcysteine,Mucolytic / expectorant,seed:pharmacology-reference
+n-acetylcysteine (antioxidant),Antioxidant / micronutrient,seed:pharmacology-reference
+nabumetone,NSAID,seed:pharmacology-reference
+nadifloxacin,Topical antibacterial (acne/skin),seed:pharmacology-reference
+naftidrofuryl,Vasodilator (peripheral),seed:pharmacology-reference
+naftifine,Allylamine antifungal,seed:pharmacology-reference
+nalbuphine,Opioid analgesic,seed:pharmacology-reference
+nalmefene,Opioid antagonist,seed:pharmacology-reference
+naloxone,Opioid antagonist,seed:pharmacology-reference
+naltrexone,Opioid antagonist,seed:pharmacology-reference
+nandrolone,Anabolic steroid,seed:pharmacology-reference
+nandrolone decanoate,Anabolic steroid,seed:pharmacology-reference
+naphazoline,Nasal / systemic decongestant (sympathomimetic),seed:pharmacology-reference
+naproxen,NSAID,seed:pharmacology-reference
+naratriptan,Triptan (5-HT1B/1D agonist),seed:pharmacology-reference
+natamycin,Polyene antifungal,seed:pharmacology-reference
+nateglinide,Meglitinide,seed:pharmacology-reference
+nebivolol,Beta blocker,seed:pharmacology-reference
+nedocromil,Mast cell stabiliser,seed:pharmacology-reference
+neomycin,Aminoglycoside,seed:pharmacology-reference
+netilmicin,Aminoglycoside,seed:pharmacology-reference
+netupitant,NK1 receptor antagonist,seed:pharmacology-reference
+nevirapine,Antiretroviral,seed:pharmacology-reference
+niclosamide,Anthelmintic,seed:pharmacology-reference
+nicorandil,Nitrate vasodilator,seed:pharmacology-reference
+nicotinic acid,Other lipid-lowering,seed:pharmacology-reference
+nicoumalone,Anticoagulant (vitamin K antagonist),seed:pharmacology-reference
+nifedipine,Calcium channel blocker (dihydropyridine),seed:pharmacology-reference
+nimesulide,NSAID,seed:pharmacology-reference
+nimodipine,Calcium channel blocker (dihydropyridine),seed:pharmacology-reference
+nimorazole,Nitroimidazole antimicrobial,seed:pharmacology-reference
+nitazoxanide,Antiprotozoal (other),seed:pharmacology-reference
+nitrazepam,Benzodiazepine,seed:pharmacology-reference
+nitrendipine,Calcium channel blocker (dihydropyridine),seed:pharmacology-reference
+nitrofurantoin,Nitrofuran antibacterial,seed:pharmacology-reference
+nitroglycerin,Nitrate vasodilator,seed:pharmacology-reference
+nizatidine,H2 receptor antagonist,seed:pharmacology-reference
+nomegestrol,Progestogen,seed:pharmacology-reference
+norethisterone,Progestogen,seed:pharmacology-reference
+norgestrel,Progestogen,seed:pharmacology-reference
+nortriptyline,Tricyclic antidepressant,seed:pharmacology-reference
+noscapine,Antitussive,seed:pharmacology-reference
+nystatin,Polyene antifungal,seed:pharmacology-reference
+obeticholic acid,Bile acid,seed:pharmacology-reference
+olanzapine,Atypical antipsychotic,seed:pharmacology-reference
+olmesartan,Angiotensin receptor blocker (ARB),seed:pharmacology-reference
+olodaterol,Beta-2 agonist (bronchodilator),seed:pharmacology-reference
+olopatadine,Antihistamine H1 (ocular),seed:pharmacology-reference
+olsalazine,Aminosalicylate,seed:pharmacology-reference
+omeprazole,Proton pump inhibitor,seed:pharmacology-reference
+ondansetron,5-HT3 receptor antagonist,seed:pharmacology-reference
+oral rehydration salts,Electrolyte / rehydration,seed:pharmacology-reference
+ormeloxifene,Selective estrogen receptor modulator,seed:pharmacology-reference
+ornidazole,Nitroimidazole antimicrobial,seed:pharmacology-reference
+ors,Electrolyte / rehydration,seed:pharmacology-reference
+oseltamivir,Antiviral (anti-influenza),seed:pharmacology-reference
+otilonium,Antispasmodic (anticholinergic/musculotropic),seed:pharmacology-reference
+oxandrolone,Anabolic steroid,seed:pharmacology-reference
+oxazepam,Benzodiazepine,seed:pharmacology-reference
+oxcarbazepine,Antiepileptic,seed:pharmacology-reference
+oxetacaine,Mucosal protectant,seed:pharmacology-reference
+oxetacaine (local anaesthetic),Local anaesthetic,seed:pharmacology-reference
+oxethazaine,Mucosal protectant,seed:pharmacology-reference
+oxiconazole,Azole antifungal,seed:pharmacology-reference
+oxybutynin,Overactive bladder agent,seed:pharmacology-reference
+oxycodone,Opioid analgesic,seed:pharmacology-reference
+oxymetazoline,Nasal / systemic decongestant (sympathomimetic),seed:pharmacology-reference
+ozenoxacin,Topical antibacterial (acne/skin),seed:pharmacology-reference
+paliperidone,Atypical antipsychotic,seed:pharmacology-reference
+palonosetron,5-HT3 receptor antagonist,seed:pharmacology-reference
+pamidronate,Bisphosphonate,seed:pharmacology-reference
+pancreatin,Digestive enzyme (pancreatic),seed:pharmacology-reference
+pancrelipase,Digestive enzyme (pancreatic),seed:pharmacology-reference
+pantoprazole,Proton pump inhibitor,seed:pharmacology-reference
+papain,Proteolytic / anti-inflammatory enzyme,seed:pharmacology-reference
+papain (digestive),Digestive enzyme (pancreatic),seed:pharmacology-reference
+para-aminosalicylic acid,Antitubercular,seed:pharmacology-reference
+paracetamol,Analgesic / antipyretic (aniline),seed:pharmacology-reference
+paracetamol/acetaminophen,Analgesic / antipyretic (aniline),seed:pharmacology-reference
+parecoxib,NSAID (COX-2 selective),seed:pharmacology-reference
+paromomycin,Aminoglycoside,seed:pharmacology-reference
+paroxetine,SSRI,seed:pharmacology-reference
+patiromer,Potassium binder,seed:pharmacology-reference
+penfluridol,Typical antipsychotic,seed:pharmacology-reference
+penicillamine,Antidote / chelator,seed:pharmacology-reference
+penicillin g,Penicillin,seed:pharmacology-reference
+penicillin v,Penicillin,seed:pharmacology-reference
+pentazocine,Opioid analgesic,seed:pharmacology-reference
+pentoxifylline,Vasodilator (peripheral),seed:pharmacology-reference
+pepsin,Digestive enzyme (pancreatic),seed:pharmacology-reference
+peptizyme,Proteolytic / anti-inflammatory enzyme,seed:pharmacology-reference
+perampanel,Antiepileptic,seed:pharmacology-reference
+perindopril,ACE inhibitor,seed:pharmacology-reference
+permethrin,Antiscabietic / pediculicide,seed:pharmacology-reference
+pethidine,Opioid analgesic,seed:pharmacology-reference
+pheniramine,Antihistamine (1st generation),seed:pharmacology-reference
+pheniramine maleate,Antihistamine (1st generation),seed:pharmacology-reference
+phenobarbital,Barbiturate,seed:pharmacology-reference
+phenobarbitone,Barbiturate,seed:pharmacology-reference
+phenprocoumon,Anticoagulant (vitamin K antagonist),seed:pharmacology-reference
+phenylephrine,Nasal / systemic decongestant (sympathomimetic),seed:pharmacology-reference
+phenytoin,Antiepileptic,seed:pharmacology-reference
+pholcodine,Antitussive,seed:pharmacology-reference
+phylloquinone,Vitamin K,seed:pharmacology-reference
+phytomenadione,Vitamin K,seed:pharmacology-reference
+pimecrolimus,Immunosuppressant (calcineurin / mTOR),seed:pharmacology-reference
+pimozide,Typical antipsychotic,seed:pharmacology-reference
+pinaverium,Antispasmodic (anticholinergic/musculotropic),seed:pharmacology-reference
+pioglitazone,Thiazolidinedione,seed:pharmacology-reference
+piperacillin,Penicillin,seed:pharmacology-reference
+piperaquine,Antimalarial,seed:pharmacology-reference
+pipotiazine,Typical antipsychotic,seed:pharmacology-reference
+piracetam,Nootropic / neurotrophic,seed:pharmacology-reference
+piroxicam,NSAID,seed:pharmacology-reference
+pitavastatin,Statin (HMG-CoA reductase inhibitor),seed:pharmacology-reference
+podophyllotoxin,Keratolytic,seed:pharmacology-reference
+polyethylene glycol,Osmotic laxative,seed:pharmacology-reference
+polyethylene glycol (ocular),Ocular lubricant,seed:pharmacology-reference
+polymyxin b,Polymyxin,seed:pharmacology-reference
+polyvinyl alcohol,Ocular lubricant,seed:pharmacology-reference
+posaconazole,Azole antifungal,seed:pharmacology-reference
+potassium chloride,Electrolyte / rehydration,seed:pharmacology-reference
+potassium citrate,Electrolyte / rehydration,seed:pharmacology-reference
+potassium magnesium citrate,Electrolyte / rehydration,seed:pharmacology-reference
+potassium permanganate,Antiseptic / disinfectant,seed:pharmacology-reference
+povidone iodine,Antiseptic / disinfectant,seed:pharmacology-reference
+pramipexole,Dopaminergic anti-parkinson,seed:pharmacology-reference
+prasugrel,Antiplatelet (P2Y12 inhibitor),seed:pharmacology-reference
+pravastatin,Statin (HMG-CoA reductase inhibitor),seed:pharmacology-reference
+praziquantel,Anthelmintic,seed:pharmacology-reference
+prazosin,Alpha-1 blocker,seed:pharmacology-reference
+prednisolone,Corticosteroid,seed:pharmacology-reference
+prednisone,Corticosteroid,seed:pharmacology-reference
+pregabalin,Gabapentinoid,seed:pharmacology-reference
+prilocaine,Local anaesthetic,seed:pharmacology-reference
+primaquine,Antimalarial,seed:pharmacology-reference
+probenecid,Uricosuric,seed:pharmacology-reference
+prochlorperapine,Dopamine antagonist antiemetic,seed:pharmacology-reference
+prochlorperazine,Dopamine antagonist antiemetic,seed:pharmacology-reference
+procyclidine,Anticholinergic (anti-parkinson),seed:pharmacology-reference
+progesterone,Progestogen,seed:pharmacology-reference
+proguanil,Antimalarial,seed:pharmacology-reference
+promethazine,Antihistamine (1st generation),seed:pharmacology-reference
+promethazine (antiemetic),Antihistamine / antiemetic (phenothiazine),seed:pharmacology-reference
+propafenone,Antiarrhythmic,seed:pharmacology-reference
+propantheline,Antispasmodic (anticholinergic/musculotropic),seed:pharmacology-reference
+proparacaine,Local anaesthetic,seed:pharmacology-reference
+propranolol,Beta blocker,seed:pharmacology-reference
+propylthiouracil,Antithyroid,seed:pharmacology-reference
+pseudoephedrine,Nasal / systemic decongestant (sympathomimetic),seed:pharmacology-reference
+psyllium,Bulk laxative,seed:pharmacology-reference
+pyrantel pamoate,Anthelmintic,seed:pharmacology-reference
+pyrazinamide,Antitubercular,seed:pharmacology-reference
+pyridoxine,Vitamin B6,seed:pharmacology-reference
+pyrimethamine,Antimalarial,seed:pharmacology-reference
+quetiapine,Atypical antipsychotic,seed:pharmacology-reference
+quinapril,ACE inhibitor,seed:pharmacology-reference
+quinine,Antimalarial,seed:pharmacology-reference
+quinine (cramps),Skeletal muscle relaxant,seed:pharmacology-reference
+quiniodochlor,Amphenicol,seed:pharmacology-reference
+quiniodochlor (antidiarrhoeal),Antidiarrhoeal (intestinal antiseptic),seed:pharmacology-reference
+rabeprazole,Proton pump inhibitor,seed:pharmacology-reference
+racecadotril,Antimotility agent,seed:pharmacology-reference
+raloxifene,Selective estrogen receptor modulator,seed:pharmacology-reference
+raltegravir,Antiretroviral,seed:pharmacology-reference
+ramipril,ACE inhibitor,seed:pharmacology-reference
+ramosetron,5-HT3 receptor antagonist,seed:pharmacology-reference
+ranitidine,H2 receptor antagonist,seed:pharmacology-reference
+rasagiline,Dopaminergic anti-parkinson,seed:pharmacology-reference
+rebamipide,Mucosal protectant,seed:pharmacology-reference
+regular insulin,Insulin,seed:pharmacology-reference
+remogliflozin,SGLT2 inhibitor,seed:pharmacology-reference
+remogliflozin etabonate,SGLT2 inhibitor,seed:pharmacology-reference
+repaglinide,Meglitinide,seed:pharmacology-reference
+retapamulin,Topical antibacterial (acne/skin),seed:pharmacology-reference
+reteplase,Fibrinolytic,seed:pharmacology-reference
+retinol,Vitamin A,seed:pharmacology-reference
+retinyl palmitate,Vitamin A,seed:pharmacology-reference
+ribavirin,Antiviral (nucleoside analogue),seed:pharmacology-reference
+rifabutin,Rifamycin,seed:pharmacology-reference
+rifampicin,Rifamycin,seed:pharmacology-reference
+rifampin,Rifamycin,seed:pharmacology-reference
+rifapentine,Rifamycin,seed:pharmacology-reference
+rifaximin,Rifamycin,seed:pharmacology-reference
+riociguat,Pulmonary hypertension agent,seed:pharmacology-reference
+risedronate,Bisphosphonate,seed:pharmacology-reference
+risperidone,Atypical antipsychotic,seed:pharmacology-reference
+ritonavir,Antiretroviral,seed:pharmacology-reference
+rituximab,Biologic DMARD (anti-TNF / interleukin),seed:pharmacology-reference
+rivaroxaban,Direct oral anticoagulant,seed:pharmacology-reference
+rivastigmine,Cholinesterase inhibitor,seed:pharmacology-reference
+rizatriptan,Triptan (5-HT1B/1D agonist),seed:pharmacology-reference
+ropinirole,Dopaminergic anti-parkinson,seed:pharmacology-reference
+ropivacaine,Local anaesthetic,seed:pharmacology-reference
+rosiglitazone,Thiazolidinedione,seed:pharmacology-reference
+rosuvastatin,Statin (HMG-CoA reductase inhibitor),seed:pharmacology-reference
+rotigotine,Dopaminergic anti-parkinson,seed:pharmacology-reference
+roxatidine,H2 receptor antagonist,seed:pharmacology-reference
+roxithromycin,Macrolide,seed:pharmacology-reference
+rupatadine,Antihistamine (2nd generation),seed:pharmacology-reference
+rutoside,Proteolytic / anti-inflammatory enzyme,seed:pharmacology-reference
+s-adenosylmethionine,Hepatoprotective,seed:pharmacology-reference
+s-amlodipine,Calcium channel blocker (dihydropyridine),seed:pharmacology-reference
+safinamide,Dopaminergic anti-parkinson,seed:pharmacology-reference
+salbutamol,Beta-2 agonist (bronchodilator),seed:pharmacology-reference
+salicylic acid,Keratolytic,seed:pharmacology-reference
+salmeterol,Beta-2 agonist (bronchodilator),seed:pharmacology-reference
+satranidazole,Nitroimidazole antimicrobial,seed:pharmacology-reference
+saxagliptin,DPP-4 inhibitor,seed:pharmacology-reference
+secnidazole,Nitroimidazole antimicrobial,seed:pharmacology-reference
+secukinumab,Biologic DMARD (anti-TNF / interleukin),seed:pharmacology-reference
+selegiline,Dopaminergic anti-parkinson,seed:pharmacology-reference
+selenium,Antioxidant / micronutrient,seed:pharmacology-reference
+semaglutide,GLP-1 receptor agonist,seed:pharmacology-reference
+senna,Stimulant laxative,seed:pharmacology-reference
+sennosides,Stimulant laxative,seed:pharmacology-reference
+serratepeptidase,Proteolytic / anti-inflammatory enzyme,seed:pharmacology-reference
+serratiopeptidase,Proteolytic / anti-inflammatory enzyme,seed:pharmacology-reference
+sertaconazole,Azole antifungal,seed:pharmacology-reference
+sertraline,SSRI,seed:pharmacology-reference
+sevelamer,Phosphate binder,seed:pharmacology-reference
+sildenafil,PDE5 inhibitor,seed:pharmacology-reference
+silodosin,Alpha-1 blocker (uroselective),seed:pharmacology-reference
+silver sulfadiazine,Antiseptic / disinfectant,seed:pharmacology-reference
+silybin,Hepatoprotective,seed:pharmacology-reference
+silymarin,Hepatoprotective,seed:pharmacology-reference
+simethicone,Antiflatulent,seed:pharmacology-reference
+simeticone,Antiflatulent,seed:pharmacology-reference
+simvastatin,Statin (HMG-CoA reductase inhibitor),seed:pharmacology-reference
+sirolimus,Immunosuppressant (calcineurin / mTOR),seed:pharmacology-reference
+sitagliptin,DPP-4 inhibitor,seed:pharmacology-reference
+sodium ascorbate,Vitamin C,seed:pharmacology-reference
+sodium bicarbonate,Antacid,seed:pharmacology-reference
+sodium bicarbonate (systemic),Electrolyte / rehydration,seed:pharmacology-reference
+sodium chloride,Electrolyte / rehydration,seed:pharmacology-reference
+sodium citrate,Electrolyte / rehydration,seed:pharmacology-reference
+sodium cromoglycate,Mast cell stabiliser,seed:pharmacology-reference
+sodium fusidate,Topical antibacterial (acne/skin),seed:pharmacology-reference
+sodium hyaluronate,Ocular lubricant,seed:pharmacology-reference
+sodium picosulfate,Stimulant laxative,seed:pharmacology-reference
+sodium polystyrene sulphonate,Potassium binder,seed:pharmacology-reference
+sodium stibogluconate,Antiprotozoal (other),seed:pharmacology-reference
+sodium valproate,Antiepileptic,seed:pharmacology-reference
+sofosbuvir,Antiviral (anti-hepatitis),seed:pharmacology-reference
+solifenacin,Overactive bladder agent,seed:pharmacology-reference
+sorbitol,Osmotic laxative,seed:pharmacology-reference
+sotalol,Antiarrhythmic,seed:pharmacology-reference
+spiramycin,Macrolide,seed:pharmacology-reference
+spironolactone,Potassium-sparing diuretic / aldosterone antagonist,seed:pharmacology-reference
+stanozolol,Anabolic steroid,seed:pharmacology-reference
+sterculia,Bulk laxative,seed:pharmacology-reference
+streptokinase,Fibrinolytic,seed:pharmacology-reference
+streptomycin,Aminoglycoside,seed:pharmacology-reference
+sucralfate,Mucosal protectant,seed:pharmacology-reference
+sulbactam,Beta-lactamase inhibitor,seed:pharmacology-reference
+sulfadiazine,Sulfonamide antibacterial,seed:pharmacology-reference
+sulfadoxine,Antimalarial,seed:pharmacology-reference
+sulfamethoxazole,Sulfonamide antibacterial,seed:pharmacology-reference
+sulfasalazine,Aminosalicylate,seed:pharmacology-reference
+sulfasalazine (DMARD),Immunosuppressant / DMARD,seed:pharmacology-reference
+sulphamethoxazole,Sulfonamide antibacterial,seed:pharmacology-reference
+sulpiride,Typical antipsychotic,seed:pharmacology-reference
+sultiame,Antiepileptic,seed:pharmacology-reference
+sumatriptan,Triptan (5-HT1B/1D agonist),seed:pharmacology-reference
+tacrolimus,Immunosuppressant (calcineurin / mTOR),seed:pharmacology-reference
+tadalafil,PDE5 inhibitor,seed:pharmacology-reference
+tafluprost,Prostaglandin analogue (ophthalmic),seed:pharmacology-reference
+tamoxifen,Selective estrogen receptor modulator,seed:pharmacology-reference
+tamsulosin,Alpha-1 blocker (uroselective),seed:pharmacology-reference
+tapentadol,Opioid analgesic,seed:pharmacology-reference
+taurine,Amino acid / nutritional,seed:pharmacology-reference
+tazarotene,Topical retinoid,seed:pharmacology-reference
+tazobactam,Beta-lactamase inhibitor,seed:pharmacology-reference
+tazobactum,Beta-lactamase inhibitor,seed:pharmacology-reference
+tedizolid,Oxazolidinone (weak MAO inhibitor),seed:pharmacology-reference
+teicoplanin,Glycopeptide,seed:pharmacology-reference
+telmisartan,Angiotensin receptor blocker (ARB),seed:pharmacology-reference
+temazepam,Benzodiazepine,seed:pharmacology-reference
+tenecteplase,Fibrinolytic,seed:pharmacology-reference
+teneligliptin,DPP-4 inhibitor,seed:pharmacology-reference
+tenofovir,Antiviral (anti-hepatitis),seed:pharmacology-reference
+tenofovir alafenamide,Antiretroviral,seed:pharmacology-reference
+tenofovir disoproxil fumarate,Antiretroviral,seed:pharmacology-reference
+terazosin,Alpha-1 blocker,seed:pharmacology-reference
+terbinafine,Allylamine antifungal,seed:pharmacology-reference
+terbutaline,Beta-2 agonist (bronchodilator),seed:pharmacology-reference
+tetracaine,Local anaesthetic,seed:pharmacology-reference
+tetracycline,Tetracycline,seed:pharmacology-reference
+theophylline,Methylxanthine bronchodilator,seed:pharmacology-reference
+thiamine,Vitamin B1,seed:pharmacology-reference
+thiocolchicoside,Skeletal muscle relaxant,seed:pharmacology-reference
+thioridazine,Typical antipsychotic,seed:pharmacology-reference
+thyroid extract,Thyroid hormone,seed:pharmacology-reference
+thyroxine,Thyroid hormone,seed:pharmacology-reference
+tianeptine,Atypical antidepressant,seed:pharmacology-reference
+ticagrelor,Antiplatelet (P2Y12 inhibitor),seed:pharmacology-reference
+ticlopidine,Antiplatelet (P2Y12 inhibitor),seed:pharmacology-reference
+tigecycline,Tetracycline,seed:pharmacology-reference
+tinidazole,Nitroimidazole antimicrobial,seed:pharmacology-reference
+tiotropium,Antimuscarinic bronchodilator,seed:pharmacology-reference
+tizanidine,Skeletal muscle relaxant,seed:pharmacology-reference
+tobramycin,Aminoglycoside,seed:pharmacology-reference
+tocilizumab,Biologic DMARD (anti-TNF / interleukin),seed:pharmacology-reference
+tocopherol,Vitamin E,seed:pharmacology-reference
+tocopheryl acetate,Vitamin E,seed:pharmacology-reference
+tofacitinib,Immunosuppressant / DMARD,seed:pharmacology-reference
+tolcapone,Dopaminergic anti-parkinson,seed:pharmacology-reference
+tolperisone,Skeletal muscle relaxant,seed:pharmacology-reference
+tolterodine,Overactive bladder agent,seed:pharmacology-reference
+topiramate,Antiepileptic,seed:pharmacology-reference
+torasemide,Loop diuretic,seed:pharmacology-reference
+torsemide,Loop diuretic,seed:pharmacology-reference
+tramadol,Opioid analgesic,seed:pharmacology-reference
+tramadol hydrochloride,Opioid analgesic,seed:pharmacology-reference
+trandolapril,ACE inhibitor,seed:pharmacology-reference
+tranexamic acid,Antifibrinolytic / haemostatic,seed:pharmacology-reference
+travoprost,Prostaglandin analogue (ophthalmic),seed:pharmacology-reference
+trazodone,Atypical antidepressant,seed:pharmacology-reference
+tretinoin,Topical retinoid,seed:pharmacology-reference
+triamcinolone,Corticosteroid,seed:pharmacology-reference
+triamterene,Potassium-sparing diuretic / aldosterone antagonist,seed:pharmacology-reference
+tribenoside,Local haemorrhoid preparation,seed:pharmacology-reference
+tricholine citrate,Nootropic / neurotrophic,seed:pharmacology-reference
+tricholine citrate (appetite),Laxative / appetite / misc GI,seed:pharmacology-reference
+trifluoperazine,Typical antipsychotic,seed:pharmacology-reference
+trihexyphenidyl,Anticholinergic (anti-parkinson),seed:pharmacology-reference
+trimebutine,Prokinetic (dopamine D2 antagonist),seed:pharmacology-reference
+trimethoprim,Dihydrofolate reductase inhibitor,seed:pharmacology-reference
+trimipramine,Tricyclic antidepressant,seed:pharmacology-reference
+triprolidine,Antihistamine (1st generation),seed:pharmacology-reference
+trospium,Overactive bladder agent,seed:pharmacology-reference
+trypsin,Proteolytic / anti-inflammatory enzyme,seed:pharmacology-reference
+trypsin  chymotrypsin,Proteolytic / anti-inflammatory enzyme,seed:pharmacology-reference
+trypsin chymotrypsin,Proteolytic / anti-inflammatory enzyme,seed:pharmacology-reference
+trypsin-chymotrypsin,Proteolytic / anti-inflammatory enzyme,seed:pharmacology-reference
+ubidecarenone,Antioxidant / micronutrient,seed:pharmacology-reference
+udenafil,PDE5 inhibitor,seed:pharmacology-reference
+umeclidinium,Antimuscarinic bronchodilator,seed:pharmacology-reference
+upadacitinib,Immunosuppressant / DMARD,seed:pharmacology-reference
+urea (topical),Keratolytic,seed:pharmacology-reference
+urokinase,Fibrinolytic,seed:pharmacology-reference
+ursodeoxycholic acid,Bile acid,seed:pharmacology-reference
+ursodiol,Bile acid,seed:pharmacology-reference
+ustekinumab,Biologic DMARD (anti-TNF / interleukin),seed:pharmacology-reference
+valacyclovir,Antiviral (nucleoside analogue),seed:pharmacology-reference
+valdecoxib,NSAID (COX-2 selective),seed:pharmacology-reference
+valganciclovir,Antiviral (nucleoside analogue),seed:pharmacology-reference
+valproate,Antiepileptic,seed:pharmacology-reference
+valproic acid,Antiepileptic,seed:pharmacology-reference
+valsartan,Angiotensin receptor blocker (ARB),seed:pharmacology-reference
+vancomycin,Glycopeptide,seed:pharmacology-reference
+vardenafil,PDE5 inhibitor,seed:pharmacology-reference
+velpatasvir,Antiviral (anti-hepatitis),seed:pharmacology-reference
+venlafaxine,SNRI,seed:pharmacology-reference
+verapamil,Calcium channel blocker (non-dihydropyridine),seed:pharmacology-reference
+vigabatrin,Antiepileptic,seed:pharmacology-reference
+vilanterol,Beta-2 agonist (bronchodilator),seed:pharmacology-reference
+vildagliptin,DPP-4 inhibitor,seed:pharmacology-reference
+vinpocetine,Nootropic / neurotrophic,seed:pharmacology-reference
+vitamin a,Vitamin A,seed:pharmacology-reference
+vitamin b1,Vitamin B1,seed:pharmacology-reference
+vitamin b12,Vitamin B12,seed:pharmacology-reference
+vitamin b6,Vitamin B6,seed:pharmacology-reference
+vitamin c,Vitamin C,seed:pharmacology-reference
+vitamin d2,Vitamin D analogue,seed:pharmacology-reference
+vitamin d3,Vitamin D analogue,seed:pharmacology-reference
+vitamin e,Vitamin E,seed:pharmacology-reference
+vitamin k,Vitamin K,seed:pharmacology-reference
+vitamin k1,Vitamin K,seed:pharmacology-reference
+voglibose,Alpha-glucosidase inhibitor,seed:pharmacology-reference
+voriconazole,Azole antifungal,seed:pharmacology-reference
+vortioxetine,Atypical antidepressant,seed:pharmacology-reference
+warfarin,Anticoagulant (vitamin K antagonist),seed:pharmacology-reference
+white soft paraffin,Emollient / barrier,seed:pharmacology-reference
+xylometazoline,Nasal / systemic decongestant (sympathomimetic),seed:pharmacology-reference
+zafirlukast,Leukotriene receptor antagonist,seed:pharmacology-reference
+zaleplon,Z-drug hypnotic,seed:pharmacology-reference
+zanamivir,Antiviral (anti-influenza),seed:pharmacology-reference
+zidovudine,Antiretroviral,seed:pharmacology-reference
+zinc,Antioxidant / micronutrient,seed:pharmacology-reference
+zinc acetate,Electrolyte / rehydration,seed:pharmacology-reference
+zinc sulphate,Electrolyte / rehydration,seed:pharmacology-reference
+ziprasidone,Atypical antipsychotic,seed:pharmacology-reference
+zoledronic acid,Bisphosphonate,seed:pharmacology-reference
+zolmitriptan,Triptan (5-HT1B/1D agonist),seed:pharmacology-reference
+zolpidem,Z-drug hypnotic,seed:pharmacology-reference
+zonisamide,Antiepileptic,seed:pharmacology-reference
+zopiclone,Z-drug hypnotic,seed:pharmacology-reference
+zuclopenthixol,Typical antipsychotic,seed:pharmacology-reference

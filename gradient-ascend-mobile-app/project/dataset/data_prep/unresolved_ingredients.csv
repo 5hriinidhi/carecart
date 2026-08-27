@@ -1,0 +1,916 @@
+ingredient_clean,occurrences,example_food_id,example_food_name
+firm white pumpkin,1,IF-0014,Petha
+kitchen lime,1,IF-0014,Petha
+alum powder,1,IF-0014,Petha
+molu leaf,1,IF-0018,Singori
+coconut flakes,1,IF-0024,Cham cham
+elachi,1,IF-0037,Adhirasam
+loaf bread,1,IF-0042,Double ka meetha
+black lentils,1,IF-0045,Kuzhi paniyaram
+mung bean,1,IF-0046,Mysore pak
+khus-khus seeds,1,IF-0056,Anarsa
+potol,1,IF-0065,Maach Jhol
+boiled pork,1,IF-0066,Pork Bharta
+axone,1,IF-0068,Galho
+pork,1,IF-0068,Galho
+shimla mirch,1,IF-0073,Aloo shimla mirch
+ladies finger,1,IF-0075,Bhindi masala
+chicken thighs,1,IF-0076,Biryani
+naan bread,1,IF-0081,Chicken Tikka masala
+tomato sauce,1,IF-0081,Chicken Tikka masala
+skinless chicken breasts,1,IF-0081,Chicken Tikka masala
+bhatura,1,IF-0083,Chole bhature
+masoor dal,1,IF-0084,Daal baati churma
+beaten rice flakes,1,IF-0089,Poha
+white urad dal,1,IF-0090,Fara
+bell peppers,1,IF-0092,Kadai paneer
+gravy,1,IF-0092,Kadai paneer
+rose syrup,1,IF-0097,Kulfi falooda
+falooda sev,1,IF-0097,Kulfi falooda
+roasted gram flour,1,IF-0100,Litti chokha
+mustard green,1,IF-0101,Makki di roti sarson da saag
+frozen green peas,1,IF-0104,Mushroom matar
+wild mushrooms,1,IF-0104,Mushroom matar
+tandoori masala,1,IF-0109,Paneer tikka masala
+kala chana,1,IF-0110,Pani puri
+boondi,1,IF-0110,Pani puri
+musk melon seeds,1,IF-0111,Panjeeri
+chopped tomatoes,1,IF-0112,Papad
+tea bags,1,IF-0115,Pindi chana
+sattu,1,IF-0119,Sattu ki roti
+white bread slices,1,IF-0121,Shahi tukra
+biryani masala powder,1,IF-0124,Tandoori Fish Tikka
+fish fillets,1,IF-0124,Tandoori Fish Tikka
+green bell pepper,1,IF-0124,Tandoori Fish Tikka
+kala jeera,1,IF-0125,Attu
+elephant foot yam,1,IF-0126,Avial
+long beans,1,IF-0126,Avial
+tindora,1,IF-0126,Avial
+split pigeon peas,1,IF-0127,Bisi bele bath
+whole urad dal,1,IF-0129,Dosa
+blend rice,1,IF-0129,Dosa
+greens,1,IF-0136,Keerai sadam
+red chili,1,IF-0137,Keerai poriyal
+beef,1,IF-0138,Beef Fry
+gooseberry,1,IF-0142,Kothamali sadam
+pearl onions,1,IF-0144,Kuzhambu
+lentils,1,IF-0148,Papadum
+green moong beans,1,IF-0152,Pesarattu
+thin rice flakes,1,IF-0158,Sandige
+sevai,1,IF-0159,Sevai
+parboiled rice,1,IF-0159,Sevai
+steamer,1,IF-0159,Sevai
+whole red beans,1,IF-0161,Theeyal
+meat curry powder,1,IF-0164,Chicken Varuval
+chicken chunks,1,IF-0164,Chicken Varuval
+kala masala,1,IF-0166,Amti
+baingan,1,IF-0168,Kolim Jawla
+bombay duck,1,IF-0173,Bombil fry
+malvani masala,1,IF-0173,Bombil fry
+fry,1,IF-0175,Chevdo
+chana daal,1,IF-0175,Chevdo
+coconut ice,1,IF-0177,Copra paak
+red food coloring,1,IF-0177,Copra paak
+dal,1,IF-0178,Daal Dhokli
+pav,1,IF-0179,Kutchi dabeli
+bhuna chana,1,IF-0180,Dahi vada
+sauce,1,IF-0184,Gatta curry
+chia seed,1,IF-0188,Halvasan
+rapeseed oil,1,IF-0190,Kansar
+green chili paste,1,IF-0193,Khandvi
+dry roasted,1,IF-0195,Laapsi
+cilantro,1,IF-0196,Koshimbir
+pav bhaji masala,1,IF-0201,Pav Bhaji
+dinner rolls,1,IF-0201,Pav Bhaji
+khaman,1,IF-0204,Sev khamani
+surti papdi,1,IF-0210,Undhiyu
+valor papdi,1,IF-0210,Undhiyu
+green garlic chutney,1,IF-0213,Lilva Kachori
+fresh green peas,1,IF-0213,Lilva Kachori
+moong beans,1,IF-0214,Mag Dhokli
+white flour,1,IF-0217,Farsi Puri
+sticky rice,1,IF-0222,Gheela Pitha
+orange rind,1,IF-0222,Gheela Pitha
+panch phoran masala,1,IF-0223,Khar
+forbidden black rice,1,IF-0230,Black rice
+biryani masala,1,IF-0231,Bora Sawul
+yellow moong daal,1,IF-0231,Bora Sawul
+whole red,1,IF-0231,Bora Sawul
+fresh green chilli,1,IF-0233,Chingri malai curry
+lamb,1,IF-0236,Haq Maas
+fish fillet,1,IF-0238,Kabiraji
+mutton,1,IF-0242,Koldil Duck
+fish roe,1,IF-0243,Masor Koni
+pumpkin flowers,1,IF-0243,Masor Koni
+dry chilli,1,IF-0245,Pakhala
+tea leaves,1,IF-0246,Pani Pitha
+soaked rice,1,IF-0246,Pani Pitha
+cardamom pods,1,IF-0247,Payokh
+red pepper,1,IF-0249,Red Rice
+watercress,1,IF-0249,Red Rice
+glutinous rice,1,IF-0251,Til Pitha
+dried rose petals,1,IF-0253,Shufta
+arrowroot powder,1,IF-0254,Mawa Bati
+extract,1,PF-2,Britannia Nutrichoice Digestive High-Fibre Biscuits
+belgium dark chocolate,1,PF-4,Sunfeast Baked Creations Rich Choco Chip Cookies
+polyglycerol esters of interesterified ricinoleic acid,1,PF-5,"sunfeast Dark Fantasy Bourbon, Classic Biscuit Made With Real Chocolate"
+castor bean,1,PF-5,"sunfeast Dark Fantasy Bourbon, Classic Biscuit Made With Real Chocolate"
+nature identical artificial flavouring substances- vanilla cake,1,PF-10,Britannia Good Day Pista Badam
+desiccated coconut powder,1,PF-12,UNIBIC Danish Coconut Cookies
+ammonium hydrogen carbonate,1,PF-13,Orion Choco Pie - Chocolate Coated Soft Biscuit
+carob bean gum,1,PF-13,Orion Choco Pie - Chocolate Coated Soft Biscuit
+hydrolysed pea protein,1,PF-13,Orion Choco Pie - Chocolate Coated Soft Biscuit
+monocalcium orthophosphate,1,PF-13,Orion Choco Pie - Chocolate Coated Soft Biscuit
+e3411,1,PF-13,Orion Choco Pie - Chocolate Coated Soft Biscuit
+non hydrogenated vegetable fat,1,PF-13,Orion Choco Pie - Chocolate Coated Soft Biscuit
+sodium hydrogen carbonate,1,PF-13,Orion Choco Pie - Chocolate Coated Soft Biscuit
+e3221,1,PF-13,Orion Choco Pie - Chocolate Coated Soft Biscuit
+vanillin powder,1,PF-13,Orion Choco Pie - Chocolate Coated Soft Biscuit
+artificial flavor,1,PF-13,Orion Choco Pie - Chocolate Coated Soft Biscuit
+foxtail millet flour,1,PF-14,Britannia Nutrichoice Oats Cookies Diabetic Friendly
+little millet flour,1,PF-14,Britannia Nutrichoice Oats Cookies Diabetic Friendly
+artificial flavouring substances- vanilla cake,1,PF-17,Britannia Good Day Pista Badam Cookies
+interesterifiedvegetable fat,1,PF-18,Sunfeast Cheese Wowzers
+spice extracti,1,PF-18,Sunfeast Cheese Wowzers
+polyglycerolesters of interesterified ricinoleic acid,1,PF-18,Sunfeast Cheese Wowzers
+from castor oil,1,PF-18,Sunfeast Cheese Wowzers
+natural and nature-identical flavoring substances,1,PF-21,Britannia Good Day Butter Jeera Cookies
+nature,1,PF-23,Britannia Milk Bikis Biscuits
+binding agents xanthan gum,1,PF-25,"Ritebite Max Protein Cookie Choco Almond, Sugar Free Premium Biscuit Cookies"
+binding agents gum acacia,1,PF-25,"Ritebite Max Protein Cookie Choco Almond, Sugar Free Premium Biscuit Cookies"
+fructo-oligosaccharide,1,PF-25,"Ritebite Max Protein Cookie Choco Almond, Sugar Free Premium Biscuit Cookies"
+amaranth puffs,1,PF-25,"Ritebite Max Protein Cookie Choco Almond, Sugar Free Premium Biscuit Cookies"
+roasted chick pea flour,1,PF-25,"Ritebite Max Protein Cookie Choco Almond, Sugar Free Premium Biscuit Cookies"
+psyllium husk,1,PF-25,"Ritebite Max Protein Cookie Choco Almond, Sugar Free Premium Biscuit Cookies"
+oats powder,1,PF-26,Britannia Good Day Chunkies Chocochip Cookie
+mango filling,1,PF-28,Orion Mango Choco Pie
+dry nuts,1,PF-31,UNIBIC Cashew Badam Cookies
+chicory mixture,1,PF-34,Parle Hide & Seek Cafe Mocha Cookies
+blackcurrant,1,PF-35,UNIBIC Fruit & Nut cookie
+papaya cubes,1,PF-35,UNIBIC Fruit & Nut cookie
+artificial flavours - chocolate,1,PF-38,Britannia NutriChoice Chocolate and Almond Oats Biscuits
+maltodextnn,1,PF-40,Malkist Cheese Crunchy Layered Crackers
+bakers yeast,1,PF-40,Malkist Cheese Crunchy Layered Crackers
+pyridoxine hydrochlonde,1,PF-40,Malkist Cheese Crunchy Layered Crackers
+artificial flavouning substance,1,PF-40,Malkist Cheese Crunchy Layered Crackers
+farine de blé raffinée,1,PF-41,Karachi Bakery Osmania Biscuits
+graisses végétales hydrogénées,1,PF-41,Karachi Bakery Osmania Biscuits
+lait et solides de lait,1,PF-41,Karachi Bakery Osmania Biscuits
+sel,1,PF-41,Karachi Bakery Osmania Biscuits
+saffron flavour,1,PF-43,Haldirams Cookie Heaven Badam Pista Cookies
+fdsc yellow no,1,PF-43,Haldirams Cookie Heaven Badam Pista Cookies
+binding agent,1,PF-45,"Ritebite Max Protein Cookie Choco Chips, No Maida Multigrain Premium Biscuit Cookies"
+compound chips,1,PF-45,"Ritebite Max Protein Cookie Choco Chips, No Maida Multigrain Premium Biscuit Cookies"
+amaranth puff,1,PF-45,"Ritebite Max Protein Cookie Choco Chips, No Maida Multigrain Premium Biscuit Cookies"
+roasted chickpea,1,PF-46,"Ritebite Max Protein Cookie Trail Mix, No Maida Multigrain Premium Biscuit Cookies"
+dried black currants,1,PF-46,"Ritebite Max Protein Cookie Trail Mix, No Maida Multigrain Premium Biscuit Cookies"
+dark chocolate chip,1,PF-47,The Baker's Dozen Cookies Choco Chip Flavoured Biscuits Cookies
+added artificial flavour vanilla cake,1,PF-47,The Baker's Dozen Cookies Choco Chip Flavoured Biscuits Cookies
+colours ins,1,PF-49,"Sunfeast Dark Fantasy Choco Chip, Biscuit Made With Deliciously Rich Chocolate"
+dark compound,1,PF-51,Open Secret Zero Maida Assorted Chocolate Cookies
+oat meal,1,PF-52,Mcvitie's Digestive High Fibre Biscuits With Goodness Of Wholewheat
+baker s yeast,1,PF-53,Malkist Double Chocolatey Crunchy Layered Crackers
+pyridoxine hydrochloride,1,PF-53,Malkist Double Chocolatey Crunchy Layered Crackers
+chocolate dark compound,1,PF-54,CookieMan Choco Chunk Cookies
+flax seed,1,PF-64,CookieMan Ragi Millet Jaggery Cookies
+natural and artificial sweeteners,1,PF-64,CookieMan Ragi Millet Jaggery Cookies
+cardamom seeds,1,PF-66,Parle Elaichi Rusk
+nature identical vanillin,1,PF-67,Britannia Pure Magic Choco Stars
+flovouring substances,1,PF-67,Britannia Pure Magic Choco Stars
+nature identital,1,PF-67,Britannia Pure Magic Choco Stars
+artificial ethyl venillin,1,PF-67,Britannia Pure Magic Choco Stars
+levulose,1,PF-68,Parle-G Gold Biscuit
+of vegetable add origin,1,PF-69,Parle-G Royale
+di-acetyl tartaric acid esters of mono,1,PF-77,Parle Hide & Seek Choco Roll Choco Rolls
+di-glycerides of edible vegetable oils,1,PF-77,Parle Hide & Seek Choco Roll Choco Rolls
+cake concentrate,1,PF-82,Let'S Try Fruits Cake Rusk
+jaggey,1,PF-85,Palekar Jaggery Toasted Buns
+emulsifier471,1,PF-85,Palekar Jaggery Toasted Buns
+potassium iodate,1,PF-87,Britannia Marie Gold Biscuits Plain
+dark choco filling,1,PF-89,Britannia Pure Magic Chocolush Choco Filled Cookie
+chives,1,PF-90,Britannia 5050 Maska Chaska Biscuit
+dark chocochips,1,PF-93,Britannia Good Day ChocoChip Cookies
+mono-glycerides of fatty acids,1,PF-96,Sunfeast Dark Fantasy Yumfills Rich Chocolate Pie Cake
+propylene glycol esters of fatty acids,1,PF-96,Sunfeast Dark Fantasy Yumfills Rich Chocolate Pie Cake
+salts of myristic,1,PF-96,Sunfeast Dark Fantasy Yumfills Rich Chocolate Pie Cake
+palmitic,1,PF-96,Sunfeast Dark Fantasy Yumfills Rich Chocolate Pie Cake
+stearic acids,1,PF-96,Sunfeast Dark Fantasy Yumfills Rich Chocolate Pie Cake
+ammonia,1,PF-96,Sunfeast Dark Fantasy Yumfills Rich Chocolate Pie Cake
+potassium,1,PF-96,Sunfeast Dark Fantasy Yumfills Rich Chocolate Pie Cake
+polyglycerol esters of fatty acid,1,PF-96,Sunfeast Dark Fantasy Yumfills Rich Chocolate Pie Cake
+vil,1,PF-96,Sunfeast Dark Fantasy Yumfills Rich Chocolate Pie Cake
+seasoning flavour onion,1,PF-97,Sunfeast All Rounder Crunchy Potato Biscuit with Chatpata Masala Flavour
+seasoning flavour garlic,1,PF-97,Sunfeast All Rounder Crunchy Potato Biscuit with Chatpata Masala Flavour
+seasoning flavour coriander,1,PF-97,Sunfeast All Rounder Crunchy Potato Biscuit with Chatpata Masala Flavour
+seasoning flavour red chilli,1,PF-97,Sunfeast All Rounder Crunchy Potato Biscuit with Chatpata Masala Flavour
+seasoning flavour pepper,1,PF-97,Sunfeast All Rounder Crunchy Potato Biscuit with Chatpata Masala Flavour
+seasoning flavour cumin,1,PF-97,Sunfeast All Rounder Crunchy Potato Biscuit with Chatpata Masala Flavour
+from sunflower,1,PF-97,Sunfeast All Rounder Crunchy Potato Biscuit with Chatpata Masala Flavour
+rape seed oil,1,PF-98,Sunfeats Dark Fantasy Desserts Choconut Dipped Filled Cookie Reimaged
+choco crème,1,PF-98,Sunfeats Dark Fantasy Desserts Choconut Dipped Filled Cookie Reimaged
+compound chocolate chips,1,PF-102,Sunfeast Farmlite Oats & Chocolate Cookies
+antifoaming agent,1,PF-104,Frooti Mango Fruit Juice
+identical and natural flavouring substances gelling agent,1,PF-105,Paper Boat Lychee Fruit Juice
+identical and natural flavouring substances antioxidant,1,PF-105,Paper Boat Lychee Fruit Juice
+preservatives211,1,PF-105,Paper Boat Lychee Fruit Juice
+mix berries,1,PF-106,Yu Berry Blast 100% Fruit Juice With Berry Pieces
+popping boba,1,PF-108,Boba Bhai Pina Colada with Popping Bubbles & Nata de Coco
+mango flavours,1,PF-109,Maaza Mango Fruit Juice
+reconstituted pomegranate juice,1,PF-110,Paper Boat Swing Pomegranate Fruit Juice
+mango juice concentrate,1,PF-112,Paper Boat Mango
+watermelon pulp,1,PF-119,"B Natural Mixed Fruit Juice, 100% Pulp"
+bael pulp,1,PF-119,"B Natural Mixed Fruit Juice, 100% Pulp"
+jamun pulp,1,PF-119,"B Natural Mixed Fruit Juice, 100% Pulp"
+from apple,1,PF-120,Dabur Fruit Power Mixed Fruit Juice
+equivalent t0 mango pulp in reconstituted beverage ingredients,1,PF-121,Slice Mango Drink
+concentrated mango pulp,1,PF-121,Slice Mango Drink
+natural and nature identical flavouring substances,1,PF-121,Slice Mango Drink
+steviol glycoside,1,PF-121,Slice Mango Drink
+guava puree,1,PF-122,Paper Boat Swing Guava Fruit Juice
+passion,1,PF-123,Dabur Real Fruit Power Masala Mixed Fruit Juice
+natural colours a,1,PF-123,Dabur Real Fruit Power Masala Mixed Fruit Juice
+chili pepper,1,PF-123,Dabur Real Fruit Power Masala Mixed Fruit Juice
+cranberry juice concentrate,1,PF-126,Dabur Real Cranberry Fruit Juice
+strawberry juice from strawberry,1,PF-127,Mogu Mogu Strawberry Fruit Juice
+peach,1,PF-132,Tropicana Delight Mixed Fruit Juice
+reconstituted apple juice content,1,PF-135,Dabur Real Activ Apple Juice
+litchi pulp concentrate,1,PF-136,Dabur Real Litchi Fruit Juice
+ginger extract,1,PF-139,Raw Pressery Refreshers Sugarcane Fruit Juice
+mosambi,1,PF-140,Dabur Real Mosambi Fruit Juice
+sweet lime,1,PF-140,Dabur Real Mosambi Fruit Juice
+concentrated cranberry juice,1,PF-142,Tropicana Delight Cranberry Fruit Juice
+concentrated red grape juice,1,PF-142,Tropicana Delight Cranberry Fruit Juice
+concentrated pomegranate juice,1,PF-142,Tropicana Delight Cranberry Fruit Juice
+acidity regulators ins,1,PF-143,Storia Pomegranate Fruit Juice
+japple concentrate,1,PF-143,Storia Pomegranate Fruit Juice
+vitamin c- antioxidant,1,PF-144,Raw Pressery Valencia Orange Fruit Juice
+cranberry puree,1,PF-145,Raw Pressery Refreshers Cranberry Fruit Juice
+cranberry concentrate,1,PF-145,Raw Pressery Refreshers Cranberry Fruit Juice
+acidifier,1,PF-146,Rani Imported Orange and Carrot Fruit Juice
+nature identical orange flavor,1,PF-146,Rani Imported Orange and Carrot Fruit Juice
+pure orange juice,1,PF-149,No filter 100% juice orange
+strawberry juice,1,PF-151,No filter 100% juice strawberry
+nature identical flavour blueberry,1,PF-154,RIO Blueberry Peach Bubbly Fruit Drink Can
+nature identical flavour peach,1,PF-154,RIO Blueberry Peach Bubbly Fruit Drink Can
+peach juice,1,PF-154,RIO Blueberry Peach Bubbly Fruit Drink Can
+acai berry,1,PF-155,RIO Acai Berry & Mixed Berry Bubbly Fruit Drink Can
+acidity regulators acidity regulators,1,PF-156,RIO WildBerry Bubbly Fruit Drink Can
+wild berry,1,PF-156,RIO WildBerry Bubbly Fruit Drink Can
+carbonating agent,1,PF-158,Appy Fizz Apple Soft Drink
+saffron powder,1,PF-159,Paper Boat Aamras Drink
+blend of mango pulp,1,PF-160,Dabur Real Mango Drink
+including alphonso mango pulp,1,PF-160,Dabur Real Mango Drink
+reconstituted from apple juice concentrate,1,PF-161,Del Monte Green Apple Fruit Drink Crisp
+aloevera juice,1,PF-164,Alo Frut Litchi
+pulp,1,PF-164,Alo Frut Litchi
+added flavours natural,1,PF-165,Bindu Fizz Jeera Masala Soft Drink
+addity regulators,1,PF-168,Bombay Banta Kala Khatta Soft Drink
+lemon juice reconstituted,1,PF-170,Bombay Banta Masala Soda Soft Drink
+class,1,PF-171,Paper Boat Swing Jeera Soft Drink
+cloudifier,1,PF-174,Aloha Pudina Masala Soft Drink
+nature-identical flavours,1,PF-175,NEOPOP Mango Bliss Can
+lemon fruit,1,PF-178,Monster-S The Doctor Imported Energy Drink
+natural flavourings,1,PF-178,Monster-S The Doctor Imported Energy Drink
+panax ginseng root extract,1,PF-178,Monster-S The Doctor Imported Energy Drink
+vitamins b2,1,PF-178,Monster-S The Doctor Imported Energy Drink
+vitamins b3,1,PF-178,Monster-S The Doctor Imported Energy Drink
+vitamins b6,1,PF-178,Monster-S The Doctor Imported Energy Drink
+vitamins b12,1,PF-178,Monster-S The Doctor Imported Energy Drink
+l-carnitine l-tartrate,1,PF-178,Monster-S The Doctor Imported Energy Drink
+d-glucronolactone,1,PF-178,Monster-S The Doctor Imported Energy Drink
+sweeteners aspartame,1,PF-179,Dr Pepper Sparkling Fruit Flavour Soft Drink
+sweeteners acesulfame k,1,PF-179,Dr Pepper Sparkling Fruit Flavour Soft Drink
+clear lemon juice concentrate,1,PF-180,Bisleri Limonata Lemon and Mint Soft Drink
+lemon flavour,1,PF-181,Limca Lemon Soft Drink
+concentrated lemon juice,1,PF-185,7UP Nimbooz Soft Drink
+regulators,1,PF-186,Mountain Dew Lemon Soft Drink
+coconut chunks,1,PF-187,Pluckk Natural Tender Coconut Water With Real Malai Chunks
+nsn,1,PF-188,Paper Boat Tender Coconut Water
+sequestrants,1,PF-190,Sting Energy Drink
+vitamins premix,1,PF-190,Sting Energy Drink
+acidity regulators magnesium carbonate,1,PF-191,Red Bull Energy Drink
+b12,1,PF-191,Red Bull Energy Drink
+toffee,1,PF-197,Smoodh Toffee Caramel Milk
+vitamind2,1,PF-198,Hershey's Chocolate Milkshake
+vitaminb1,1,PF-198,Hershey's Chocolate Milkshake
+liquid giucose,1,PF-199,Hershey's Cookies and Cream Milkshake
+mineral caloium carbonate,1,PF-199,Hershey's Cookies and Cream Milkshake
+emusfiers,1,PF-199,Hershey's Cookies and Cream Milkshake
+atificial flavounng substances,1,PF-199,Hershey's Cookies and Cream Milkshake
+edible common sat,1,PF-199,Hershey's Cookies and Cream Milkshake
+seguestrant,1,PF-199,Hershey's Cookies and Cream Milkshake
+vitarmin a,1,PF-199,Hershey's Cookies and Cream Milkshake
+ergocaloferol,1,PF-199,Hershey's Cookies and Cream Milkshake
+thiamine chloride hydrochioride,1,PF-199,Hershey's Cookies and Cream Milkshake
+riboltavin,1,PF-199,Hershey's Cookies and Cream Milkshake
+stabilizers412,1,PF-201,Sunfeast Dark Fantasy Chocolate Milkshake With Belgian Chocolate
+ili,1,PF-201,Sunfeast Dark Fantasy Chocolate Milkshake With Belgian Chocolate
+oat,1,PF-201,Sunfeast Dark Fantasy Chocolate Milkshake With Belgian Chocolate
+purifed water,1,PF-205,Phab 18g Protein Mango Magic Milkshake
+probiotic fructooligosaccharide,1,PF-205,Phab 18g Protein Mango Magic Milkshake
+artificial flavour substances - mango,1,PF-205,Phab 18g Protein Mango Magic Milkshake
+ynthetic food colour,1,PF-205,Phab 18g Protein Mango Magic Milkshake
+natural food color,1,PF-207,Heritage Pista Flavoured Milk
+cardamom extract,1,PF-207,Heritage Pista Flavoured Milk
+artificial vanilla cake flavouring substance,1,PF-208,Heritage VANILLA CAKE Flavoured Milk
+cappuccino,1,PF-218,Nescafe Ready To Drink Coffee Flavoured Milk Intense Cafe Cappucino Cold Coffee
+natural flavoring substance,1,PF-219,Cravova Hazelnut Cold Coffee
+chicory,1,PF-221,"Tata Cold Coffee Belgian Chocolate Iced Coffee, Rich & Creamy, Flavoured Milk"
+added flavour - nature identical chocolate flavouring substances eggless chocolate cake,1,PF-222,Dairy Day Bento Cake Choco Fantasy Ice Cream Cake - Box
+choco compound chips,1,PF-222,Dairy Day Bento Cake Choco Fantasy Ice Cream Cake - Box
+chocolate syrup,1,PF-222,Dairy Day Bento Cake Choco Fantasy Ice Cream Cake - Box
+chocolate and vanilla cake,1,PF-223,Winkies Cake - Chocolate Cake Slice
+added artificial flavouring substances,1,PF-224,The Baker's Dozen VANILLA CAKE Cake
+orange peel candy,1,PF-225,The Baker'S Dozen Fresh Orange Cake
+glazed fruits papaya cuts,1,PF-226,Britannia Gobbles Bar Cake - Fruity Fun
+glazed fruits preservative,1,PF-226,Britannia Gobbles Bar Cake - Fruity Fun
+emulsifiers470,1,PF-226,Britannia Gobbles Bar Cake - Fruity Fun
+choco callets,1,PF-229,Britannia Fudge It Chocolate Brownie (With Egg)
+brownie magnum,1,PF-229,Britannia Fudge It Chocolate Brownie (With Egg)
+and artificial flavour,1,PF-230,Winkies Fruit Cake Slice
+refined vegetable fat ciinteresterified vegetable fat,1,PF-231,Britannia Gobbles Marble Red Velvet Cake
+vitamin aj,1,PF-231,Britannia Gobbles Marble Red Velvet Cake
+huaiectants,1,PF-231,Britannia Gobbles Marble Red Velvet Cake
+and humectant,1,PF-231,Britannia Gobbles Marble Red Velvet Cake
+glazed fruit cuts,1,PF-233,Modern Pineapple Pop Cake
+synthetic food color,1,PF-233,Modern Pineapple Pop Cake
+pineapple cuts,1,PF-233,Modern Pineapple Pop Cake
+líquid glucose,1,PF-234,Cadbury Chocobakes ChocLayered Cakes
+chocolayer,1,PF-234,Cadbury Chocobakes ChocLayered Cakes
+croissant,1,PF-236,Bauli Moonfils Croissants Choco Cream (Egg)
+bakery mox,1,PF-236,Bauli Moonfils Croissants Choco Cream (Egg)
+artificial flavoring substances - vanilla cake,1,PF-236,Bauli Moonfils Croissants Choco Cream (Egg)
+artificial flavoring substances - chocolate,1,PF-236,Bauli Moonfils Croissants Choco Cream (Egg)
+sugat,1,PF-238,Modern Fruit N Nut Cake
+hydrogenated vegetable fat candied fruits,1,PF-238,Modern Fruit N Nut Cake
+dry fruits mix,1,PF-238,Modern Fruit N Nut Cake
+cake concentrate mix,1,PF-238,Modern Fruit N Nut Cake
+c296,1,PF-238,Modern Fruit N Nut Cake
+mixed fruits,1,PF-239,UNIBIC Plum Cake
+pear,1,PF-239,UNIBIC Plum Cake
+dehydrated mango pulp,1,PF-239,UNIBIC Plum Cake
+peservative,1,PF-239,UNIBIC Plum Cake
+mixed fruit pulp,1,PF-239,UNIBIC Plum Cake
+oranges,1,PF-239,UNIBIC Plum Cake
+candied ginger peel,1,PF-239,UNIBIC Plum Cake
+ginger piergs,1,PF-239,UNIBIC Plum Cake
+sun flower oil,1,PF-239,UNIBIC Plum Cake
+palmoein oil,1,PF-240,Winkies Fruit Cake Raisin & Tutti Fruitti
+baking powder and,1,PF-240,Winkies Fruit Cake Raisin & Tutti Fruitti
+nature-identical and natural flavour,1,PF-240,Winkies Fruit Cake Raisin & Tutti Fruitti
+orange and lemon,1,PF-240,Winkies Fruit Cake Raisin & Tutti Fruitti
+and preservatives,1,PF-242,Winkies Novo VANILLA CAKE Cake
+humactant,1,PF-244,Winkies English Tea Cake
+bakery mix,1,PF-246,Bauli Moonfils Croissants Strawberry
+mulsifier,1,PF-246,Bauli Moonfils Croissants Strawberry
+an-bioxidant,1,PF-246,Bauli Moonfils Croissants Strawberry
+artificial flavouring substances-orange,1,PF-246,Bauli Moonfils Croissants Strawberry
+black carrot extract,1,PF-246,Bauli Moonfils Croissants Strawberry
+artificial flavoring substances-strawberry,1,PF-246,Bauli Moonfils Croissants Strawberry
+anti-oxidant,1,PF-247,"Open Secret Heart Shaped Chocolate Almond Brownie, No Maida, Zero Palm Oil"
+eggless chocolate cake,1,PF-248,Havmor Mud Cake Ice Cream Cake
+additives - emulsifiers,1,PF-248,Havmor Mud Cake Ice Cream Cake
+additives-synthetic food colour,1,PF-248,Havmor Mud Cake Ice Cream Cake
+cow,1,PF-249,The Belgian Waffle Co Cookie & Cream Waffle Crisps
+buffalo,1,PF-249,The Belgian Waffle Co Cookie & Cream Waffle Crisps
+edible vegetable,1,PF-249,The Belgian Waffle Co Cookie & Cream Waffle Crisps
+refined palm kernel,1,PF-249,The Belgian Waffle Co Cookie & Cream Waffle Crisps
+crème filling,1,PF-250,Sunfeast Dark Fantasy Choco Rolls
+ins1100,1,PF-251,Dukes Waffy Chocolate Wafers
+ins1101,1,PF-251,Dukes Waffy Chocolate Wafers
+dark choco compound,1,PF-252,The Belgian Waffle Co Classic Choco Crisps
+nature-identical flavouring substances contains ecc,1,PF-253,Dr. Oetker Kuppies Chocolate Waffle
+belgian chocolate sauce,1,PF-257,Nova Nova Best Bite Choco Filled Cones- Belgian Chocolate
+rice grit,1,PF-262,Kurkure Yummy PuffCorn Yummy Cheese Chips
+artificial sweetner aspartame,1,PF-262,Kurkure Yummy PuffCorn Yummy Cheese Chips
+turmeric extract,1,PF-262,Kurkure Yummy PuffCorn Yummy Cheese Chips
+chick pea,1,PF-267,Crax Double Mazza Roasted Chana Peanuts Namkeen Snacks
+yellow pea grits,1,PF-269,Bingo! Popped Chips Sour Cream & Herbs
+green pea grits,1,PF-269,Bingo! Popped Chips Sour Cream & Herbs
+nature-ldentical flavouring substances,1,PF-271,Too Yumm! Sour Cream & Onion Veggie Stix
+used as natural flavouring agent,1,PF-271,Too Yumm! Sour Cream & Onion Veggie Stix
+large cardamom powder,1,PF-276,Uncle Chips Spicy Treat
+cinnamon nutmeg,1,PF-282,Let's Try Peanut Party Mix
+vegetable oils,1,PF-284,Haldiram's Halke Fulke - Salted Potato Chips
+yeast exctract,1,PF-284,Haldiram's Halke Fulke - Salted Potato Chips
+red chili powder,1,PF-288,Let's Try Garlic Bhujia
+flaked rice,1,PF-289,Lets Try Lite Mixture
+carrom seeds,1,PF-289,Lets Try Lite Mixture
+casia powder,1,PF-289,Lets Try Lite Mixture
+papain,1,PF-290,Orion K Snack Rings Kimchi Flavour
+refined cottonseed oil,1,PF-291,Jabsons Roasted Peanuts Classic Salted
+colouring agent,1,PF-292,Orion K Snack Rings 3x Spicy
+chipotle,1,PF-294,BRB Potato Popped Chips - Spicy Chipotle Flavour
+pulses,1,PF-295,Brb Rice Popped Chips Peri Peri Flavour
+longi mirch,1,PF-298,Let's Try Bhujia
+roasted urad dal,1,PF-299,Wellbe Crunchy Kodbale
+amaranth flour,1,PF-301,The Baker's Dozen Zero Maida Ragi Crackers Baked Millet Snack
+stabilising agent,1,PF-306,Too Yumm! Bhoot Potato Chips Spicy Chilli Flavour Chips
+canola,1,PF-312,Kurkure Schezwan Chutney
+edible common,1,PF-319,Farmley Achaari Makhana Roasted In Olive Oil
+garlic flakes,1,PF-319,Farmley Achaari Makhana Roasted In Olive Oil
+hydrolysed vegetable,1,PF-319,Farmley Achaari Makhana Roasted In Olive Oil
+fox-nuts,1,PF-323,MOM Black Salt Roasted Makhana
+foxnut flour,1,PF-324,Let's Try Sour Cream And Onion Makhana Puffs
+anti-caking agents,1,PF-325,MR. MAKHANA Fox Nuts Black Salt
+garic,1,PF-326,Too Yumm! Karare Chilli Achari Flavour
+geling agent,1,PF-326,Too Yumm! Karare Chilli Achari Flavour
+conciments,1,PF-327,Too Yumm! Noodles Masala | Spicy No Palm Oil Crisps
+ins55,1,PF-327,Too Yumm! Noodles Masala | Spicy No Palm Oil Crisps
+lemon juice powder,1,PF-329,Too Yumm! Aloo Chaat Potato Stix | Munching Snack | On-the-Go Munchies
+tepary bean flour,1,PF-330,Too Yumm! Aloo Bhujia | No Palm Oil | 35% Less Saturated Fat
+split green gram,1,PF-332,Too Yumm! Moong Dal | No Palm Oil | 35% Less Saturated Fat
+split pulse bengal gram,1,PF-334,Haldiram's Mixture
+tapary beans,1,PF-334,Haldiram's Mixture
+moth dal,1,PF-334,Haldiram's Mixture
+split pulse urd,1,PF-335,Haldirams Soya Sticks
+urd dal,1,PF-335,Haldirams Soya Sticks
+nutmeg cinnamon,1,PF-335,Haldirams Soya Sticks
+fennel seed,1,PF-335,Haldirams Soya Sticks
+cotton seed corn,1,PF-337,Haldiram's Khatta Meetha
+gram pulse,1,PF-337,Haldiram's Khatta Meetha
+lentil,1,PF-337,Haldiram's Khatta Meetha
+bishops weed,1,PF-337,Haldiram's Khatta Meetha
+fif,1,PF-337,Haldiram's Khatta Meetha
+haldiram s moong dal,1,PF-338,Haldiram's Moong Dal
+derived,1,PF-339,Haldiram's Cornflakes Mixture
+mace powder,1,PF-339,Haldiram's Cornflakes Mixture
+edible oil,1,PF-346,Granamma Madras Mixture
+fried curry leaves,1,PF-346,Granamma Madras Mixture
+dried curry leaves,1,PF-349,Granamma Kara Boondi
+besan powder,1,PF-350,Dev Kadalamavu Mixture
+chilly powder,1,PF-350,Dev Kadalamavu Mixture
+rice powder,1,PF-351,Dev Snacks Ghee Murukku
+urid dal,1,PF-351,Dev Snacks Ghee Murukku
+nature identical flavouring substance - vanillin,1,PF-357,Ferrero Rocher
+hydrogenated edible vegetable fat,1,PF-359,Amul Chocominis Chocolate
+added vanilla cake flavour,1,PF-359,Amul Chocominis Chocolate
+edible vegetable fats less than,1,PF-360,Galaxy Cookie Crumble CHOCOLATE BAR
+fat reduced cocoa powder,1,PF-360,Galaxy Cookie Crumble CHOCOLATE BAR
+coconuts,1,PF-369,Eat Anytime Coffee Cinnamon Date Laddoo
+artificial flavouring substance-vanillin,1,PF-374,Hershey's Creamy Milk CHOCOLATE BAR
+artificial vanilla cake flavouring,1,PF-376,Cadbury Dairy Milk Bites Hazelnut Chocolate Pack
+cocoa content,1,PF-378,"Galaxy Fusions Silky Smooth Dark CHOCOLATE BAR, Made with 70% Cocoa"
+total cocoa content,1,PF-378,"Galaxy Fusions Silky Smooth Dark CHOCOLATE BAR, Made with 70% Cocoa"
+extruded rice,1,PF-383,Kinder Creamy Milky And Cocoa With Extruded Rice
+white chocolate,1,PF-384,Hershey's Kisses Cookies 'N' Cream Chocolate
+gojiberry,1,PF-385,Hershey's Exotic Raspberry & Goji Dark Chocolate
+blackberry fruit powder,1,PF-388,Hershey's Exotic Dark Chocolate Californian Almonds - With Blackberry Crunchy Dark Chocolate
+edible vegetable fat less than,1,PF-391,Bounty Miniatures Coconut Filled Chocolate Pack
+ectant,1,PF-391,Bounty Miniatures Coconut Filled Chocolate Pack
+edible vegetable fat <,1,PF-393,"Snickers Filled with Brownie, Peanuts & Caramel CHOCOLATE BAR"
+palm superolein,1,PF-394,Cadbury Dairy Milk Lickables Chocolate with Oreo Chunks
+center filling,1,PF-395,Hershey's Kisses Choco Truffle
+rapeseed,1,PF-395,Hershey's Kisses Choco Truffle
+apple orange pieces,1,PF-397,Cadbury Dairy Milk Silk Desserts Plum Cake CHOCOLATE BAR
+apple puree concentrate,1,PF-397,Cadbury Dairy Milk Silk Desserts Plum Cake CHOCOLATE BAR
+liqud glucose,1,PF-397,Cadbury Dairy Milk Silk Desserts Plum Cake CHOCOLATE BAR
+plum cake,1,PF-397,Cadbury Dairy Milk Silk Desserts Plum Cake CHOCOLATE BAR
+sorbitan tristearate,1,PF-399,"Fabelle Hazelnut Handcrafted Chocolate Truffles Inspired by Classic Desserts, Assorted Luxury Chocolates Gift Pack"
+dried sweetened cranberries,1,PF-401,Cadbury Bournville Cranberry 50% Dark CHOCOLATE BAR
+nature identical flavoring substance,1,PF-402,Cadbury Bournville Fruit & Nut 50% Dark CHOCOLATE BAR
+hydrogenated egetable oil,1,PF-404,Snickers Almond Filled CHOCOLATE BAR
+nature identical flavoring substances,1,PF-406,Cadbury Bournville Rich Cocoa 50% Dark CHOCOLATE BAR
+acai,1,PF-409,Hershey's Exotic Dark Blueberry And Acai Chocolate Share Bag
+belgian,1,PF-410,Nova Nova Waffle Chocolates- Belgian Chocolate
+white chocolate drizzle,1,PF-410,Nova Nova Waffle Chocolates- Belgian Chocolate
+plant origin,1,PF-411,Nova Nova Choco Pockets- Classic Chocolate
+flour improver,1,PF-411,Nova Nova Choco Pockets- Classic Chocolate
+e01100,1,PF-411,Nova Nova Choco Pockets- Classic Chocolate
+artificial flavouring substance - vanilla cake,1,PF-412,Hershey's Kisses Hazelnut 'N' Cookies Chocolate
+‎unsweetened cocoa,1,PF-417,Lo Foods Dark CHOCOLATE BAR Hazelnut Premium Sugar Free Chocolate Rich Healthy Chocolates
+artificial vanillin flavour,1,PF-420,Milka Raisins & Nuts Milk Chocolate
+natural orange extract,1,PF-424,Darkins Indian Artisanal 63% Dark Orange Chocolate
+cacao beans,1,PF-427,Darkins Indian Artisanal 70% Dark Cranberry & Chilli Chocolate
+bhut jholokia chilli,1,PF-427,Darkins Indian Artisanal 70% Dark Cranberry & Chilli Chocolate
+orange oil,1,PF-432,The Whole Truth Orange Dark Chocolate
+artificial flavourings,1,PF-435,Lindt Lindor Smooth Melting Assorted Chocolates Cornet
+blood orange solids,1,PF-436,Godiva Dark Chocolate Blood Orange Tablet Bar
+natural vanilla cake flavouring,1,PF-436,Godiva Dark Chocolate Blood Orange Tablet Bar
+min cocoa,1,PF-436,Godiva Dark Chocolate Blood Orange Tablet Bar
+fat reduced cocoa powdaer,1,PF-437,Godiva Signature 72% Cacao Dark Chocolate
+cocoa solids is minimum,1,PF-437,Godiva Signature 72% Cacao Dark Chocolate
+tree nuts,1,PF-444,Toblerone Fruit & Nut Chocolate
+orange juice from concentrate,1,PF-448,Lindt Excellence Orange Intense Dark Chocolate
+lemon juice from concentrate,1,PF-448,Lindt Excellence Orange Intense Dark Chocolate
+puffed quinoa,1,PF-449,Sugar Free D'lite Quinoa & Almonds Dark CHOCOLATE BAR
+palm kernel fat,1,PF-450,Maltesers Chocolate
+natural vanilla cake extract,1,PF-450,Maltesers Chocolate
+rice crispies,1,PF-451,Cadbury 5 Star 3D CHOCOLATE BAR
+raspberry crumble,1,PF-453,Chokola 45% Raspberry Chocolate Minis
+refined palm kernel stearin,1,PF-454,Dukesh Truffel Butter Scotch Chocolate
+refined salseed fat,1,PF-462,Ferrero Rocher Moments Pack
+sunflowerseed oil,1,PF-462,Ferrero Rocher Moments Pack
+high oleic acid,1,PF-462,Ferrero Rocher Moments Pack
+503ii,1,PF-462,Ferrero Rocher Moments Pack
+pass pass,1,PF-464,Pulse Kachcha Aam 50 Candies
+strawberry juice concentrate,1,PF-468,Fruittella Strawberry Flavour Chewy Toffee Stick
+binders,1,PF-472,Orbit Sugar-Free Mixed Fruit Chewing Gum Tube
+strawberry flavour ingredients,1,PF-473,Chupa Chups Assorted Flavour Long Tubes
+watermelon flavour ingredients,1,PF-473,Chupa Chups Assorted Flavour Long Tubes
+mixed berry,1,PF-474,Skittles Wildberry Bite-Size Fruit Flavoured Candy
+fennel seeds powder,1,PF-476,Tic Tac Seeds Fennel (Saunf)
+triglycerides,1,PF-477,Doublemint Peppermint Chewy Mints Tube
+sweetened rose petal paste,1,PF-479,Rangmunch Anardana Shots
+pomegranate powder,1,PF-479,Rangmunch Anardana Shots
+coriander seed powder,1,PF-479,Rangmunch Anardana Shots
+citric crystals,1,PF-479,Rangmunch Anardana Shots
+cumin seeds powder,1,PF-480,Tic Tac Seeds Jeera Blacksalt
+natural identical flavours,1,PF-480,Tic Tac Seeds Jeera Blacksalt
+dried ripe mango pulp,1,PF-481,Rangmunch Mango Masti Premium Mouth Frehsner
+37c,1,PF-482,Alpenliebe Gold Caramel Toffee
+natural food colours,1,PF-483,KOPIKO Cappuccino Coffee Candy
+e15d,1,PF-483,KOPIKO Cappuccino Coffee Candy
+and added nature - identical flavouring substances - strawberry,1,PF-485,Alpenliebe Juzt Jelly - Strawberry Flavour
+amla,1,PF-486,"Sri Sri Tattva Candy - Amla, Delicious, Healthy & Digestive"
+phyllanthus emblica,1,PF-486,"Sri Sri Tattva Candy - Amla, Delicious, Healthy & Digestive"
+lodized,1,PF-487,Alpenliebe Gold Cream Strawberry Flavour Toffee
+hydrogenated vegetable fat powder,1,PF-488,DERBY Tradissions Assorted Toffees
+^corresponding to strawberry fruit juice,1,PF-490,Mentos Rainbow Assorted Flavour Chewy Toffee
+^corresponding to orange fruit juice,1,PF-490,Mentos Rainbow Assorted Flavour Chewy Toffee
+mint flavour,1,PF-490,Mentos Rainbow Assorted Flavour Chewy Toffee
+corresponding to strawberry fruit juice,1,PF-492,Mentos Strawberry Flavour Toffee
+hydrogenated vegetable fat contains permitted synthetic food colour,1,PF-494,Swad Swad Coffee Candy
+gulkand chocolate,1,PF-496,Mapro Mazaana Chocolate Paan
+and emulsifier,1,PF-497,Dukes Choco Centre Filled Eclairs - Rich & Creamy
+numbers in brackets as per international numbering system,1,PF-497,Dukes Choco Centre Filled Eclairs - Rich & Creamy
+vitamin c powder,1,PF-501,Swad Orange With Vitamin C Candy
+paan leaf,1,PF-502,Swad Meetha Pan Paan Candy
+kattha,1,PF-502,Swad Meetha Pan Paan Candy
+laung,1,PF-502,Swad Meetha Pan Paan Candy
+peppermint contains permitted synthetic food colour,1,PF-502,Swad Meetha Pan Paan Candy
+pan,1,PF-502,Swad Meetha Pan Paan Candy
+choco center,1,PF-503,Lotte Eclairs Coffy Bite Toffee
+added flavours nature identical flavouring substances,1,PF-503,Lotte Eclairs Coffy Bite Toffee
+black currant,1,PF-504,"Parle Poppins Candy - Fruit Flavoured Rolls, Tangy & Crunchy"
+sunset yellow fcf,1,PF-506,Cocon Jelly - Mixed Fruit Flavour
+brilliant blue fcf,1,PF-506,Cocon Jelly - Mixed Fruit Flavour
+gelatine,1,PF-508,Haribo Goldbaren
+safflower,1,PF-508,Haribo Goldbaren
+spirulina,1,PF-508,Haribo Goldbaren
+elderberry,1,PF-508,Haribo Goldbaren
+aronia,1,PF-508,Haribo Goldbaren
+peppermint,1,PF-509,CandyVille Mint Mello Flavoured Candy - Peppermint
+center filling-cardamom paste nature identical flavouring substances,1,PF-510,DERBY Elaichi Éclair
+nutrition per gram,1,PF-517,Fox'S Crystal Clear Candy - Mint Flavour
+piece,1,PF-517,Fox'S Crystal Clear Candy - Mint Flavour
+kcal total fat,1,PF-517,Fox'S Crystal Clear Candy - Mint Flavour
+0g saturated fat,1,PF-517,Fox'S Crystal Clear Candy - Mint Flavour
+0g protein,1,PF-517,Fox'S Crystal Clear Candy - Mint Flavour
+0g total carbohydrate,1,PF-517,Fox'S Crystal Clear Candy - Mint Flavour
+75g sodium,1,PF-517,Fox'S Crystal Clear Candy - Mint Flavour
+menthol crystals,1,PF-518,CandyVille Mint Mello Flavoured Candy - Lime & Mint
+fresh scraped coconut,1,PF-520,Manimark Kamarkat - Indian Sweet
+artificial flavouring substances-lychee,1,PF-523,Hart Beat Sweets Love Candy - Lychee Flavoured
+added nature identical and artificial flavouring substances,1,PF-528,Lotte Coffy Bite Classic
+green mango,1,PF-529,Jelimals Space Adventure - Assorted Jelly Candy
+nimbu ka sar,1,PF-532,Swad Digestive Candy
+kali mirch,1,PF-532,Swad Digestive Candy
+sonth,1,PF-532,Swad Digestive Candy
+piplamul,1,PF-532,Swad Digestive Candy
+lendi pipal,1,PF-532,Swad Digestive Candy
+and mango powder,1,PF-535,Parle Mango Bite
+red apple flavour,1,PF-537,Tic Tac Candy - Red Apple Treat
+mixed masala,1,PF-542,Pulse Guava Candy - With Tangy Twist
+guava flavour,1,PF-542,Pulse Guava Candy - With Tangy Twist
+citric acid flavour,1,PF-543,Coco Cado Jelly - Assorted
+colouring,1,PF-543,Coco Cado Jelly - Assorted
+sorbic acid,1,PF-543,Coco Cado Jelly - Assorted
+tutti frutti,1,PF-544,Chupa Chups Assorted Bubble Gum Filled Lollipop
+dehydrated fruits powder,1,PF-544,Chupa Chups Assorted Bubble Gum Filled Lollipop
+nature identical flavouring substance- orange,1,PF-545,DERBY Vitacin Orange Flavoured Candy
+orange bits,1,PF-546,GO DESi Chilli Orange Desi Popz Lollipop Candy
+tapioca strach,1,PF-546,GO DESi Chilli Orange Desi Popz Lollipop Candy
+raw mango powder,1,PF-546,GO DESi Chilli Orange Desi Popz Lollipop Candy
+base gum,1,PF-547,Boomer Strawberry Flavoured Chewing Gum
+added strawberry flavour,1,PF-547,Boomer Strawberry Flavoured Chewing Gum
+dry grapes,1,PF-548,Townbus Cornflakes Mixture - Namkeen
+red chilly powder,1,PF-548,Townbus Cornflakes Mixture - Namkeen
+ajowan,1,PF-549,Townbus Khara Boondi
+multigrain flour,1,PF-551,bb Gooddiet Multigrain PUFFS - Chilli Chataka
+multi-grain flour,1,PF-552,bb Gooddiet Multigrain Puffs - Butter Makhana
+and anticaking agent,1,PF-552,bb Gooddiet Multigrain Puffs - Butter Makhana
+nuts contains added flavours,1,PF-552,bb Gooddiet Multigrain Puffs - Butter Makhana
+cassia leaf,1,PF-555,Tasties Origins Bakarwadi
+cassia bark,1,PF-555,Tasties Origins Bakarwadi
+whole bengal gram flakes,1,PF-556,Haldiram's Chana Jor Garam
+gram dal flour,1,PF-557,Tasties Origins Gujarati Besan Papdi
+omam,1,PF-558,Tasties Origins Ompudi Nylon Sev
+tapioca pearls,1,PF-559,Mama Nourish Crunchy Sabudana Farali Chivda
+natural anti-oxidant,1,PF-560,Slurrp Farm Cheese & Herbs Puff
+jack fruit,1,PF-562,A-1 Chips Jack Fruit Chips
+#spices,1,PF-564,Bingo! No Rulz Cheese Curlz
+whole grain corn,1,PF-565,Slurrp Farm Choco Ragi Puffs
+taali protein puff blend,1,PF-566,Taali Cheese & Herbs Protein Puffs
+urad daal,1,PF-566,Taali Cheese & Herbs Protein Puffs
+fried gram,1,PF-570,bb Gooddiet Mini Nippattu/ Mathri
+flakes,1,PF-571,bb Gooddiet Crackers - Rock Salt & Pepper
+jowar crisps,1,PF-573,Eat Better Co Millet Namkeen Mango Achari
+nature identical flavouring,1,PF-575,Balaji Namkeen - Masala Sev Murmura
+desi masala tadka flavour seasoning,1,PF-581,Pringles Potato Chips Desi Masala Tadka Flavour
+vegetable powders,1,PF-581,Pringles Potato Chips Desi Masala Tadka Flavour
+aciditi regrulator,1,PF-581,Pringles Potato Chips Desi Masala Tadka Flavour
+pizza flavour seasoning,1,PF-582,Pringles Potato Chips Pizza Flavour
+dried vegetable powders,1,PF-582,Pringles Potato Chips Pizza Flavour
+dried fat emulsion,1,PF-582,Pringles Potato Chips Pizza Flavour
+smoke,1,PF-582,Pringles Potato Chips Pizza Flavour
+tangy tomato twist season,1,PF-583,Pringles Potato Chips Tangy Tomato Twist
+cayenne,1,PF-583,Pringles Potato Chips Tangy Tomato Twist
+corian,1,PF-583,Pringles Potato Chips Tangy Tomato Twist
+mss,1,PF-583,Pringles Potato Chips Tangy Tomato Twist
+flavour substance,1,PF-583,Pringles Potato Chips Tangy Tomato Twist
+regulator,1,PF-583,Pringles Potato Chips Tangy Tomato Twist
+peri peri seasoning,1,PF-584,Pringles Potato Chips Peri Peri Flavour
+red chilli pepper,1,PF-584,Pringles Potato Chips Peri Peri Flavour
+herb extract,1,PF-584,Pringles Potato Chips Peri Peri Flavour
+natural and artificial flavours,1,PF-585,Pringles Imported Potato Chips - Ranch
+apple cider,1,PF-585,Pringles Imported Potato Chips - Ranch
+degerminated yellow corn,1,PF-586,Pringles Imported Potato Crisps - BBQ
+mono- and diglycerides,1,PF-586,Pringles Imported Potato Crisps - BBQ
+hydrolyzed corn protein,1,PF-586,Pringles Imported Potato Crisps - BBQ
+inosinate,1,PF-586,Pringles Imported Potato Crisps - BBQ
+paprika extract colour,1,PF-586,Pringles Imported Potato Crisps - BBQ
+sulphite,1,PF-588,Cadbury Oreo Original Chocolatey Sandwich Biscuits
+‚ and dough conditioner,1,PF-589,Sunfeast Bounce Biscuits - Pineapple Creme Cookies
+cumin black,1,PF-590,Bisk Farm Googly Biscuits
+dhania,1,PF-590,Bisk Farm Googly Biscuits
+lal mirchi,1,PF-590,Bisk Farm Googly Biscuits
+dispersing agents,1,PF-591,Bisk Farm Top Biscuits - Butter Munch
+refined edible vegetable oil,1,PF-592,Bisk Farm Biscuits - English Cracker
+edible starches,1,PF-592,Bisk Farm Biscuits - English Cracker
+cereal based beverage mix,1,PF-593,Bournvita Biscuits
+15c,1,PF-593,Bournvita Biscuits
+edible vegtable oil,1,PF-594,Priyagold Marie Lite
+emulsifires,1,PF-594,Priyagold Marie Lite
+digycerides of vegitable origin,1,PF-594,Priyagold Marie Lite
+amonium bicarbonate,1,PF-594,Priyagold Marie Lite
+sodium bicrbonate,1,PF-594,Priyagold Marie Lite
+gough conditioner,1,PF-594,Priyagold Marie Lite
+anti oxidant,1,PF-594,Priyagold Marie Lite
+tertiary butyl hydroquinone,1,PF-594,Priyagold Marie Lite
+artificial flavoring substance - ajwain,1,PF-595,bb Popular Bakery Biscuit - Ajwain
+candied papata,1,PF-596,bb Popular Bakery Biscuit - Tooti Fruity
+papaya fruit cubes,1,PF-596,bb Popular Bakery Biscuit - Tooti Fruity
+artificial flavoring substance - mix fruit jam,1,PF-596,bb Popular Bakery Biscuit - Tooti Fruity
+artificial flavoring substances,1,PF-597,bb Popular Traditional Jeera Bakery Biscuits
+silver leaves,1,PF-599,Kaju Katli Classic
+raagi crisps,1,PF-600,Dry Fruit Barfi
+interesterified,1,PF-601,Grb Elachi Soancake
+nature identical rose flavour,1,PF-601,Grb Elachi Soancake
+ro water,1,PF-602,MTR Mysore Pak
+interestified vegetable fat,1,PF-602,MTR Mysore Pak
+roasted gram dal,1,PF-612,Sweet Karam Coffee White Sugar Free Ragi Laddu
+white lentil flour,1,PF-614,Daadi's Badam Laddoo Pure Ghee
+nature identical orange flavour,1,PF-617,Grb Orange Soanpapdi
+and added artificial flavouring substances,1,PF-619,Haldiram's Badam Halwa
+kunafa,1,PF-620,fresho! Signature Turkish Baklava
+mixed dried fruits,1,PF-620,fresho! Signature Turkish Baklava
+baklava mixture,1,PF-620,fresho! Signature Turkish Baklava
+rabdi,1,PF-621,Amul Rasmalai
+sjar,1,PF-623,Mithai Remix Mango Truffle Peda
+sweetened khoa,1,PF-626,Chitale Bandhu Mawa Modak
+added natural flavouring substance,1,PF-627,Bansiwala Paan Petha
+pear millet,1,PF-629,Nandini Millet Laddu
+finger millet flour,1,PF-629,Nandini Millet Laddu
+urad dal flour,1,PF-630,Daadi's Atta Gond Laddoo
+gond,1,PF-630,Daadi's Atta Gond Laddoo
+sunflower seed oil,1,PF-632,Yu Jalapeno Cheese
+black pepper corn,1,PF-632,Yu Jalapeno Cheese
+spring onions,1,PF-632,Yu Jalapeno Cheese
+carrot flakes,1,PF-634,Maggi Masala Cuppa Noodles
+roasted garlic flakes,1,PF-634,Maggi Masala Cuppa Noodles
+toasted onion powder,1,PF-635,MAGGI 2-Minute Instant Noodles
+green cardamom powder,1,PF-635,MAGGI 2-Minute Instant Noodles
+silica,1,PF-636,MTR Vegetable Upma
+pasta,1,PF-637,MOM Cheesy Peri Peri Instant Pasta
+cheesy peri peri sauce mix,1,PF-637,MOM Cheesy Peri Peri Instant Pasta
+italian seasoning mix,1,PF-637,MOM Cheesy Peri Peri Instant Pasta
+ginger-garlic,1,PF-638,Currychief Chettinad Curry
+stoneflower,1,PF-638,Currychief Chettinad Curry
+dehydrated red onion flakes,1,PF-639,MOM Poha With Bhujia
+curry leaves bhujia,1,PF-639,MOM Poha With Bhujia
+bean flour,1,PF-639,MOM Poha With Bhujia
+coriander ex-tract,1,PF-640,Maggi Chilly Chow Cuppa Noodles
+dehydrated carrot bits,1,PF-640,Maggi Chilly Chow Cuppa Noodles
+made,1,PF-641,MTR Breakfast Khatta Meetha Poha Mix
+dehydrated onion flakes,1,PF-641,MTR Breakfast Khatta Meetha Poha Mix
+chicken fat,1,PF-642,Maggi Chicken Instant Noodles
+dehydrated bread,1,PF-642,Maggi Chicken Instant Noodles
++roasted spice powder,1,PF-643,Maggi Special Masala Instant Noodles
+nutneg,1,PF-643,Maggi Special Masala Instant Noodles
+com-pounded asafoetida,1,PF-643,Maggi Special Masala Instant Noodles
+tomate,1,PF-644,Gits Paneer Tikka Masala Ready to Eat
+coriander ginger,1,PF-644,Gits Paneer Tikka Masala Ready to Eat
+coriander seeds,1,PF-644,Gits Paneer Tikka Masala Ready to Eat
+cumin seeds turmeric,1,PF-644,Gits Paneer Tikka Masala Ready to Eat
+cinnamon black pepper,1,PF-644,Gits Paneer Tikka Masala Ready to Eat
+stararise,1,PF-644,Gits Paneer Tikka Masala Ready to Eat
+dry manga,1,PF-644,Gits Paneer Tikka Masala Ready to Eat
+camin,1,PF-645,Gits Veg Biryani Ready to Eat
+green cardamon,1,PF-645,Gits Veg Biryani Ready to Eat
+caraway seeds,1,PF-645,Gits Veg Biryani Ready to Eat
+fennel seeds rose mater sallon,1,PF-645,Gits Veg Biryani Ready to Eat
+blackgram dal,1,PF-648,MTR Dosa Instant Mix
+edible vegetable oil refined sunflower oil,1,PF-649,Cookd Black Pepper Kit
+rawa,1,PF-650,MTR Roasted Vermicelli
+condi-ments,1,PF-651,Aashirvaad Rava Idli Instant Mix
+ca-shewnuts,1,PF-651,Aashirvaad Rava Idli Instant Mix
+dehydrated green chilli powder,1,PF-651,Aashirvaad Rava Idli Instant Mix
+dry red chilli,1,PF-653,Yu Cheesy VEG Carbonara - Korean Ramen Noodles
+used as natural flavouring agent garnish,1,PF-654,Too Yumm K-Bomb Ramen Hot n Spicy Instant Noodles
+spice extract blend,1,PF-656,Maggi Korean BBQ Veg Instant Noodles
+curry spice extract blend,1,PF-656,Maggi Korean BBQ Veg Instant Noodles
+rosemary extract oil,1,PF-656,Maggi Korean BBQ Veg Instant Noodles
+high oleic sunflower oil,1,PF-656,Maggi Korean BBQ Veg Instant Noodles
+masala mix,1,PF-657,YiPPee! Magic Masala Noodles with Added Veggies
+caraway,1,PF-657,YiPPee! Magic Masala Noodles with Added Veggies
+acidity regulators jins,1,PF-658,Sunfeast Yippee! Korean Noodles Fiery Hot
+spice oleoresin,1,PF-658,Sunfeast Yippee! Korean Noodles Fiery Hot
+zucchini,1,PF-658,Sunfeast Yippee! Korean Noodles Fiery Hot
+corn kernel,1,PF-659,Yu Zingy Cheese Instant Cup Noodles
+rave vitamins and minerals premix,1,PF-660,Bambino Elbow Macaroni Pasta
+vitamin b3,1,PF-660,Bambino Elbow Macaroni Pasta
+es niacinamide,1,PF-660,Bambino Elbow Macaroni Pasta
+es thiemine mononitrate,1,PF-660,Bambino Elbow Macaroni Pasta
+vitamin b9,1,PF-660,Bambino Elbow Macaroni Pasta
+garlic cloves,1,PF-662,Ruchi magic Garlic Pickle
+crushed,1,PF-662,Ruchi magic Garlic Pickle
+split bengal gram dhal,1,PF-662,Ruchi magic Garlic Pickle
+dal chana,1,PF-662,Ruchi magic Garlic Pickle
+split black gram,1,PF-662,Ruchi magic Garlic Pickle
+gobhi,1,PF-666,The Little Farm Co. Mixed Gobhi Gajar Shalgum Pickle
+shalgum,1,PF-666,The Little Farm Co. Mixed Gobhi Gajar Shalgum Pickle
+cold pressed mustard oil,1,PF-666,The Little Farm Co. Mixed Gobhi Gajar Shalgum Pickle
+sunflower refined oil,1,PF-667,Dnv Appalam
+teploca,1,PF-668,Wellfry Sabudana Red Chilli Papad
+red chill,1,PF-668,Wellfry Sabudana Red Chilli Papad
+retention agent,1,PF-669,Del Monte Sliced Black Olives
+mint powder,1,PF-671,Daishik Green Chutney
+sprouted millets,1,PF-673,MTR Schezwan Idli Mix
+sundried vegetables,1,PF-673,MTR Schezwan Idli Mix
+black gram dal,1,PF-674,MTR Gourmet Butter Idli Mix
+chick pea flour,1,PF-675,Gits Khaman Dhokla Instant Snack Mix
+sweet pepper,1,PF-676,Golden Prize Tuna Spread In Mayonnaise
+natural flavour sprinkler,1,PF-677,Cookd Tandoori Tikka Kit
+natural flavour oil,1,PF-677,Cookd Tandoori Tikka Kit
+manchurian seasoning,1,PF-678,Wok N Roll Manchurian Masala
+sprouted masoor,1,PF-680,Gladful Choco Pancake Sprouted Millets and Masoor Mix
+jawar,1,PF-680,Gladful Choco Pancake Sprouted Millets and Masoor Mix
+oats idli premix,1,PF-681,Madmix Oats Idli With Free Chutney
+gram,1,PF-681,Madmix Oats Idli With Free Chutney
+chick peas,1,PF-684,Hocco Pindi Chole Rice Combo
+kitchen king,1,PF-684,Hocco Pindi Chole Rice Combo
+pomegranate seed dry,1,PF-684,Hocco Pindi Chole Rice Combo
+chickpeas white,1,PF-685,Hocco Chana Masala
+kashmiri chilli powder,1,PF-687,Hocco Mumbai Bhaji
+organic wholegrain brown rice,1,PF-690,Pintola Organic Wholegrain Brown Rice Cakes
+nature identical flavors,1,PF-691,Wakao Jackfruit Biryani
+veg seasoning,1,PF-692,Hocco Dal Makhani
+split gram,1,PF-694,Gits Heat & Eat Pau Bhaji
+stone flower,1,PF-694,Gits Heat & Eat Pau Bhaji
+dehydrated ginger bits,1,PF-695,Knorr Chinese Manchurian Gravy Mix
+rajmah,1,PF-697,Kitchens Of India Rajma Masala
+cereal discs,1,PF-699,Nestle Cerelac Multigrain & Fruits Baby Food Cereal
+dehydrated apple bits,1,PF-699,Nestle Cerelac Multigrain & Fruits Baby Food Cereal
+cherry flakes,1,PF-699,Nestle Cerelac Multigrain & Fruits Baby Food Cereal
+multigrain flour blend,1,PF-701,Slurrp Farm Ragi Rice Strawberry Instant Healthy Cereal
+fruit powder blend,1,PF-701,Slurrp Farm Ragi Rice Strawberry Instant Healthy Cereal
+papaya pieces,1,PF-704,Puramate Tooty Fruity Mix
+dark compound choco chips,1,PF-705,Betty Crocker Triple Chocolate Brownie Instant Cake Mix Powder
+white compound chips,1,PF-705,Betty Crocker Triple Chocolate Brownie Instant Cake Mix Powder
+is341,1,PF-705,Betty Crocker Triple Chocolate Brownie Instant Cake Mix Powder
+edible vegetable fat interesterified,1,PF-712,MTR Gulab Jamun Mix
+and colour,1,PF-713,Pillsbury Chocolate Flavour Pancake Mix 2-Minute Pancake Mix For Kids
+jelly mix,1,PF-715,Weikfield Jelly Crystals Strawberry Flavour Carton
+nature identical flavouring substance - strawberry,1,PF-715,Weikfield Jelly Crystals Strawberry Flavour Carton
+jelly premix,1,PF-715,Weikfield Jelly Crystals Strawberry Flavour Carton
+popped corn,1,PF-716,ACT II Sweet & Salty Popcorn
+whole grain rolled oats,1,PF-718,Quaker Oats Breakfast Cereal
+vitamin a and riboflavin,1,PF-718,Quaker Oats Breakfast Cereal
+artificial - coconut,1,PF-719,Kellogg's Muesli Fruit Nut & Seeds 12-in-1 Power Breakfast
+candied cranberry,1,PF-719,Kellogg's Muesli Fruit Nut & Seeds 12-in-1 Power Breakfast
+seed,1,PF-719,Kellogg's Muesli Fruit Nut & Seeds 12-in-1 Power Breakfast
+black currants,1,PF-719,Kellogg's Muesli Fruit Nut & Seeds 12-in-1 Power Breakfast
+multigrain flour mix,1,PF-721,Kellogg's Multigrain Chocos
+natural identical flavouring substances,1,PF-722,Kellogg's Corn Flakes With Real Strawberry
+strawberry puree,1,PF-722,Kellogg's Corn Flakes With Real Strawberry
+dehydrated fruits,1,PF-723,Yoga Bar Super High Protein Muesli
+probiotics,1,PF-723,Yoga Bar Super High Protein Muesli
+bacillus coagulans snz1969,1,PF-723,Yoga Bar Super High Protein Muesli
+million cfu per serve,1,PF-723,Yoga Bar Super High Protein Muesli
+natural vanilla cake,1,PF-724,"Yoga Bar Wholegrain Breakfast Muesli-Dark Chocolate+Cranberry,Granola"
+apple fiber,1,PF-724,"Yoga Bar Wholegrain Breakfast Muesli-Dark Chocolate+Cranberry,Granola"
+rda,1,PF-725,Manna Oats Pouch
+carbohydrates,1,PF-725,Manna Oats Pouch
+soluble dietary fibre,1,PF-725,Manna Oats Pouch
+phosphorus,1,PF-725,Manna Oats Pouch
+magnesium,1,PF-725,Manna Oats Pouch
+bajra flakes,1,PF-727,Saffola Masala Oats
+dried vegetables,1,PF-727,Saffola Masala Oats
+jowar flakes,1,PF-727,Saffola Masala Oats
+condiments~,1,PF-727,Saffola Masala Oats
+chakla,1,PF-728,Kwality Classic Masala Oats - Box
+chili extract,1,PF-728,Kwality Classic Masala Oats - Box
+instant oats,1,PF-729,Pintola High Protein Oats Dark Chocolate With Almonds Raisin Pumpkin And Chia Seeds
+dried fruit,1,PF-730,Yoga Bar Breakfast Cereal & Muesli
+blackcurrants,1,PF-730,Yoga Bar Breakfast Cereal & Muesli
+dark chocolate powder,1,PF-731,Kellogg's Chocolate Muesli
+e1422,1,PF-732,Kissan Fresh Tomato Ketchup
+barbeque,1,PF-734,Veeba Smokey Barbeque Sauce
+crushed tomato,1,PF-736,Knorr Sauce Pizza and Pasta
+diced tomato,1,PF-736,Knorr Sauce Pizza and Pasta
+chopped onion,1,PF-736,Knorr Sauce Pizza and Pasta
+red chilli puree,1,PF-737,Knorr Red Chilli Sauce
+aged red peppers,1,PF-738,Tabasco Red Pepper Sauce
+bayleaf,1,PF-739,MasterChow Spicy Sichuan Chilli Oil
+sequestrate,1,PF-740,Habanero Herb-Infused Alfredo Style White Pasta Sauce
+limr,1,PF-743,Ong's Spring Roll Sauce
+fresh spring onion,1,PF-746,Saucery Roasted Garlic And Spring Onion Dip
+roasted garlic,1,PF-746,Saucery Roasted Garlic And Spring Onion Dip
+mulberry,1,PF-753,Eatopia Mulberry Fruit Honey Jam
+blueberries,1,PF-754,Eatopia Mixedberry Honey Jam Spread
+mulberries,1,PF-754,Eatopia Mixedberry Honey Jam Spread
+strawberries,1,PF-754,Eatopia Mixedberry Honey Jam Spread
+basil leaves,1,PF-757,Oetker FunFoods Pesto Italian Sauce
+diced jalapeno,1,PF-758,Habanero Jalapeno Cheese Dip
+mixed fruit pulp blend,1,PF-761,Kissan Mixed Fruit Jam
+pear pulp,1,PF-761,Kissan Mixed Fruit Jam
+strawberry pulp,1,PF-764,Sweetmate Sugar Free Strawberry Jam
+fruit pectin thickener,1,PF-764,Sweetmate Sugar Free Strawberry Jam
+mathani chilli,1,PF-766,ADF Soul Sriracha Dip
+bird eye chilli,1,PF-766,ADF Soul Sriracha Dip
+edible sunflower oil,1,PF-767,ADF Soul Twisty Tamarind Dip
+onion seeds,1,PF-767,ADF Soul Twisty Tamarind Dip
+com,1,PF-775,Manna Health Mix- Multigrain Drink For Kids
+red rice,1,PF-775,Manna Health Mix- Multigrain Drink For Kids
+bread crumb,1,PF-779,Hyfun Burger Patty
+dehydrated white onion powder,1,PF-779,Hyfun Burger Patty
+batter mix,1,PF-781,ITC Master Chef Crispy Onion Rings
+coating batter,1,PF-781,ITC Master Chef Crispy Onion Rings
+maize flour,1,PF-782,Hyfun Jalapeno Cheesy Pops
+frozen american sweet corn,1,PF-782,Hyfun Jalapeno Cheesy Pops
+diced green jalapeno,1,PF-782,Hyfun Jalapeno Cheesy Pops
+chilled water,1,PF-782,Hyfun Jalapeno Cheesy Pops
+black olives,1,PF-785,Prasuma Pizza Minis - Veg Supreme
+pizza base,1,PF-786,Prasuma Pizza Minis - Paneer Tikka
+toppings,1,PF-786,Prasuma Pizza Minis - Paneer Tikka
+pizza sauce,1,PF-786,Prasuma Pizza Minis - Paneer Tikka
+16c,1,PF-790,Prasuma Bao Buns - Veg Pizza
+thai chilli paste,1,PF-794,Prasuma Chilli Prawn Momos
+vegetable palm,1,PF-797,Prasuma Chocolate Burst Bao Buns
+pork meat,1,PF-798,Prasuma Original Pork Momos
+amchor powder,1,PF-801,Prasuma Spiced Aloo Mini Samosa
+chicken keema,1,PF-802,Prasuma Chicken Mini Samosa
+makhani gravy,1,PF-802,Prasuma Chicken Mini Samosa
+microbial veg,1,PF-804,Mooz Mozzarella & Cheddar Pizza Cheese
+rennet,1,PF-804,Mooz Mozzarella & Cheddar Pizza Cheese
+carbo bean gum,1,PF-808,Cremeitalia Sour Cream
+peel cut,1,PF-811,English Oven Fruit Bread
+condiments or their extracts,1,PF-811,English Oven Fruit Bread
+lactic cultures,1,PF-812,Milky Mist Greek Yogurt
+rose-lychee preparation,1,PF-813,Hatsun Fruit Yoghurt Rose And Lychee
+black carrot concentrate,1,PF-813,Hatsun Fruit Yoghurt Rose And Lychee
+blueberry puree,1,PF-814,Hatsun Yogurt Drink Blueberry
+blueberry juice concentrate,1,PF-814,Hatsun Yogurt Drink Blueberry
+active lactic culture,1,PF-815,Milky Mist Fruit Yogurt Strawberry
+l bacillus delbrueckii subsp bulgaricus,1,PF-815,Milky Mist Fruit Yogurt Strawberry
+s thermophilus,1,PF-815,Milky Mist Fruit Yogurt Strawberry
+fruit content,1,PF-815,Milky Mist Fruit Yogurt Strawberry
+from strawberry preparation,1,PF-815,Milky Mist Fruit Yogurt Strawberry
+strawberry pieces,1,PF-815,Milky Mist Fruit Yogurt Strawberry
+natural - identical flavoring substances - strawberry,1,PF-815,Milky Mist Fruit Yogurt Strawberry
+chocolate sauce,1,PF-817,Arun Chocolate Ice Cream Tub
+chocolate chip,1,PF-817,Arun Chocolate Ice Cream Tub
+nature-identical flavoring substances,1,PF-818,Arun Pista Ice Cream Tub
+isomaltulose,1,PF-821,Go Zero Roasted Almond Low Calorie Guilt Free Ice Cream Tub
+stabilising agents,1,PF-822,Go Zero Mad Over Mango Low Calorie Guilt Free Ice Cream Tub
+dried californian cranberry,1,PF-823,NIC Mixed Berries Ice Cream Tub
+dried californian blueberry,1,PF-823,NIC Mixed Berries Ice Cream Tub
+processed strawberry,1,PF-823,NIC Mixed Berries Ice Cream Tub
+blackcurrant fruit,1,PF-825,Dairy Day Black Currant Ice Cream Tub
+natural blackcurrant flavouring substances,1,PF-825,Dairy Day Black Currant Ice Cream Tub
+added artificial vanilla cake flavouring substance,1,PF-827,Kwality Wall's Cadbury Crackle Tub
+salted,1,PF-827,Kwality Wall's Cadbury Crackle Tub
+e1400,1,PF-827,Kwality Wall's Cadbury Crackle Tub
+chocolate confectionery,1,PF-827,Kwality Wall's Cadbury Crackle Tub
+oreo biscuit - crushed,1,PF-828,Kwality Wall's Oreo And Cream Tub
+chocolate topping,1,PF-830,Amul Chocolate Magic Sundae Ice Cream Tub
+orange jelly,1,PF-831,Amul Fruit N Nut Fantasy Ice Cream Tub
+kesar elaichi,1,PF-831,Amul Fruit N Nut Fantasy Ice Cream Tub
+chocolate crush,1,PF-832,NIC Chocochips Ice Cream Tub
+bodying agent,1,PF-836,London Dairy Choco Brownie Delight Ice Cream Tub
+figs,1,PF-837,Havmor Taj Mahal Ice Cream Tub
+nature identical flavouring substances-dulce de leche,1,PF-838,Milkymist Dulce De Leche Tub
+outer coating,1,PF-840,Arun Ibar Mini Almond Crunch Ice Cream Stick
+stevia outer layer,1,PF-841,Go Zero Hazelnut Chocolate Low Calorie Guilt Free Ice Cream Bar
+chocolate paste,1,PF-841,Go Zero Hazelnut Chocolate Low Calorie Guilt Free Ice Cream Bar
+chocolate frozen dessert,1,PF-842,Dairy Day New Triple Bar Ice Cream Stick
+chocolate stick,1,PF-844,Amul Gold Frostik Ice Cream Stick
+outer layer - choco layer coating,1,PF-844,Amul Gold Frostik Ice Cream Stick
+chocolate fudge,1,PF-845,Hocco Choco Brownie Ice Cream Tub
+natural vanilla cake flavour,1,PF-845,Hocco Choco Brownie Ice Cream Tub
+pko,1,PF-845,Hocco Choco Brownie Ice Cream Tub
+nature identical vanillin flavouring substances,1,PF-845,Hocco Choco Brownie Ice Cream Tub
+stevia raspberry ice candy layer,1,PF-846,Go Zero Raspberry Duet Low Calorie Guilt Free Ice Cream Stick
+raspberry pulp,1,PF-846,Go Zero Raspberry Duet Low Calorie Guilt Free Ice Cream Stick
+glazed fruits,1,PF-852,Kwality Walls Cassata
