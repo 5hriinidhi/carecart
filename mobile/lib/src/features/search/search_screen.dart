@@ -13,10 +13,10 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Cc.paper,
-      body: SafeArea(
-        child: ListView(
+    return CcScreen(
+      background: Cc.paper,
+      safeBottom: true,
+      child: ListView(
           padding: const EdgeInsets.fromLTRB(18, 8, 18, 16),
           children: [
             const SizedBox(height: 6),
@@ -65,7 +65,6 @@ class SearchScreen extends StatelessWidget {
             ],
           ],
         ),
-      ),
     );
   }
 }

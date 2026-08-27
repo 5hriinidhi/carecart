@@ -24,11 +24,9 @@ class ResultScreen extends StatelessWidget {
     final p = kProducts[productId]!;
     final sev = chipFor(p.score);
 
-    return Scaffold(
-      backgroundColor: Cc.paper,
-      body: SafeArea(
-        bottom: false,
-        child: ListView(
+    return CcScreen(
+      background: Cc.paper,
+      child: ListView(
           padding: EdgeInsets.zero,
           children: [
             // hero
@@ -74,23 +72,25 @@ class ResultScreen extends StatelessWidget {
                       Text('${p.score}',
                           style: CcText.hero.copyWith(color: _ink)),
                       const SizedBox(width: 14),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(p.verdictLabel,
-                                style: TextStyle(
-                                    fontFamily: 'Bricolage',
-                                    fontSize: 19,
-                                    height: 1.1,
-                                    fontWeight: FontWeight.w700,
-                                    color: _ink)),
-                            const SizedBox(height: 4),
-                            Text('CARECART SCORE /100',
-                                style: CcText.mono.copyWith(
-                                    color: _ink.withValues(alpha: 0.65), fontSize: 11)),
-                          ],
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(p.verdictLabel,
+                                  style: TextStyle(
+                                      fontFamily: 'Bricolage',
+                                      fontSize: 19,
+                                      height: 1.1,
+                                      fontWeight: FontWeight.w700,
+                                      color: _ink)),
+                              const SizedBox(height: 4),
+                              Text('CARECART SCORE /100',
+                                  style: CcText.mono.copyWith(
+                                      color: _ink.withValues(alpha: 0.65), fontSize: 11)),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -223,7 +223,6 @@ class ResultScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
     );
   }
 
@@ -312,10 +311,10 @@ class _NutrientRow extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          crossAxisAlignment: CrossAxisAlignment.baseline,
-          textBaseline: TextBaseline.alphabetic,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Expanded(
+              flex: 3,
               child: Text(n.k,
                   style: const TextStyle(
                       fontFamily: 'DMSans',
@@ -323,8 +322,14 @@ class _NutrientRow extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                       color: Cc.ink)),
             ),
-            Text('${n.v} · ${n.pct}% of ceiling',
-                style: CcText.mono.copyWith(color: color, fontSize: 12)),
+            const SizedBox(width: 8),
+            Flexible(
+              flex: 2,
+              child: Text('${n.v} · ${n.pct}% of ceiling',
+                  textAlign: TextAlign.end,
+                  overflow: TextOverflow.ellipsis,
+                  style: CcText.mono.copyWith(color: color, fontSize: 12)),
+            ),
           ],
         ),
         const SizedBox(height: 6),

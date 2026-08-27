@@ -18,11 +18,10 @@ class TrendsScreen extends StatelessWidget {
     final series = kTrend[range]!;
     final labels = kTrendLabels[range]!;
 
-    return Scaffold(
-      backgroundColor: Cc.paper,
-      body: SafeArea(
-        bottom: false,
-        child: ListView(
+    return CcScreen(
+      background: Cc.paper,
+      child: ListView(
+          primary: false,
           padding: const EdgeInsets.fromLTRB(18, 8, 18, 16),
           children: [
             const SizedBox(height: 6),
@@ -137,9 +136,6 @@ class TrendsScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar:
-          CcBottomNav(active: 'trends', onTapItem: onNav, onTapScan: onScan),
     );
   }
 }

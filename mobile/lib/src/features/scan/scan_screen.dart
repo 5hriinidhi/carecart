@@ -17,10 +17,10 @@ class ScanScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF14170F),
-      body: SafeArea(
-        child: Column(
+    return CcScreen(
+      background: const Color(0xFF14170F),
+      safeBottom: true,
+      child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
@@ -90,7 +90,6 @@ class ScanScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
     );
   }
 }

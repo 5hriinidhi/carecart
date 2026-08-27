@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/text.dart';
 import '../../core/theme.dart';
+import '../../core/widgets.dart';
 import '../../fixtures/demo_data.dart';
 
 /// Static analyzing screen — `state.screen == 'analyzing'`. Shown here frozen
@@ -14,10 +15,10 @@ class AnalyzingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Cc.paper,
-      body: SafeArea(
-        child: Padding(
+    return CcScreen(
+      background: Cc.paper,
+      safeBottom: true,
+      child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 34),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -50,7 +51,6 @@ class AnalyzingScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }

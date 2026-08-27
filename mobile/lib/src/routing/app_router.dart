@@ -1,13 +1,13 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../debug/debug_gallery.dart';
-import '../features/home/home_screen.dart';
+import '../features/app_shell.dart';
 import '../features/onboarding/onboarding_screen.dart';
 
-/// Flips to true once the 6-step profile build completes.
-/// Wire this to real persistence (secure storage / API) later.
+/// Onboarding gate. SEPARATE from the main-app state machine ([mainAppProvider])
+/// - do not merge or cross-reference the two (CLAUDE.md).
 class OnboardingComplete extends Notifier<bool> {
   @override
   bool build() => false;
@@ -24,24 +24,28 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/',
     refreshListenable: _RouterRefresh(ref),
     redirect: (context, state) {
-      // /debug/* is exempt from the onboarding gate - it's a standalone
-      // screen-preview area (Phase 2.2).
-      if (state.matchedLocation.startsWith('/debug')) return null;
+      final loc = state.matchedLocation;
+
+      // /debug/* is a standalone screen-preview area, exempt from the gate.
+      if (loc.startsWith('/debug')) return null;
 
       final done = ref.read(onboardingCompleteProvider);
-      final atOnboarding = state.matchedLocation.startsWith('/onboarding');
-      if (!done && !atOnboarding) return '/onboarding';
-      if (done && atOnboarding) return '/';
+      final atOnboarding = loc.startsWith('/onboarding');
+
+      if (!done) return atOnboarding ? null : '/onboarding';
+      // onboarding complete -> land in the app
+      if (atOnboarding || loc == '/') return '/app';
       return null;
     },
     routes: [
+      GoRoute(path: '/', builder: (_, _) => const SizedBox.shrink()),
       GoRoute(
         path: '/onboarding',
         builder: (context, state) => const OnboardingScreen(),
       ),
       GoRoute(
-        path: '/',
-        builder: (context, state) => const HomeScreen(),
+        path: '/app',
+        builder: (context, state) => const MainAppShell(),
       ),
       GoRoute(
         path: '/debug',

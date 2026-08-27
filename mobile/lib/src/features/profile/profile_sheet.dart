@@ -133,15 +133,38 @@ class _ProfileRow extends StatelessWidget {
   }
 }
 
-/// Full-screen rendering (scrim + panel pinned to the bottom) for previewing.
+/// Scrim + bottom-pinned panel. Used both for the debug preview and, in the
+/// app shell, as the `state.showProfiles` overlay. Tapping the scrim calls
+/// [onDismiss].
+class ProfileSheetOverlay extends StatelessWidget {
+  const ProfileSheetOverlay({super.key, this.onDismiss, this.onPick});
+  final VoidCallback? onDismiss;
+  final void Function(DemoProfile profile)? onPick;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: onDismiss,
+            child: const ColoredBox(color: Color(0x6B14170F)),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: SafeArea(child: ProfileSheet(onPick: onPick)),
+        ),
+      ],
+    );
+  }
+}
+
+/// Debug-gallery entry.
 class ProfileSheetPreview extends StatelessWidget {
   const ProfileSheetPreview({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0x6B14170F),
-      body: const Align(alignment: Alignment.bottomCenter, child: SafeArea(child: ProfileSheet())),
-    );
-  }
+  Widget build(BuildContext context) => const ProfileSheetOverlay();
 }

@@ -13,11 +13,10 @@ class MedsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Cc.paper,
-      body: SafeArea(
-        bottom: false,
-        child: ListView(
+    return CcScreen(
+      background: Cc.paper,
+      child: ListView(
+          primary: false,
           padding: const EdgeInsets.fromLTRB(18, 8, 18, 16),
           children: [
             const SizedBox(height: 6),
@@ -94,9 +93,6 @@ class MedsScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar:
-          CcBottomNav(active: 'meds', onTapItem: onNav, onTapScan: onScan),
     );
   }
 }

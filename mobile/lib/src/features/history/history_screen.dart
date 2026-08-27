@@ -13,11 +13,10 @@ class HistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Cc.paper,
-      body: SafeArea(
-        bottom: false,
-        child: ListView(
+    return CcScreen(
+      background: Cc.paper,
+      child: ListView(
+          primary: false,
           padding: const EdgeInsets.fromLTRB(18, 8, 18, 16),
           children: [
             const SizedBox(height: 6),
@@ -55,9 +54,6 @@ class HistoryScreen extends StatelessWidget {
             ],
           ],
         ),
-      ),
-      bottomNavigationBar:
-          CcBottomNav(active: 'history', onTapItem: onNav, onTapScan: onScan),
     );
   }
 }

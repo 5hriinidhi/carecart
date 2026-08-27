@@ -16,11 +16,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Cc.paper,
-      body: SafeArea(
-        bottom: false,
-        child: ListView(
+    return CcScreen(
+      background: Cc.paper,
+      child: ListView(
+          primary: false,
           padding: const EdgeInsets.fromLTRB(18, 8, 18, 16),
           children: [
             // header
@@ -157,32 +156,38 @@ class HomeScreen extends StatelessWidget {
                             "Nothing alarming yet — let's fix it early.",
                             style: CcText.body.copyWith(color: const Color(0xFF7A4A31))),
                         const SizedBox(height: 11),
-                        Row(children: [
-                          GestureDetector(
-                            onTap: () => onNav?.call('nudge'),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                              decoration: BoxDecoration(
-                                  color: Cc.accentDeep, borderRadius: BorderRadius.circular(999)),
-                              child: const Text("What's driving it",
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 6,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () => onNav?.call('nudge'),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 8),
+                                decoration: BoxDecoration(
+                                    color: Cc.accentDeep,
+                                    borderRadius: BorderRadius.circular(999)),
+                                child: const Text("What's driving it",
+                                    style: TextStyle(
+                                        fontFamily: 'DMSans',
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white)),
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              child: Text('Not now',
                                   style: TextStyle(
                                       fontFamily: 'DMSans',
                                       fontSize: 12,
                                       fontWeight: FontWeight.w500,
-                                      color: Colors.white)),
+                                      color: Color(0xFF8A4526))),
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            child: Text('Not now',
-                                style: TextStyle(
-                                    fontFamily: 'DMSans',
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xFF8A4526))),
-                          ),
-                        ]),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -275,12 +280,6 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CcBottomNav(
-        active: 'home',
-        onTapItem: onNav,
-        onTapScan: onScan,
-      ),
     );
   }
 }

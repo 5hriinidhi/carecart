@@ -16,10 +16,10 @@ class NudgeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: _bg,
-      body: SafeArea(
-        child: ListView(
+    return CcScreen(
+      background: _bg,
+      safeBottom: true,
+      child: ListView(
           padding: const EdgeInsets.fromLTRB(18, 8, 18, 16),
           children: [
             CcRoundButton(
@@ -122,7 +122,6 @@ class NudgeScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
     );
   }
 }
