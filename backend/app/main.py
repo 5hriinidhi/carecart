@@ -6,6 +6,8 @@ Docs:       http://localhost:8000/docs
 
 from __future__ import annotations
 
+import logging
+import sys
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -18,10 +20,40 @@ from app.api.v1.router import api_router
 from app.core.config import settings
 from app.db.session import engine
 
+logger = logging.getLogger("carecart")
+if not logger.handlers:
+    _h = logging.StreamHandler(sys.stdout)
+    _h.setFormatter(logging.Formatter("%(levelname)s [%(name)s] %(message)s"))
+    logger.addHandler(_h)
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+
+
+def _log_startup_config() -> None:
+    """Log the config picture at boot - never the secret values themselves."""
+    logger.info("environment=%s  debug=%s", settings.environment, settings.debug)
+    logger.info("database=%s", settings.sqlalchemy_url_safe)
+
+    present, missing = [], []
+    for env_name, is_set, feature in settings.optional_key_status():
+        (present if is_set else missing).append((env_name, feature))
+
+    logger.info(
+        "third-party API keys present: %s",
+        ", ".join(name for name, _ in present) or "(none)",
+    )
+    for name, feature in missing:
+        logger.warning("third-party API key MISSING: %s  ->  degraded: %s", name, feature)
+    if missing and not settings.is_production:
+        logger.warning(
+            "%d optional key(s) missing - the features above will not work in this dev session.",
+            len(missing),
+        )
+
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    # startup hooks (warm caches, ping Milvus, etc.) go here
+    _log_startup_config()
     yield
     # shutdown hooks go here
 

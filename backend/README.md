@@ -29,10 +29,21 @@ uvicorn app.main:app --reload
 
 ## Configuration
 
-`app/core/config.py` composes the connection string as
-`postgresql+psycopg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}`,
-or uses `DATABASE_URL` verbatim if that env var is set. In `docker-compose.yml`
-the `backend` service overrides `POSTGRES_HOST=postgres`.
+`app/core/config.py` defines a typed `Settings` (pydantic-settings). Import the
+single cached instance — `from app.core.config import settings` — everywhere;
+never read `os.environ` directly.
+
+- **Connection string**: composed as
+  `postgresql+psycopg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}`,
+  or `DATABASE_URL` verbatim if set. `docker-compose.yml` overrides `POSTGRES_HOST=postgres`.
+- **Fail-fast**: if a required var (`POSTGRES_*`) is empty, or — with
+  `ENVIRONMENT=production` — `JWT_SECRET` is unset or a third-party key is
+  missing, importing the module raises `ConfigError` naming each offending
+  variable (not a `KeyError` / raw `ValidationError`) and the process exits.
+- **Optional keys** (`OTP_PROVIDER_API_KEY`, `CLAUDE_API_KEY`, `OPENFDA_API_KEY`,
+  `USDA_FDC_API_KEY`): allowed to be blank in dev. On startup `main.py` logs
+  which are present vs missing — by name, never the value — and which feature
+  each missing key degrades. `sqlalchemy_url_safe` masks the DB password for logs.
 
 ## Migrations
 
