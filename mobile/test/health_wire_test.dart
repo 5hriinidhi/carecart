@@ -1,21 +1,26 @@
-// Phase 1 -> 2 wire check, part B: the real HomeScreen widget renders a
+// Phase 1 -> 2 wire check, part B: the debug HealthStatusTile renders a
 // /health response on screen.
 //
 // The HTTP call itself is exercised by `dart run tool/health_probe.dart`
-// (part A) - real dio -> real backend. Here we feed HomeScreen the same
-// HealthResult shape the backend returns and assert the screen displays it,
-// so the render path is proven without a flaky network call inside flutter_test.
+// (part A) - real dio -> real backend. Here we feed the tile the same
+// HealthResult shape the backend returns and assert the render path, without a
+// flaky network call inside flutter_test.
 //
 //   flutter test test/health_wire_test.dart
 
 import 'package:carecart/src/core/api_client.dart';
-import 'package:carecart/src/features/home/home_screen.dart';
+import 'package:carecart/src/debug/health_status_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+Widget _host(HealthResult result) => ProviderScope(
+      overrides: [healthCheckProvider.overrideWith((ref) async => result)],
+      child: const MaterialApp(home: Scaffold(body: HealthStatusTile())),
+    );
+
 void main() {
-  testWidgets('HomeScreen shows a successful /health result as "wire is live"',
+  testWidgets('HealthStatusTile shows a successful /health result as "wire is live"',
       (tester) async {
     // exactly what `GET /health` returns from the running backend
     const backendResponse = HealthResult(
@@ -24,14 +29,7 @@ void main() {
       body: {'status': 'ok', 'db': 'connected'},
     );
 
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          healthCheckProvider.overrideWith((ref) async => backendResponse),
-        ],
-        child: const MaterialApp(home: HomeScreen()),
-      ),
-    );
+    await tester.pumpWidget(_host(backendResponse));
     await tester.pumpAndSettle();
 
     final card = find.byKey(const Key('health-status'));
@@ -51,19 +49,14 @@ void main() {
     expect(rendered, contains('db=connected'));
   });
 
-  testWidgets('HomeScreen shows a failure clearly when the backend is down',
+  testWidgets('HealthStatusTile shows a failure clearly when the backend is down',
       (tester) async {
     const down = HealthResult(
       reachable: false,
       httpStatus: null,
       body: {'error': 'Connection refused'},
     );
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [healthCheckProvider.overrideWith((ref) async => down)],
-        child: const MaterialApp(home: HomeScreen()),
-      ),
-    );
+    await tester.pumpWidget(_host(down));
     await tester.pumpAndSettle();
 
     expect(find.text('no connection'), findsOneWidget);

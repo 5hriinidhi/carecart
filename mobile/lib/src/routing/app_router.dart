@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../debug/debug_gallery.dart';
 import '../features/home/home_screen.dart';
 import '../features/onboarding/onboarding_screen.dart';
 
@@ -23,6 +24,10 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/',
     refreshListenable: _RouterRefresh(ref),
     redirect: (context, state) {
+      // /debug/* is exempt from the onboarding gate - it's a standalone
+      // screen-preview area (Phase 2.2).
+      if (state.matchedLocation.startsWith('/debug')) return null;
+
       final done = ref.read(onboardingCompleteProvider);
       final atOnboarding = state.matchedLocation.startsWith('/onboarding');
       if (!done && !atOnboarding) return '/onboarding';
@@ -37,6 +42,21 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/',
         builder: (context, state) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: '/debug',
+        builder: (context, state) => DebugGalleryScreen(
+          onOpen: (name) => context.go('/debug/$name'),
+        ),
+        routes: [
+          GoRoute(
+            path: ':name',
+            builder: (context, state) => DebugScreenHost(
+              name: state.pathParameters['name']!,
+              onBack: () => context.go('/debug'),
+            ),
+          ),
+        ],
       ),
     ],
   );
