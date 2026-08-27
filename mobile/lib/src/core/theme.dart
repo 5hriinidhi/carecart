@@ -18,10 +18,13 @@ abstract final class Cc {
   static const accent = Color(0xFFE39B74);
   static const accentDeep = Color(0xFFD07E52);
 
-  // severity
+  // severity (foreground + tint), from SEV{} in CareCart App.dc.html
   static const avoid = Color(0xFFB44F35);
+  static const avoidTint = Color(0xFFF4DBD3);
   static const caution = Color(0xFFB8860B);
+  static const cautionTint = Color(0xFFF6EBD2);
   static const safe = Color(0xFF4A5A33);
+  static const safeTint = Color(0xFFDCE8CE);
 }
 
 ThemeData buildCareCartTheme() {
