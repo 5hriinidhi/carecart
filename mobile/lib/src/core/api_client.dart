@@ -16,6 +16,7 @@ String get apiBaseUrl {
   return 'http://localhost:8000';
 }
 
+/// Dio bound to the versioned API (`/api/v1/...`).
 final dioProvider = Provider<Dio>((ref) {
   return Dio(
     BaseOptions(
@@ -25,3 +26,53 @@ final dioProvider = Provider<Dio>((ref) {
     ),
   );
 });
+
+/// Result of a `GET /health` call against the backend.
+class HealthResult {
+  const HealthResult({
+    required this.reachable,
+    required this.httpStatus,
+    required this.body,
+  });
+
+  final bool reachable;
+  final int? httpStatus;
+  final Map<String, dynamic> body;
+
+  bool get dbConnected => body['db'] == 'connected';
+
+  @override
+  String toString() =>
+      reachable ? 'HTTP $httpStatus  $body' : 'unreachable ($body)';
+}
+
+/// One real `GET {apiBaseUrl}/health` (liveness + DB readiness).
+/// Returns a [HealthResult] instead of throwing so callers can render failures.
+Future<HealthResult> fetchHealth({Dio? client}) async {
+  final dio = client ??
+      Dio(BaseOptions(
+        connectTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 10),
+        validateStatus: (_) => true, // 503 is a valid, informative response here
+      ));
+  try {
+    final res = await dio.getUri<Map<String, dynamic>>(
+      Uri.parse('$apiBaseUrl/health'),
+    );
+    return HealthResult(
+      reachable: true,
+      httpStatus: res.statusCode,
+      body: res.data ?? const {},
+    );
+  } on DioException catch (e) {
+    return HealthResult(
+      reachable: false,
+      httpStatus: e.response?.statusCode,
+      body: {'error': e.message ?? e.type.name},
+    );
+  }
+}
+
+/// Drives the HomeScreen checkpoint card.
+final healthCheckProvider =
+    FutureProvider.autoDispose<HealthResult>((ref) => fetchHealth());
