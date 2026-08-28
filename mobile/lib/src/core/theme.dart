@@ -40,14 +40,24 @@ ThemeData buildCareCartTheme() {
     scaffoldBackgroundColor: Cc.paper,
   );
 
-  // Bricolage Grotesque (display) + DM Sans (body) are the prototype fonts.
-  // Add the .ttf files under mobile/assets/fonts/ and declare them in pubspec
-  // to switch on; falls back to the platform sans until then.
+  // Bricolage Grotesque (display), DM Sans (body) and DM Mono (labels) are
+  // vendored under mobile/assets/fonts/ and declared in pubspec — bundled, so
+  // first run works offline. `fontFamilyFallback` keeps text legible (correct
+  // metrics, platform sans) if an asset ever fails to load.
   return base.copyWith(
     textTheme: base.textTheme.apply(
       bodyColor: Cc.ink,
       displayColor: Cc.inkSoft,
       fontFamily: 'DMSans',
+      fontFamilyFallback: kCcFontFallback,
     ),
   );
 }
+
+/// Platform-sans fallback chain for every custom family in the app.
+const kCcFontFallback = <String>[
+  'Roboto', // Android
+  '.SF UI Text', 'SF Pro Text', // iOS / macOS
+  'Segoe UI', // Windows
+  'sans-serif',
+];

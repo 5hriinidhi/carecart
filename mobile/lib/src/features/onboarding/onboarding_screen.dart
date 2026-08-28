@@ -439,16 +439,23 @@ class _StepsView extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('STEP ${s.oStepNo} OF 6',
-                        style: TextStyle(
-                            fontFamily: 'DMMono',
-                            fontSize: 11,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 1.1,
-                            color: Cc.muted)),
+                    Flexible(
+                      child: Text('STEP ${s.oStepNo} OF 6',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontFamily: 'DMMono',
+                              fontSize: 11,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 1.1,
+                              color: Cc.muted)),
+                    ),
+                    const SizedBox(width: 12),
                     GestureDetector(
                       onTap: flow.skipRemainingSteps,
                       child: Text('Skip for now',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: _sans(11.5, w: FontWeight.w500, color: _faint)),
                     ),
                   ],
@@ -1167,41 +1174,50 @@ class _BuildingView extends ConsumerWidget {
 
     return CcScreen(
       background: Cc.paper,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 34),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(
-              width: 74,
-              height: 74,
-              child: CircularProgressIndicator(
-                strokeWidth: 5,
-                valueColor: AlwaysStoppedAnimation<Color>(Cc.olive),
-                backgroundColor: Color(0x2E63753F),
-              ),
-            ),
-            const SizedBox(height: 28),
-            Text('Building your profile',
-                style: _bric(20, FontWeight.w700, height: 1.25)),
-            const SizedBox(height: 6),
-            Text(
-              'Setting your ceilings and loading the interaction rules for your '
-              'medications.',
-              textAlign: TextAlign.center,
-              style: _sans(12.5, color: Cc.muted, height: 1.5),
-            ),
-            const SizedBox(height: 28),
-            for (var i = 0; i < _buildSteps.length; i++)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 9),
-                child: _BuildRow(
-                  label: _buildSteps[i],
-                  done: i < oBuild,
-                  current: i == oBuild,
+      child: LayoutBuilder(
+        builder: (context, cons) => SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: cons.maxHeight),
+            child: IntrinsicHeight(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(34, 24, 34, 24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      width: 74,
+                      height: 74,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 5,
+                        valueColor: AlwaysStoppedAnimation<Color>(Cc.olive),
+                        backgroundColor: Color(0x2E63753F),
+                      ),
+                    ),
+                    const SizedBox(height: 28),
+                    Text('Building your profile',
+                        style: _bric(20, FontWeight.w700, height: 1.25)),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Setting your ceilings and loading the interaction rules '
+                      'for your medications.',
+                      textAlign: TextAlign.center,
+                      style: _sans(12.5, color: Cc.muted, height: 1.5),
+                    ),
+                    const SizedBox(height: 28),
+                    for (var i = 0; i < _buildSteps.length; i++)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 9),
+                        child: _BuildRow(
+                          label: _buildSteps[i],
+                          done: i < oBuild,
+                          current: i == oBuild,
+                        ),
+                      ),
+                  ],
                 ),
               ),
-          ],
+            ),
+          ),
         ),
       ),
     );

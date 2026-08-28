@@ -40,52 +40,71 @@ class ScanScreen extends StatelessWidget {
                 ],
               ),
             ),
+            // Viewfinder centres in the free space when it fits; on short
+            // screens the whole area scrolls so nothing clips.
             Expanded(
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _Viewfinder(),
-                    const SizedBox(height: 22),
-                    const Text('Hold the barcode in the frame',
-                        style: TextStyle(
-                            fontFamily: 'Bricolage',
-                            fontSize: 18,
-                            height: 1.3,
-                            fontWeight: FontWeight.w700,
-                            color: Cc.paper)),
-                    const SizedBox(height: 6),
-                    const SizedBox(
-                      width: 250,
-                      child: Text(
-                        "No barcode on the pack? Point at the ingredients list instead — we'll read the text.",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontFamily: 'DMSans',
-                            fontSize: 12.5,
-                            height: 1.5,
-                            color: Color(0x9EF1F0E4)),
-                      ),
+              child: LayoutBuilder(
+                builder: (context, cons) => SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: cons.maxHeight),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              _Viewfinder(),
+                              const SizedBox(height: 22),
+                              const Text('Hold the barcode in the frame',
+                                  style: TextStyle(
+                                      fontFamily: 'Bricolage',
+                                      fontSize: 18,
+                                      height: 1.3,
+                                      fontWeight: FontWeight.w700,
+                                      color: Cc.paper)),
+                              const SizedBox(height: 6),
+                              const SizedBox(
+                                width: 250,
+                                child: Text(
+                                  "No barcode on the pack? Point at the ingredients list instead — we'll read the text.",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: 'DMSans',
+                                      fontSize: 12.5,
+                                      height: 1.5,
+                                      color: Color(0x9EF1F0E4)),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // demo picker
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(18, 0, 18, 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('DEMO — PICK A PRODUCT TO SCAN',
+                                  style: CcText.mono.copyWith(
+                                      color: const Color(0x73F1F0E4),
+                                      letterSpacing: 1.05,
+                                      fontSize: 10.5)),
+                              const SizedBox(height: 9),
+                              for (final pid in kDemoPickOrder) ...[
+                                _DemoRow(
+                                    product: kProducts[pid]!,
+                                    onTap: () => onPick?.call(pid)),
+                                const SizedBox(height: 8),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            // demo picker
-            Padding(
-              padding: const EdgeInsets.fromLTRB(18, 0, 18, 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('DEMO — PICK A PRODUCT TO SCAN',
-                      style: CcText.mono.copyWith(
-                          color: const Color(0x73F1F0E4), letterSpacing: 1.05, fontSize: 10.5)),
-                  const SizedBox(height: 9),
-                  for (final pid in kDemoPickOrder) ...[
-                    _DemoRow(product: kProducts[pid]!, onTap: () => onPick?.call(pid)),
-                    const SizedBox(height: 8),
-                  ],
-                ],
               ),
             ),
           ],
