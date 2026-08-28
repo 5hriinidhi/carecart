@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import datetime as dt
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Response, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
@@ -30,9 +30,10 @@ def _aware(d: dt.datetime) -> dt.datetime:
     return d if d.tzinfo else d.replace(tzinfo=dt.UTC)
 
 
-def _not_found_response(barcode: str) -> JSONResponse:
+def _not_found_response(barcode: str, *, cache: str) -> JSONResponse:
     return JSONResponse(
         status_code=status.HTTP_404_NOT_FOUND,
+        headers={"X-Cache": cache},
         content=ProductNotFoundOut(
             detail="This product isn't in the database yet. Scan its ingredients list instead.",
             barcode=barcode,
@@ -77,7 +78,7 @@ def _upsert(db, values: dict) -> Product:
     responses={404: {"model": ProductNotFoundOut}},
     operation_id="products_lookup_barcode",
 )
-def get_product(barcode: str, user: CurrentUser, db: DbSession):
+def get_product(barcode: str, user: CurrentUser, db: DbSession, response: Response):
     barcode = barcode.strip()
     if not (barcode.isdigit() and 8 <= len(barcode) <= 14):
         raise HTTPException(
@@ -89,8 +90,10 @@ def get_product(barcode: str, user: CurrentUser, db: DbSession):
     fresh = row is not None and _aware(row.refreshed_at) > _now() - ttl
 
     if fresh:
+        # served entirely from Postgres - no Open Food Facts call
         if row.off_status == "not_found":
-            return _not_found_response(barcode)
+            return _not_found_response(barcode, cache="HIT")
+        response.headers["X-Cache"] = "HIT"
         return _to_out(row, cached=True)
 
     # cache miss or stale -> ask Open Food Facts
@@ -98,6 +101,7 @@ def get_product(barcode: str, user: CurrentUser, db: DbSession):
         off_product = openfoodfacts.fetch_product(barcode)
     except openfoodfacts.OpenFoodFactsError:
         if row is not None and row.off_status == "found":
+            response.headers["X-Cache"] = "STALE"
             return _to_out(row, cached=True, stale=True)  # expired data beats nothing
         raise HTTPException(
             status.HTTP_502_BAD_GATEWAY,
@@ -108,7 +112,7 @@ def get_product(barcode: str, user: CurrentUser, db: DbSession):
     if off_product is None:
         _upsert(db, {"barcode": barcode, "off_status": "not_found", "refreshed_at": now})
         db.commit()
-        return _not_found_response(barcode)
+        return _not_found_response(barcode, cache="MISS")
 
     norm = openfoodfacts.normalize(barcode, off_product)
     row = _upsert(
@@ -129,4 +133,5 @@ def get_product(barcode: str, user: CurrentUser, db: DbSession):
         },
     )
     db.commit()
+    response.headers["X-Cache"] = "MISS"
     return _to_out(row, cached=False)

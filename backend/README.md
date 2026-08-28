@@ -45,7 +45,11 @@ Open Food Facts API and caches the result in the `products` table for
 - **Miss** → `404` `{"detail": "...", "barcode": "...", "fallback": "ocr"}` so
   the client falls back to scanning the ingredients list. Misses are cached too.
 - Barcode must be 8–14 digits (`422` otherwise). If OFF is unreachable an
-  expired cache entry is served with `stale: true`; with no cache at all → `502`.
+  expired cache entry is served with `stale: true`; with no cache at all → `502`
+  (bounded by `OFF_TIMEOUT_SECONDS`, never hangs).
+- Every response carries an **`X-Cache`** header: `MISS` (fetched from OFF just
+  now), `HIT` (served from Postgres, no OFF call), or `STALE` (OFF was down, an
+  expired copy was served).
 - OFF etiquette: every request sends a descriptive `User-Agent`
   (`OFF_USER_AGENT`), and the cache means a repeat scan never touches OFF.
 
