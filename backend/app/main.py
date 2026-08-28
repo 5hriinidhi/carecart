@@ -10,7 +10,7 @@ import logging
 import sys
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
@@ -61,7 +61,7 @@ async def lifespan(_: FastAPI):
 app = FastAPI(
     title=settings.app_name,
     version="0.1.0",
-    debug=settings.debug,
+    debug=settings.debug and not settings.is_production,  # never leak tracebacks in prod
     lifespan=lifespan,
 )
 
@@ -72,6 +72,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.exception_handler(Exception)
+async def _unhandled_exception(request: Request, exc: Exception) -> JSONResponse:
+    """Any uncaught error: log the detail server-side, return a generic body so
+    no stack trace, SQL, or row data can reach the client."""
+    logger.exception("unhandled error on %s %s", request.method, request.url.path)
+    return JSONResponse(status_code=500, content={"detail": "Internal server error"})
+
 
 app.include_router(api_router, prefix=settings.api_v1_prefix)
 

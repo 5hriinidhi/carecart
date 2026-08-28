@@ -13,12 +13,17 @@ SQLAlchemy==2.0.36
 alembic==1.14.0
 psycopg[binary]==3.2.3            # psycopg 3 driver
 
-# --- auth ---
+# --- auth / crypto ---
 pyjwt==2.10.1
 bcrypt==4.2.1
+cryptography==44.0.0              # Fernet: application-layer encryption at rest
 
 # --- http / misc ---
 httpx==0.28.1
+
+# --- OCR (medication label scan) ---
+pytesseract==0.3.13              # needs the `tesseract` binary on PATH (see Dockerfile)
+Pillow==11.0.0
 
 # --- vector database ---
 pymilvus==2.5.0

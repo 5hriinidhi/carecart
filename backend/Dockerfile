@@ -7,10 +7,11 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# curl is used by the compose healthcheck; no build toolchain needed
+# curl: compose healthcheck. tesseract-ocr: the OCR engine pytesseract shells out
+# to (medication label scan). No build toolchain needed otherwise
 # (psycopg[binary] and grpcio ship manylinux wheels).
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends curl \
+    && apt-get install -y --no-install-recommends curl tesseract-ocr \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt ./

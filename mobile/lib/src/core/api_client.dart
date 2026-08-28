@@ -16,15 +16,39 @@ String get apiBaseUrl {
   return 'http://localhost:8000';
 }
 
-/// Dio bound to the versioned API (`/api/v1/...`).
+/// The current access token (JWT from the OTP flow). Null until sign-in wires
+/// it in; [dioProvider] attaches it as a Bearer header when present.
+class AuthToken extends Notifier<String?> {
+  @override
+  String? build() => null;
+
+  void set(String? token) => state = (token == null || token.isEmpty) ? null : token;
+  void clear() => state = null;
+}
+
+final authTokenProvider = NotifierProvider<AuthToken, String?>(AuthToken.new);
+
+/// Dio bound to the versioned API (`/api/v1/...`), with the auth token attached.
 final dioProvider = Provider<Dio>((ref) {
-  return Dio(
+  final dio = Dio(
     BaseOptions(
       baseUrl: '$apiBaseUrl/api/v1',
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 15),
     ),
   );
+  dio.interceptors.add(
+    InterceptorsWrapper(
+      onRequest: (options, handler) {
+        final token = ref.read(authTokenProvider);
+        if (token != null && token.isNotEmpty) {
+          options.headers['Authorization'] = 'Bearer $token';
+        }
+        handler.next(options);
+      },
+    ),
+  );
+  return dio;
 });
 
 /// Result of a `GET /health` call against the backend.

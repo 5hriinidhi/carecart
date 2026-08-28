@@ -1,9 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/product_api.dart';
+
 /// The 9 main-app screens, mirroring the prototype's `state.screen` string
 /// values in `CareCart App.dc.html` ('home', 'scan', 'analyzing', ...).
 enum MainScreen { home, scan, analyzing, result, trends, history, meds, search, nudge }
+
+/// Barcode lookup progress on the scan screen (Phase 4.1).
+enum LookupPhase { idle, looking, found, notFound, error }
 
 /// The four bottom-nav tabs (a subset of [MainScreen], like the prototype's
 /// `state.tab`).
@@ -33,6 +38,11 @@ class MainAppState {
     this.logged = false,
     this.accepted = false,
     this.medOff = const {},
+    this.barcode,
+    this.product,
+    this.lookup = LookupPhase.idle,
+    this.lookupError,
+    this.ocrFallback = false,
   });
 
   final MainScreen screen;
@@ -48,6 +58,13 @@ class MainAppState {
   final bool logged; // result -> "saved to history"
   final bool accepted; // nudge -> "reminder set"
   final Map<String, bool> medOff; // med name -> toggled off?
+
+  // ---- barcode scan (Phase 4.1) ----
+  final String? barcode; // the barcode currently being looked up / last scanned
+  final ScannedProduct? product; // resolved product on a successful lookup
+  final LookupPhase lookup;
+  final String? lookupError; // human message when lookup == error
+  final bool ocrFallback; // backend said "not found, scan the ingredients"
 
   /// Bottom nav is only shown on the four tab screens (prototype `showNav`).
   bool get showNav => kNavTabs.contains(screen);
@@ -68,6 +85,11 @@ class MainAppState {
     bool? logged,
     bool? accepted,
     Map<String, bool>? medOff,
+    Object? barcode = _sentinel,
+    Object? product = _sentinel,
+    LookupPhase? lookup,
+    Object? lookupError = _sentinel,
+    bool? ocrFallback,
   }) {
     return MainAppState(
       screen: screen ?? this.screen,
@@ -83,6 +105,14 @@ class MainAppState {
       logged: logged ?? this.logged,
       accepted: accepted ?? this.accepted,
       medOff: medOff ?? this.medOff,
+      barcode: identical(barcode, _sentinel) ? this.barcode : barcode as String?,
+      product:
+          identical(product, _sentinel) ? this.product : product as ScannedProduct?,
+      lookup: lookup ?? this.lookup,
+      lookupError: identical(lookupError, _sentinel)
+          ? this.lookupError
+          : lookupError as String?,
+      ocrFallback: ocrFallback ?? this.ocrFallback,
     );
   }
 
@@ -104,7 +134,8 @@ class MainApp extends Notifier<MainAppState> {
   }
 
   void goHome() => state = state.copyWith(screen: MainScreen.home, tab: MainScreen.home);
-  void goScan() => state = state.copyWith(screen: MainScreen.scan);
+  void goScan() => state = state.copyWith(
+      screen: MainScreen.scan, lookup: LookupPhase.idle, ocrFallback: false);
   void goSearch() => state = state.copyWith(screen: MainScreen.search);
   void goNudge() => state = state.copyWith(screen: MainScreen.nudge);
 
@@ -130,6 +161,48 @@ class MainApp extends Notifier<MainAppState> {
       state = state.copyWith(screen: MainScreen.result);
     }
   }
+
+  // ---- barcode scan (Phase 4.1) ----
+  /// Look a scanned barcode up via `GET /products/{barcode}`.
+  ///   found    -> state.product is set, lookup == found
+  ///   notFound -> ocrFallback == true (client should offer OCR)
+  ///   error    -> lookupError has a message
+  Future<void> lookupBarcode(String rawBarcode) async {
+    final code = rawBarcode.trim();
+    if (code.isEmpty) return;
+
+    state = state.copyWith(
+      screen: MainScreen.scan,
+      barcode: code,
+      lookup: LookupPhase.looking,
+      ocrFallback: false,
+      lookupError: null,
+      product: null,
+    );
+
+    final lookup = ref.read(productLookupProvider);
+    ProductLookup result;
+    try {
+      result = await lookup(code);
+    } catch (_) {
+      result = const ProductLookupError('Product lookup failed.');
+    }
+
+    if (state.barcode != code) return; // a newer scan superseded this one
+
+    switch (result) {
+      case ProductFound(:final product):
+        state = state.copyWith(lookup: LookupPhase.found, product: product);
+      case ProductNotFound(:final fallbackToOcr):
+        state = state.copyWith(
+            lookup: LookupPhase.notFound, ocrFallback: fallbackToOcr);
+      case ProductLookupError(:final message):
+        state = state.copyWith(lookup: LookupPhase.error, lookupError: message);
+    }
+  }
+
+  void dismissLookup() => state = state.copyWith(
+      lookup: LookupPhase.idle, ocrFallback: false, lookupError: null);
 
   // ---- per-screen state ----
   void setRange(String r) => state = state.copyWith(range: r);

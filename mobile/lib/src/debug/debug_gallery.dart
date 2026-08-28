@@ -35,7 +35,7 @@ final debugScreens = <String, DebugEntry>{
     navTab: null
   ),
   'home': (label: 'Home', build: (_) => const HomeScreen(), navTab: 'home'),
-  'scan': (label: 'Scan', build: (_) => const ScanScreen(), navTab: null),
+  'scan': (label: 'Scan', build: (_) => const ScanScreen(cameraEnabled: false), navTab: null),
   'analyzing': (label: 'Analyzing', build: (_) => const AnalyzingScreen(), navTab: null),
   'result': (label: 'Result — Avoid (noodles)', build: (_) => const ResultScreen(productId: 'noodles'), navTab: null),
   'result-caution': (label: 'Result — Caution (juice)', build: (_) => const ResultScreen(productId: 'juice'), navTab: null),

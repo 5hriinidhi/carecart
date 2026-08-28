@@ -1,4 +1,8 @@
+import 'dart:io' show Platform;
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../core/severity.dart';
 import '../../core/text.dart';
@@ -6,12 +10,30 @@ import '../../core/theme.dart';
 import '../../core/widgets.dart';
 import '../../fixtures/demo_data.dart';
 
-/// Static scan screen — `state.screen == 'scan'`. Dark camera viewfinder + a
-/// demo product picker.
+/// True under `flutter test` — used to skip the real camera (no plugin there).
+bool get _inFlutterTest =>
+    !kIsWeb && Platform.environment.containsKey('FLUTTER_TEST');
+
+/// Scan screen — `state.screen == 'scan'`. Live camera barcode reader
+/// ([onBarcode]) + a manual-entry field + the demo product picker.
 class ScanScreen extends StatelessWidget {
-  const ScanScreen({super.key, this.onBack, this.onPick});
+  const ScanScreen({
+    super.key,
+    this.onBack,
+    this.onPick,
+    this.onBarcode,
+    this.cameraEnabled = true,
+  });
   final VoidCallback? onBack;
   final void Function(String pid)? onPick;
+
+  /// Called with a decoded barcode (from the camera or the manual field).
+  final void Function(String barcode)? onBarcode;
+
+  /// Off in the debug gallery / tests, where there's no camera plugin.
+  final bool cameraEnabled;
+
+  bool get _showCamera => cameraEnabled && !_inFlutterTest;
 
   static const _paper70 = Color(0xB3F1F0E4);
 
@@ -55,7 +77,9 @@ class ScanScreen extends StatelessWidget {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              _Viewfinder(),
+                              _showCamera
+                                  ? _BarcodeCamera(onDetect: onBarcode)
+                                  : _Viewfinder(),
                               const SizedBox(height: 22),
                               const Text('Hold the barcode in the frame',
                                   style: TextStyle(
@@ -80,12 +104,19 @@ class ScanScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        // demo picker
                         Padding(
                           padding: const EdgeInsets.fromLTRB(18, 0, 18, 20),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Text('ENTER A BARCODE',
+                                  style: CcText.mono.copyWith(
+                                      color: const Color(0x73F1F0E4),
+                                      letterSpacing: 1.05,
+                                      fontSize: 10.5)),
+                              const SizedBox(height: 9),
+                              _ManualBarcodeField(onSubmit: onBarcode),
+                              const SizedBox(height: 18),
                               Text('DEMO — PICK A PRODUCT TO SCAN',
                                   style: CcText.mono.copyWith(
                                       color: const Color(0x73F1F0E4),
@@ -237,6 +268,143 @@ class _DemoRow extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Live camera preview that reports the first stable barcode it decodes.
+/// Debounced so a held barcode fires [onDetect] once, not every frame.
+class _BarcodeCamera extends StatefulWidget {
+  const _BarcodeCamera({this.onDetect});
+  final void Function(String barcode)? onDetect;
+
+  @override
+  State<_BarcodeCamera> createState() => _BarcodeCameraState();
+}
+
+class _BarcodeCameraState extends State<_BarcodeCamera> {
+  final _controller = MobileScannerController(
+    formats: const [
+      BarcodeFormat.ean13,
+      BarcodeFormat.ean8,
+      BarcodeFormat.upcA,
+      BarcodeFormat.upcE,
+      BarcodeFormat.itf,
+    ],
+    detectionSpeed: DetectionSpeed.noDuplicates,
+  );
+  String? _last;
+  DateTime _lastAt = DateTime.fromMillisecondsSinceEpoch(0);
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onDetect(BarcodeCapture capture) {
+    final raw = capture.barcodes
+        .map((b) => b.rawValue)
+        .firstWhere((v) => v != null && v.trim().isNotEmpty, orElse: () => null);
+    if (raw == null) return;
+    final code = raw.trim();
+    final now = DateTime.now();
+    if (code == _last && now.difference(_lastAt) < const Duration(seconds: 3)) {
+      return;
+    }
+    _last = code;
+    _lastAt = now;
+    widget.onDetect?.call(code);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 246,
+      height: 170,
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(18)),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          MobileScanner(controller: _controller, onDetect: _onDetect),
+          // reuse the corner frame overlay
+          IgnorePointer(child: _Viewfinder()),
+        ],
+      ),
+    );
+  }
+}
+
+/// Manual barcode entry — lets the flow be exercised without a camera
+/// (debug gallery, desktop, tests).
+class _ManualBarcodeField extends StatefulWidget {
+  const _ManualBarcodeField({this.onSubmit});
+  final void Function(String barcode)? onSubmit;
+
+  @override
+  State<_ManualBarcodeField> createState() => _ManualBarcodeFieldState();
+}
+
+class _ManualBarcodeFieldState extends State<_ManualBarcodeField> {
+  final _c = TextEditingController();
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    final code = _c.text.trim();
+    if (code.isEmpty) return;
+    widget.onSubmit?.call(code);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              color: const Color(0x14F1F0E4),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: const Color(0x24F1F0E4)),
+            ),
+            child: TextField(
+              controller: _c,
+              keyboardType: TextInputType.number,
+              onSubmitted: (_) => _submit(),
+              style: const TextStyle(
+                  fontFamily: 'DMMono', fontSize: 14, color: Cc.paper),
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                isCollapsed: true,
+                contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                hintText: '8901234567890',
+                hintStyle: TextStyle(
+                    fontFamily: 'DMMono', fontSize: 14, color: Color(0x66F1F0E4)),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        GestureDetector(
+          onTap: _submit,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
+            decoration: BoxDecoration(
+                color: Cc.accent, borderRadius: BorderRadius.circular(14)),
+            child: const Text('Look up',
+                style: TextStyle(
+                    fontFamily: 'DMSans',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: Cc.inkSoft)),
+          ),
+        ),
+      ],
     );
   }
 }

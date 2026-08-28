@@ -64,7 +64,22 @@ class MainAppShell extends ConsumerWidget {
         );
       case MainScreen.scan:
         bg = const Color(0xFF14170F);
-        body = ScanScreen(onBack: app.back, onPick: app.startScan);
+        body = Stack(
+          children: [
+            ScanScreen(
+              onBack: app.back,
+              onPick: app.startScan,
+              onBarcode: app.lookupBarcode,
+            ),
+            if (s.lookup != LookupPhase.idle)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: _LookupBanner(state: s, onDismiss: app.dismissLookup),
+              ),
+          ],
+        );
       case MainScreen.analyzing:
         bg = Cc.paper;
         body = AnalyzingScreen(activeStep: s.step);
@@ -102,6 +117,101 @@ class MainAppShell extends ConsumerWidget {
             onPick: (p) => app.selectProfile(p.name.split(' ').first),
           ),
       ],
+    );
+  }
+}
+
+/// Bottom strip on the scan screen that reports barcode-lookup progress.
+class _LookupBanner extends StatelessWidget {
+  const _LookupBanner({required this.state, this.onDismiss});
+  final MainAppState state;
+  final VoidCallback? onDismiss;
+
+  @override
+  Widget build(BuildContext context) {
+    final (String title, String? sub, Color accent) = switch (state.lookup) {
+      LookupPhase.looking => ('Looking up ${state.barcode}…', null, Cc.sage),
+      LookupPhase.found => (
+          state.product?.displayName ?? 'Product found',
+          <String>[
+            ?state.product?.brand,
+            '${state.product?.ingredients.length ?? 0} ingredients',
+            if (state.product?.cached ?? false) 'cached',
+            if (state.product?.stale ?? false) 'offline copy',
+          ].join(' · '),
+          Cc.sage,
+        ),
+      LookupPhase.notFound => (
+          "Not in the database",
+          state.ocrFallback
+              ? 'Scan the ingredients list instead'
+              : null,
+          Cc.accent,
+        ),
+      LookupPhase.error => (
+          'Lookup failed',
+          state.lookupError,
+          const Color(0xFFB44F35),
+        ),
+      LookupPhase.idle => ('', null, Cc.sage),
+    };
+
+    return SafeArea(
+      top: false,
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+        padding: const EdgeInsets.fromLTRB(16, 13, 10, 13),
+        decoration: BoxDecoration(
+          color: const Color(0xF2201F17),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: accent.withValues(alpha: 0.5)),
+        ),
+        child: Row(
+          children: [
+            if (state.lookup == LookupPhase.looking)
+              const SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(strokeWidth: 2, color: Cc.sage),
+              )
+            else
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(color: accent, shape: BoxShape.circle),
+              ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(title,
+                      style: const TextStyle(
+                          fontFamily: 'DMSans',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Cc.paper)),
+                  if (sub != null && sub.isNotEmpty) ...[
+                    const SizedBox(height: 2),
+                    Text(sub,
+                        style: const TextStyle(
+                            fontFamily: 'DMSans',
+                            fontSize: 11.5,
+                            color: Color(0x99F1F0E4))),
+                  ],
+                ],
+              ),
+            ),
+            if (state.lookup != LookupPhase.looking)
+              IconButton(
+                onPressed: onDismiss,
+                icon: const Icon(Icons.close_rounded,
+                    size: 18, color: Color(0x99F1F0E4)),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

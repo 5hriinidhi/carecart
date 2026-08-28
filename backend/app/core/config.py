@@ -43,6 +43,12 @@ _OPTIONAL_KEYS: dict[str, tuple[str, str]] = {
 }
 
 _DEV_JWT_SECRET = "dev-only-change-me"
+# Dev-only placeholders. Both are rejected at startup when ENVIRONMENT=production
+# (see missing_required). Generate real values:
+#   ENCRYPTION_KEY  -> Fernet.generate_key().decode()
+#   PHONE_HASH_KEY  -> secrets.token_urlsafe(32)
+_DEV_ENCRYPTION_KEY = "I49r_FgAfGuifDRRvTW5pi6RehT0q1KWV4IB-XHWuXE="
+_DEV_PHONE_HASH_KEY = "dev-only-phone-pepper-change-me"
 
 
 class Settings(BaseSettings):
@@ -65,16 +71,48 @@ class Settings(BaseSettings):
     postgres_port: int = 5432
     database_url: str | None = None  # full override; wins over the parts above
 
-    # --- auth ---
+    # --- auth: tokens ---
     jwt_secret: str = _DEV_JWT_SECRET
     jwt_algorithm: str = "HS256"
-    access_token_expire_minutes: int = 60 * 24 * 7  # 7 days
+    access_token_expire_minutes: int = 30              # short-lived access token
+    refresh_token_expire_minutes: int = 60 * 24 * 30   # 30-day refresh token
+
+    # --- health vault: encryption at rest + phone pepper ---
+    # ENCRYPTION_KEY encrypts the sensitive medication/condition columns (Fernet).
+    # ENCRYPTION_KEYS_OLD holds previous keys (comma-separated) so a rotated key
+    # can still decrypt old rows (MultiFernet). PHONE_HASH_KEY peppers the HMAC
+    # that turns a phone number into users.phone_hash (no plaintext numbers stored).
+    encryption_key: str = _DEV_ENCRYPTION_KEY
+    encryption_keys_old: str = ""
+    phone_hash_key: str = _DEV_PHONE_HASH_KEY
+
+    # --- auth: phone / OTP sign-in ---
+    otp_length: int = 6
+    otp_ttl_minutes: int = 5                # a code is valid for 5 minutes
+    otp_max_per_window: int = 3             # >= 3 request-otp calls...
+    otp_rate_window_minutes: int = 10       # ...per phone per 10 minutes -> 429
+    otp_max_verify_attempts: int = 5        # wrong guesses before a code is burned
+    otp_default_country_code: str = "+91"   # the onboarding UI shows a +91 prefix
+    otp_provider_url: str = ""              # provider HTTPS endpoint; blank -> dev console sender
+    otp_sender_id: str = "CareCart"         # sender / from-name on the SMS
 
     # --- third-party API keys (optional in dev; no defaults) ---
     otp_provider_api_key: str = ""
     claude_api_key: str = ""
     openfda_api_key: str = ""
     usda_fdc_api_key: str = ""
+
+    # --- OCR (medication label scan) ---
+    ocr_max_upload_bytes: int = 10 * 1024 * 1024  # reject larger uploads before OCR
+    ocr_text_max_chars: int = 4000               # cap on the sanitised extracted text
+    tesseract_cmd: str = ""                      # path to the tesseract binary; blank -> PATH
+
+    # --- Open Food Facts (barcode -> product) ---
+    off_base_url: str = "https://world.openfoodfacts.org"
+    # OFF asks every app to send a descriptive UA; keep contact info real in prod.
+    off_user_agent: str = "CareCart/0.1 (backend; https://github.com/5hriinidhi/carecart)"
+    off_timeout_seconds: float = 8.0
+    product_cache_ttl_hours: int = 24  # >= 24h so we stay within OFF's rate limits
 
     # --- vector database (Milvus) ---
     milvus_host: str = "localhost"  # docker-compose overrides -> "milvus"
@@ -86,6 +124,27 @@ class Settings(BaseSettings):
         # `JWT_SECRET=` (blank) in .env -> fall back to the dev placeholder, which
         # missing_required() then rejects when ENVIRONMENT=production.
         return v.strip() or _DEV_JWT_SECRET
+
+    @field_validator("encryption_key", mode="after")
+    @classmethod
+    def _default_and_check_encryption_key(cls, v: str) -> str:
+        v = v.strip() or _DEV_ENCRYPTION_KEY
+        from cryptography.fernet import Fernet  # local import: keeps config import cheap
+
+        try:
+            Fernet(v.encode())
+        except Exception as exc:  # noqa: BLE001
+            raise ValueError(
+                "ENCRYPTION_KEY must be a urlsafe-base64 32-byte Fernet key "
+                '(generate: python -c "from cryptography.fernet import Fernet; '
+                'print(Fernet.generate_key().decode())")'
+            ) from exc
+        return v
+
+    @field_validator("phone_hash_key", mode="after")
+    @classmethod
+    def _default_blank_phone_hash_key(cls, v: str) -> str:
+        return v.strip() or _DEV_PHONE_HASH_KEY
 
     # --- graph database (Neo4j, Phase 6+) ---
     neo4j_uri: str = "bolt://localhost:7687"
@@ -123,6 +182,20 @@ class Settings(BaseSettings):
     def is_production(self) -> bool:
         return self.environment.strip().lower() == "production"
 
+    @property
+    def otp_echo_in_response(self) -> bool:
+        """Dev convenience: return the freshly generated OTP in the
+        `POST /auth/request-otp` response body so local testing works without a
+        real SMS provider. Allow-listed to dev/test only, and never in
+        production. The code is still never written to a log in any environment.
+        """
+        env = self.environment.strip().lower()
+        return env in {"development", "test"} and not self.is_production
+
+    @property
+    def encryption_keys_old_list(self) -> list[str]:
+        return [k.strip() for k in self.encryption_keys_old.split(",") if k.strip()]
+
     # ---------------------------------------------------------------- validation
     def missing_required(self) -> list[str]:
         """Human-readable problems with required config. Empty list == OK."""
@@ -136,6 +209,14 @@ class Settings(BaseSettings):
             if self.jwt_secret == _DEV_JWT_SECRET:
                 problems.append(
                     "JWT_SECRET is still the dev placeholder - set a real secret in production"
+                )
+            if self.encryption_key == _DEV_ENCRYPTION_KEY:
+                problems.append(
+                    "ENCRYPTION_KEY is still the dev placeholder - set a real Fernet key"
+                )
+            if self.phone_hash_key == _DEV_PHONE_HASH_KEY:
+                problems.append(
+                    "PHONE_HASH_KEY is still the dev placeholder - set a real value in production"
                 )
             for attr, (env, feature) in _OPTIONAL_KEYS.items():
                 if not getattr(self, attr):

@@ -37,12 +37,18 @@ def test_production_enforces_optional_keys_and_real_jwt_secret():
     for env in ("OTP_PROVIDER_API_KEY", "CLAUDE_API_KEY", "OPENFDA_API_KEY", "USDA_FDC_API_KEY"):
         assert env in joined
     assert "JWT_SECRET" in joined
+    assert "ENCRYPTION_KEY" in joined
+    assert "PHONE_HASH_KEY" in joined
 
 
 def test_production_passes_when_everything_supplied():
+    from cryptography.fernet import Fernet
+
     ok = Settings(
         environment="production",
         jwt_secret="a-real-long-secret",
+        encryption_key=Fernet.generate_key().decode(),
+        phone_hash_key="a-real-phone-pepper",
         otp_provider_api_key="x",
         claude_api_key="x",
         openfda_api_key="x",
