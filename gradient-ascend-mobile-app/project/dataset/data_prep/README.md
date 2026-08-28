@@ -39,8 +39,22 @@ All scripts need `PYTHONUTF8=1` on Windows (rupee sign / BOM in the source CSVs)
 |---|---|
 | `risk_compounds.csv` | 26 food-chemistry categories relevant to drug interactions |
 | `ingredient_aliases.csv` | `alias -> risk_compound` keyword dictionary (`match_type` = substring/word) |
+| `risk_nutrient_thresholds.csv` | numeric counterpart: per-100 g nutrient band (`nutrient_key,min_value`) -> `risk_compound` + `confidence` + `rationale`. FSA front-of-pack "high"/"medium" levels for sodium / sugar / saturated fat |
 | `drug_class_lookup.csv` | `active_ingredient -> drug_class`, ~1000 entries |
 | `drug_class_stem_rules.csv` | ordered suffix/prefix rules (`-pril` -> ACE inhibitor, `cef-` -> Cephalosporin, ...) |
+
+### Consumed at runtime (Phase 4.3)
+
+`backend/scripts/load_risk_tables.py` loads `risk_compounds.csv`,
+`ingredient_aliases.csv`, `llm_ingredient_tags.csv`,
+`risk_nutrient_thresholds.csv` and `food_risk_tags.csv` into Postgres. The scan
+path (`POST /products/resolve-risks`) then resolves ingredients against those
+tables only — **no LLM call at runtime**. Ingredients that match nothing are
+queued in the `unresolved_ingredients` table; `backend/scripts/classify_unresolved.py`
+is the offline batch job that drains that queue with the same LLM-fallback
+approach as `make_llm_ingredient_tags.py` and, after human review, appends
+accepted rows to `llm_ingredient_tags.csv` (re-run `03_tag_foods.py` +
+`load_risk_tables.py` to deploy).
 
 ### LLM fallback (method=llm; spot-check these)
 | file | what |

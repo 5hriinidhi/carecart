@@ -1,0 +1,8 @@
+risk_compound,nutrient_key,basis,min_value,confidence,method,source,rationale
+sodium,sodium_mg_100g,per_100g,600,0.8,threshold,fsa_front_of_pack,"FSA front-of-pack 'high' (red): >1.5 g salt / 100 g, i.e. >= 600 mg sodium / 100 g"
+sodium,sodium_mg_100g,per_100g,120,0.45,threshold,fsa_front_of_pack,"FSA 'medium' (amber) band: 120-600 mg sodium / 100 g - lower-confidence caution"
+sodium,salt_g_100g,per_100g,1.5,0.8,threshold,fsa_front_of_pack,"FSA 'high': >= 1.5 g salt / 100 g (used when OFF reports salt but not sodium)"
+added_sugar,sugars_g_100g,per_100g,22.5,0.7,threshold,fsa_front_of_pack,"FSA 'high': >= 22.5 g total sugars / 100 g. Total sugars (not only added), hence < 0.8"
+added_sugar,sugars_g_100g,per_100g,5,0.4,threshold,fsa_front_of_pack,"FSA 'medium' band: 5-22.5 g sugars / 100 g - low-confidence caution"
+saturated_fat,saturated_fat_g_100g,per_100g,5,0.7,threshold,fsa_front_of_pack,"FSA 'high': >= 5 g saturated fat / 100 g"
+saturated_fat,saturated_fat_g_100g,per_100g,1.5,0.4,threshold,fsa_front_of_pack,"FSA 'medium' band: 1.5-5 g saturated fat / 100 g - low-confidence caution"

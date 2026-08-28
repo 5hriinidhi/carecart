@@ -106,6 +106,20 @@ class Settings(BaseSettings):
     ocr_max_upload_bytes: int = 10 * 1024 * 1024  # reject larger uploads before OCR
     ocr_text_max_chars: int = 4000               # cap on the sanitised extracted text
     tesseract_cmd: str = ""                      # path to the tesseract binary; blank -> PATH
+    # below this mean word confidence a label scan is flagged low_confidence
+    ocr_low_confidence_threshold: float = 0.55
+
+    # --- ingredient risk resolution (Phase 4.3) ---
+    # Directory holding the pre-built static reference CSVs (risk_compounds.csv,
+    # ingredient_aliases.csv, llm_ingredient_tags.csv, food_risk_tags.csv,
+    # risk_nutrient_thresholds.csv). Loaded into Postgres by
+    # scripts/load_risk_tables.py; the scan path only ever reads the DB tables,
+    # never an LLM. Blank -> the repo's dataset/data_prep folder (see property).
+    risk_data_dir: str = ""
+    # When the alias / LLM / threshold tables produce nothing for an ingredient
+    # it is marked "unverified" and queued for the offline batch job. Set to 0
+    # to skip the queue write (the "unverified" marker is still returned).
+    risk_queue_unresolved: bool = True
 
     # --- Open Food Facts (barcode -> product) ---
     off_base_url: str = "https://world.openfoodfacts.org"
@@ -195,6 +209,21 @@ class Settings(BaseSettings):
     @property
     def encryption_keys_old_list(self) -> list[str]:
         return [k.strip() for k in self.encryption_keys_old.split(",") if k.strip()]
+
+    @property
+    def risk_data_path(self) -> str:
+        """Absolute path to the static risk-reference CSV directory."""
+        import os
+
+        if self.risk_data_dir.strip():
+            return os.path.abspath(self.risk_data_dir.strip())
+        # config.py -> app/core -> app -> backend -> repo root
+        repo_root = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), "..", "..", "..")
+        )
+        return os.path.join(
+            repo_root, "gradient-ascend-mobile-app", "project", "dataset", "data_prep"
+        )
 
     # ---------------------------------------------------------------- validation
     def missing_required(self) -> list[str]:

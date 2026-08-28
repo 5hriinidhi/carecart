@@ -17,6 +17,7 @@ from sqlalchemy import delete, func, select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from app.api.deps import CurrentUser, DbSession
+from app.api.uploads import read_image_upload
 from app.core.config import settings
 from app.db.base import Base
 from app.models import Allergy, AuditLog, Condition, HealthProfile, Medication, User
@@ -36,19 +37,6 @@ from app.schemas.vault import (
     MedicationScanOut,
 )
 from app.services import ocr
-
-_ALLOWED_IMAGE_TYPES = frozenset(
-    {
-        "image/jpeg",
-        "image/jpg",
-        "image/png",
-        "image/webp",
-        "image/tiff",
-        "image/bmp",
-        "image/heic",
-        "image/heif",
-    }
-)
 
 
 def _owned_or_404(db, model: type[Base], item_id: uuid.UUID, user_id: uuid.UUID):
@@ -236,35 +224,6 @@ medications_router = _collection_router(
 )
 
 
-async def _read_image_upload(file: UploadFile) -> bytes:
-    """Enforce content-type and the size cap BEFORE any OCR work. The body is
-    read in chunks so an oversized upload is rejected without buffering it all."""
-    content_type = (file.content_type or "").split(";")[0].strip().lower()
-    if not content_type.startswith("image/") or content_type not in _ALLOWED_IMAGE_TYPES:
-        raise HTTPException(
-            status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
-            f"Upload a photo of the label (got content type '{content_type or 'unknown'}').",
-        )
-
-    cap = settings.ocr_max_upload_bytes
-    limit_mb = cap // (1024 * 1024)
-    if file.size is not None and file.size > cap:
-        raise HTTPException(
-            status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, f"Image is larger than {limit_mb} MB."
-        )
-
-    buf = bytearray()
-    while chunk := await file.read(64 * 1024):
-        buf.extend(chunk)
-        if len(buf) > cap:
-            raise HTTPException(
-                status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, f"Image is larger than {limit_mb} MB."
-            )
-    if not buf:
-        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, "The uploaded file is empty.")
-    return bytes(buf)
-
-
 @medications_router.post(
     "/scan", response_model=MedicationScanOut, operation_id="medications_scan_label"
 )
@@ -276,7 +235,7 @@ async def scan_medication_label(
     This never writes to the vault — the client shows the candidate, the user
     confirms/edits it, then saves it with ``POST /me/medications``.
     """
-    image_bytes = await _read_image_upload(file)  # 415 / 413 / 422 before OCR
+    image_bytes = await read_image_upload(file)  # 415 / 413 / 422 before OCR
 
     try:
         raw_text, mean_conf = ocr.extract_text(image_bytes)

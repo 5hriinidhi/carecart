@@ -15,7 +15,17 @@ from __future__ import annotations
 import datetime as dt
 import uuid
 
-from sqlalchemy import Date, DateTime, ForeignKey, Integer, String, Text, func, text
+from sqlalchemy import (
+    Date,
+    DateTime,
+    Float,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    func,
+    text,
+)
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -201,6 +211,118 @@ class Product(Base, TimestampMixin):
     refreshed_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), index=True)
 
 
+# ============================================ ingredient risk resolution (4.3) ==
+# These five tables are the pre-built STATIC reference data the scan path
+# resolves against. They hold no user data and are never written to on the scan
+# path except `unresolved_ingredients` (an append/counter queue). Populated from
+# dataset/data_prep/*.csv by `scripts/load_risk_tables.py`. No LLM is ever
+# called at runtime - unknown ingredients are queued here for the offline batch
+# job (`scripts/classify_unresolved.py`).
+
+
+class RiskCompound(Base):
+    """The 26 canonical food-chemistry categories relevant to drug interactions
+    (from ``risk_compounds.csv``). Referenced by every table below."""
+
+    __tablename__ = "risk_compounds"
+
+    risk_compound: Mapped[str] = mapped_column(String(48), primary_key=True)
+    display_name: Mapped[str] = mapped_column(String(120))
+    category: Mapped[str | None] = mapped_column(String(32))
+    description: Mapped[str | None] = mapped_column(Text)
+    typical_food_sources: Mapped[str | None] = mapped_column(Text)
+    why_it_matters_for_drugs: Mapped[str | None] = mapped_column(Text)
+
+
+class IngredientRiskAlias(Base):
+    """``alias -> risk_compound`` keyword dictionary, merged from the hand-authored
+    ``ingredient_aliases.csv`` (``source='keyword'``) and the reviewed LLM-fallback
+    ``llm_ingredient_tags.csv`` (``source='llm'``). A row with ``risk_compound`` NULL
+    is a token explicitly reviewed as carrying no risk compound (so it resolves as
+    known-benign, not "unverified"). The offline batch job appends ``source='batch'``
+    rows after human review."""
+
+    __tablename__ = "ingredient_risk_aliases"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=_uuid)
+    alias: Mapped[str] = mapped_column(String(160), index=True)
+    risk_compound: Mapped[str | None] = mapped_column(
+        ForeignKey("risk_compounds.risk_compound", ondelete="RESTRICT")
+    )
+    match_type: Mapped[str] = mapped_column(String(12))  # substring | word | exact
+    confidence: Mapped[float | None] = mapped_column(Float)
+    source: Mapped[str] = mapped_column(String(16))  # keyword | llm | batch
+    notes: Mapped[str | None] = mapped_column(Text)
+    rationale: Mapped[str | None] = mapped_column(Text)
+
+
+class RiskNutrientThreshold(Base):
+    """Numeric-threshold counterpart to the alias table: a per-100 g nutrient
+    level at or above which a ``risk_compound`` applies to the whole product
+    (from ``risk_nutrient_thresholds.csv``). Keys match the normalised nutriment
+    keys produced by the Open Food Facts lookup (Phase 4.1)."""
+
+    __tablename__ = "risk_nutrient_thresholds"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=_uuid)
+    risk_compound: Mapped[str] = mapped_column(
+        ForeignKey("risk_compounds.risk_compound", ondelete="RESTRICT")
+    )
+    nutrient_key: Mapped[str] = mapped_column(String(48), index=True)
+    basis: Mapped[str] = mapped_column(String(16), default="per_100g")
+    min_value: Mapped[float] = mapped_column(Float)
+    confidence: Mapped[float] = mapped_column(Float)
+    method: Mapped[str] = mapped_column(String(16), default="threshold")
+    source: Mapped[str | None] = mapped_column(String(32))
+    rationale: Mapped[str | None] = mapped_column(Text)
+
+
+class FoodRiskTag(Base):
+    """Per-food precomputed ``(food_id, risk_compound)`` tags from the one-time
+    data-prep job (``food_risk_tags.csv``). Not on the resolve path (barcodes
+    don't map to dataset food ids); loaded for Phase 4.4 to reuse when a scan
+    matches a known dataset item, and to spot-check the alias tables against."""
+
+    __tablename__ = "food_risk_tags"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=_uuid)
+    food_id: Mapped[str] = mapped_column(String(16), index=True)
+    risk_compound: Mapped[str] = mapped_column(
+        ForeignKey("risk_compounds.risk_compound", ondelete="RESTRICT")
+    )
+    confidence: Mapped[float | None] = mapped_column(Float)
+    method: Mapped[str | None] = mapped_column(String(24))
+
+
+class UnresolvedIngredient(Base):
+    """Queue of ingredient strings the static tables could not resolve.
+
+    One row per distinct (normalised) ingredient text - repeat sightings bump
+    ``times_seen`` and ``last_seen_at`` instead of inserting a duplicate. Drained
+    by the offline batch job (``scripts/classify_unresolved.py``), which
+    classifies the batch and, after human review, merges accepted results back
+    into the alias CSVs for the next deploy. No LLM is called to fill this on the
+    scan path."""
+
+    __tablename__ = "unresolved_ingredients"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=_uuid)
+    ingredient_text: Mapped[str] = mapped_column(String(200))
+    # dedup key: lowercased + cleaned form of ingredient_text
+    normalized_text: Mapped[str] = mapped_column(String(200), unique=True, index=True)
+    sample_product: Mapped[str | None] = mapped_column(String(200))
+    times_seen: Mapped[int] = mapped_column(Integer, default=1, server_default=text("1"))
+    status: Mapped[str] = mapped_column(
+        String(12), default="pending", server_default=text("'pending'")
+    )  # pending | classified | merged | rejected
+    first_seen_at: Mapped[dt.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    last_seen_at: Mapped[dt.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+
 class AuditLog(Base):
     """Append-only record of WHO touched WHICH health resource and WHEN.
 
@@ -234,5 +356,10 @@ __all__ = [
     "Medication",
     "ScanHistory",
     "Product",
+    "RiskCompound",
+    "IngredientRiskAlias",
+    "RiskNutrientThreshold",
+    "FoodRiskTag",
+    "UnresolvedIngredient",
     "AuditLog",
 ]

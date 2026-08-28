@@ -105,6 +105,87 @@ def sanitize_text(raw: str, *, max_chars: int) -> tuple[str, bool]:
     return cleaned, truncated
 
 
+# --------------------------------------------------------- ingredient parsing --
+# a leading "Ingredients:" / "Ingrédients :" / "Contains:" / "Composition -" label
+_LABEL_PREFIX_RE = re.compile(
+    r"^\s*(ingredient(?:e|s|es)?|ingr[ée]dients?|contains|composition)\s*[:.–—\-]*\s*",
+    re.IGNORECASE,
+)
+_EDGE_NOISE_RE = re.compile(r"^[\s.,;:\-–—*•·°'\"()\[\]]+|"
+                            r"[\s.,;:\-–—*•·°'\"]+$")
+_MULTISPACE_RE = re.compile(r"\s+")
+# trailing packaging text that OCR sweeps into the list
+_NOT_AN_INGREDIENT_RE = re.compile(
+    r"^(may contain|produced in|manufactured|packed|made in|for allergens|"
+    r"allergy advice|allergen|see |best before|use by|store |keep |contains \d|"
+    r"nutrition|serving|net (weight|wt)|energy|per 100|www\.|https?://|tel[:.]|email)",
+    re.IGNORECASE,
+)
+
+
+def _split_top_level(text: str, separators: str) -> list[str]:
+    """Split on `separators` that are NOT inside brackets -
+    so "colour (caramel, E150d)" stays one item."""
+    out: list[str] = []
+    buf: list[str] = []
+    depth = 0
+    for ch in text:
+        if ch in "([{":
+            depth += 1
+        elif ch in ")]}" and depth > 0:
+            depth -= 1
+        if ch in separators and depth == 0:
+            out.append("".join(buf))
+            buf = []
+        else:
+            buf.append(ch)
+    out.append("".join(buf))
+    return out
+
+
+def parse_ingredients(sanitized_text: str) -> list[str]:
+    """OCR text of an ingredients list -> a cleaned list of individual strings.
+
+    Splits on top-level commas / semicolons, strips OCR edge noise, drops
+    fragments with no letters and obvious packaging boilerplate, de-dupes.
+    This is a DRAFT for the user to correct - never treat it as ground truth.
+    """
+    body = _LABEL_PREFIX_RE.sub("", sanitized_text.strip(), count=1)
+    flat = _MULTISPACE_RE.sub(" ", body.replace("\n", " ")).strip()
+
+    parts = _split_top_level(flat, ",;")
+    # one-per-line list with no delimiters -> fall back to line splitting
+    if len([p for p in parts if p.strip()]) <= 1 and sanitized_text.count("\n") >= 2:
+        parts = [
+            piece
+            for line in sanitized_text.split("\n")
+            for piece in _split_top_level(line, ",;")
+        ]
+
+    seen: set[str] = set()
+    cleaned: list[str] = []
+    for part in parts:
+        item = _MULTISPACE_RE.sub(" ", part).strip()
+        item = _EDGE_NOISE_RE.sub("", _EDGE_NOISE_RE.sub("", item)).strip()
+        # drop unbalanced brackets left by splitting (e.g. "(Cocoa)" -> "Cocoa)")
+        while item.endswith(")") and item.count(")") > item.count("("):
+            item = item[:-1].strip()
+        while item.startswith("(") and item.count("(") > item.count(")"):
+            item = item[1:].strip()
+        if len(item) < 2 or not any(c.isalpha() for c in item):
+            continue
+        if _NOT_AN_INGREDIENT_RE.match(item):
+            continue
+        key = item.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        cleaned.append(item)
+        if len(cleaned) >= 200:  # a sane cap
+            break
+    return cleaned
+
+
 # ---------------------------------------------------------------------- guess --
 _STOPWORDS = frozenset(
     """tablet tablets tab tabs capsule capsules cap caps film coated oral use uses only

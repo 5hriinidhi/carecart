@@ -53,6 +53,79 @@ Open Food Facts API and caches the result in the `products` table for
 - OFF etiquette: every request sends a descriptive `User-Agent`
   (`OFF_USER_AGENT`), and the cache means a repeat scan never touches OFF.
 
+### `POST /api/v1/products/scan-label` — ingredient-list OCR fallback (Phase 4.2)
+
+For unbranded / regional products not in Open Food Facts. Multipart image →
+`pytesseract` → the raw OCR text **plus** a best-effort parse into individual
+ingredient strings:
+
+- Splits on top-level `,` / `;` (bracketed sub-lists like `colour (caramel,
+  E150d)` stay whole); strips a leading `Ingredients:` label, bullets and edge
+  punctuation; drops fragments with no letters and packaging boilerplate
+  (`May contain…`, URLs, `Best before…`); de-dupes.
+- Returns `editable: true` **always** — the parse is a draft; the client must
+  show the user an editable list (against `raw_text`) before it's used. Nothing
+  is persisted.
+- Also returns `ocr_confidence` (0–1) and, when the scan is unreliable — low
+  mean word confidence **or** implausibly little text extracted (a rotated /
+  dim / blurry photo where OCR salvaged one word), or nothing parseable —
+  `low_confidence: true` with a plain-language `note` telling the user to check
+  every line or retake. A bad photo never comes back as a silent empty result.
+- Same upload guards as the medication scan: `415` non-image, `413` >10 MB,
+  `422` unreadable image — all before OCR; `503` if tesseract is missing.
+
+### `POST /api/v1/products/resolve-risks` — ingredient → risk_compound tags (Phase 4.3)
+
+Takes a raw ingredient list (from a 4.1 barcode lookup or a 4.2 label scan) plus
+optional per-100 g `nutriments`, and resolves each ingredient's `risk_compound`
+tags **entirely from pre-built static tables in Postgres — no LLM, no network
+call on this path, ever.**
+
+Reference tables (loaded by `scripts/load_risk_tables.py` from
+`dataset/data_prep/*.csv`):
+
+| table | from | used for |
+|---|---|---|
+| `risk_compounds` | `risk_compounds.csv` | the 26 canonical categories |
+| `ingredient_risk_aliases` | `ingredient_aliases.csv` (`source='keyword'`) + `llm_ingredient_tags.csv` (`source='llm'`, `match_type='exact'`; a NULL `risk_compound` row = a token reviewed as benign) | `alias → risk_compound` matching |
+| `risk_nutrient_thresholds` | `risk_nutrient_thresholds.csv` | numeric per-100 g bands (FSA front-of-pack) → whole-product tags |
+| `food_risk_tags` | `food_risk_tags.csv` | per-food precompute, loaded for 4.4 to reuse |
+
+Matching (keyword substring/word + negation + coconut/bean suppression, then the
+LLM-table exact pass, then a benign list) is a direct port of the one-time
+data-prep tagger, so runtime tags line up with `food_risk_tags.csv`.
+
+Response: `ingredients[]` (each with `method` = `keyword` | `llm` | `benign` |
+`unverified`, `risk_compounds`, `confidence`), `product_tags[]` from the
+threshold pass, `risk_compounds` (union → max confidence — **what 4.4 scores**),
+and the unverified handling:
+
+- An ingredient that matches nothing comes back `method: "unverified"` (empty
+  `risk_compounds`) — never dropped, never treated as safe.
+- `caution_factors` carries `"We couldn't confirm N ingredient(s) in this
+  product."` whenever any ingredient is unverified — 4.4 must surface this as a
+  visible caution.
+- Each distinct unverified text is upserted into the `unresolved_ingredients`
+  queue (`ingredient_text`, `normalized_text` unique, `first_seen_at`,
+  `times_seen`, `sample_product`, `status`) — repeats bump `times_seen`, never a
+  duplicate row. Set `RISK_QUEUE_UNRESOLVED=0` to skip the write (the marker is
+  still returned).
+
+**Offline batch job** (`scripts/classify_unresolved.py`, *not* part of the app —
+run by hand / on a schedule):
+
+```bash
+python -m scripts.classify_unresolved classify --out review.csv   # curated map; --use-api adds a live Claude call for misses (needs CLAUDE_API_KEY)
+#   ... a human sets accept = y / n per row ...
+python -m scripts.classify_unresolved merge --reviewed review.csv  # accepted rows → llm_ingredient_tags.csv (+ audit line); queue rows → merged / rejected
+(cd ../gradient-ascend-mobile-app/project/dataset/data_prep && python 03_tag_foods.py)
+python -m scripts.load_risk_tables                                 # redeploy the reference tables
+```
+
+Classification carries `method` (`llm-curated` / `llm-api` / `unclassified`),
+`confidence` (clamped ≤ 0.9), `model` and `rationale` — nothing is auto-trusted;
+the merge step only takes rows a human marked `accept`.
+
 ## Health Identity Vault
 
 Every table is keyed to `users.id`. `users` stores only `phone_hash` — a keyed
@@ -192,12 +265,15 @@ app/
   db/base.py           DeclarativeBase + TimestampMixin
   db/types.py          EncryptedString column type (transparent at-rest encryption)
   db/session.py        engine + SessionLocal + get_db dependency
-  models/__init__.py   User, OtpChallenge, RefreshToken, HealthProfile, Condition, Allergy, Medication, ScanHistory
+  models/__init__.py   User, OtpChallenge, RefreshToken, HealthProfile, Condition, Allergy, Medication, ScanHistory, Product, RiskCompound, IngredientRiskAlias, RiskNutrientThreshold, FoodRiskTag, UnresolvedIngredient, AuditLog
   schemas/auth.py, schemas/vault.py   request/response models
   services/phone.py    E.164 normalisation
   services/otp.py      challenge lifecycle: rate-limit / issue / verify
   services/otp_sender.py  ConsoleOtpSender (dev) | HttpOtpSender (adapt to your provider)
   services/ocr.py      pytesseract wrapper: open_image / extract_text / sanitize_text / guess_medication
+  services/ingredient_risk.py  offline ingredient → risk_compound resolver (static tables only, no LLM)
+  scripts/load_risk_tables.py     deploy step: load dataset/data_prep/*.csv → Postgres reference tables
+  scripts/classify_unresolved.py  offline batch job: drain unresolved_ingredients → review CSV → merge
   api/deps.py          DbSession, get_current_user / CurrentUser
   api/v1/router.py      aggregate v1 router  (add feature routers here)
   api/v1/routes/        endpoint modules (health.py, auth.py, vault.py)
@@ -206,10 +282,11 @@ app/
 
 ## Next
 
-- `api/v1/routes/profiles.py`, `medications.py`, `scans.py`
-- Load `../gradient-ascend-mobile-app/project/dataset/data_prep/*.csv`
-  (risk_compounds, food_risk_tags, drug_classes, interaction_rules) into
-  Postgres + Milvus via a seed script.
+- Phase 4.4: severity scoring (`scan → verdict`) — consume `resolve-risks`'
+  `risk_compounds` map **and** its `caution_factors` (the "unverified" line must
+  lower the verdict, not be ignored).
+- Load `drug_classes` / `interaction_rules` from `dataset/data_prep/*.csv` into
+  Postgres + Milvus (the food-side tables land via `scripts/load_risk_tables.py`).
 
 ## Lint / test
 
