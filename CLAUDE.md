@@ -77,6 +77,23 @@ medications, conditions, allergies, and profile-derived per-serving nutrient cei
 RDA). Allergens are a hard full-screen stop, not a score deduction. Framing throughout is
 on-device / encrypted / user-deletable.
 
+## Privacy & telemetry (all phases)
+
+Onboarding collects a phone number, medication names, gender, body measurements, diet and
+allergies; Phase 3 makes the scan/verdict data real health data. **None of it may be sent to
+analytics or crash-reporting tools** — not even the fake values typed during testing. Get this
+right now so it stays right when the data is real.
+
+- No analytics / crash SDK is a dependency today (Firebase, Sentry, Amplitude, PostHog, …). Adding
+  one is a deliberate decision that must ship together with PII scrubbing and an update to this
+  section. `mobile/test/no_pii_telemetry_test.dart` enforces the allow-list.
+- No raw `print` / `debugPrint` in `lib/` — interpolated user data leaks into logs. Route logs
+  through a scrubbing logger.
+- Never wire a Dio `LogInterceptor` with `requestBody`/`responseBody: true`.
+- Earlier standing security constraints still apply: secrets only in an uncommitted `.env` (copied
+  from a blank-valued `.env.example`), never printed/logged even when debugging; the app talks to
+  Postgres as a low-privilege role (DML only), not the superuser, once real tables exist.
+
 ### Visual system
 
 - Fonts (Google Fonts): **Bricolage Grotesque** (headings/display), **DM Sans** (body),
