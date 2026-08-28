@@ -1,0 +1,103 @@
+"""POST /scan/verdict — food-drug interaction & severity scoring (Phase 4.4).
+
+Takes a product's decoded ingredients (+ per-100 g nutriments) and scores them
+against the authenticated user's stored conditions, allergies and *active*
+medications. Returns a 0-100 score, a tier (``safe``/``caution``/``avoid`` on
+the exact Phase 2.1 thresholds), and a plain-language list of the reasons.
+
+Reads the user's health vault, so it writes an ``audit_log`` row (who / when /
+status — never the content), like every other ``/me/*`` health-data path.
+"""
+
+from __future__ import annotations
+
+import datetime as dt
+
+from fastapi import APIRouter
+from sqlalchemy import select
+
+from app.api.deps import CurrentUser, DbSession
+from app.core.config import settings
+from app.models import Allergy, AuditLog, Condition, Medication
+from app.schemas.scan import (
+    MedMatchOut,
+    ScanVerdictIn,
+    ScanVerdictOut,
+    VerdictReasonOut,
+)
+from app.services import ingredient_risk
+from app.services import verdict as verdict_svc
+
+router = APIRouter(prefix="/scan", tags=["scan"])
+
+
+def _active_medications(db, user_id, today: dt.date) -> list[str]:
+    names: list[str] = []
+    for m in db.scalars(select(Medication).where(Medication.user_id == user_id)).all():
+        if m.active_from and m.active_from > today:
+            continue
+        if m.active_to and m.active_to < today:
+            continue
+        names.append(m.name)
+    return names
+
+
+@router.post("/verdict", response_model=ScanVerdictOut, operation_id="scan_verdict")
+def scan_verdict(body: ScanVerdictIn, user: CurrentUser, db: DbSession):
+    today = dt.date.today()
+    conditions = list(
+        db.scalars(
+            select(Condition.condition_name).where(Condition.user_id == user.id)
+        ).all()
+    )
+    allergies = list(
+        db.scalars(
+            select(Allergy.allergen_name).where(Allergy.user_id == user.id)
+        ).all()
+    )
+    medications = _active_medications(db, user.id, today)
+
+    resolution = ingredient_risk.resolve_ingredients(
+        db,
+        body.ingredients,
+        nutriments=body.nutriments,
+        sample_product=body.barcode or body.product_name,
+        queue_unresolved=settings.risk_queue_unresolved,
+    )
+    v = verdict_svc.score_verdict(
+        db,
+        resolution=resolution,
+        conditions=conditions,
+        allergies=allergies,
+        medications=medications,
+        nutriments=body.nutriments,
+    )
+
+    # health-data access -> audit row (no content), same transaction as the queue writes
+    db.add(
+        AuditLog(user_id=user.id, action="read", resource="scan_verdict", status_code=200)
+    )
+    db.commit()
+
+    return ScanVerdictOut(
+        score=v.score,
+        tier=v.tier,
+        hard_stop=v.hard_stop,
+        reasons=[
+            VerdictReasonOut(
+                kind=r.kind,
+                severity=r.severity,
+                points=r.points,
+                title=r.title,
+                detail=r.detail,
+            )
+            for r in v.reasons
+        ],
+        medications=[
+            MedMatchOut(name=m.name, drug_classes=m.drug_classes, identified=m.identified)
+            for m in v.medications
+        ],
+        risk_compounds=v.risk_compounds,
+        unverified=v.unverified,
+        unverified_count=len(v.unverified),
+    )

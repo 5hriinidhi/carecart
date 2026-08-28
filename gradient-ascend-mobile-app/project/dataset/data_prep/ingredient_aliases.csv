@@ -55,6 +55,9 @@ tender coconut,potassium,substring,
 potato,potassium,substring,also rapid_carb
 sweet potato,potassium,substring,also oxalate
 spinach,potassium,substring,also vitamin_k and oxalate
+spinach,vitamin_k,substring,leafy green - relevant to vitamin-K antagonists
+palak,vitamin_k,substring,hindi for spinach
+methi leaves,vitamin_k,substring,fenugreek leaves
 palak,potassium,substring,
 tomato paste,potassium,substring,
 tomato puree,potassium,substring,

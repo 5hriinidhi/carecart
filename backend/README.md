@@ -126,6 +126,38 @@ Classification carries `method` (`llm-curated` / `llm-api` / `unclassified`),
 `confidence` (clamped ≤ 0.9), `model` and `rationale` — nothing is auto-trusted;
 the merge step only takes rows a human marked `accept`.
 
+### `POST /api/v1/scan/verdict` — food-drug interaction & severity scoring (Phase 4.4)
+
+Takes a product's decoded `ingredients` (from 4.1 / 4.2) + per-100 g
+`nutriments` and scores them against the **authenticated user's** stored
+`conditions`, `allergies` and *active* `medications` (read server-side from the
+JWT — the client never sends them). Returns a **0–100 `score`**, a **`tier`**
+(`safe` ≥ 70, `caution` ≥ 45, else `avoid` — the exact `chipFor()` thresholds
+from the Flutter theme), and a plain-language `reasons` list.
+
+Model: **start at 100, subtract a deduction per matched risk factor** —
+
+| factor | source | deduction |
+|---|---|---|
+| drug–food interaction | `interaction_rules` (drug_class × risk_compound), e.g. warfarin / vitamin K, lithium / sodium | HIGH −35 · MODERATE −20 · LOW −8 |
+| condition nutrient ceiling exceeded | `condition_diet_rules` (`nutrient_ceiling`) vs `nutriments` | HIGH −28 · MOD −16 · LOW −8 (+10 if ≥ 2× the ceiling) |
+| condition risk compound present | `condition_diet_rules` (`risk_compound`) | HIGH −28 · MOD −14 · LOW −7 |
+| general poor-fit | high sugar / sodium / sat-fat / trans-fat / refined carb not tied to the user | −3 / −6 each, capped −18 |
+| unverified ingredients (4.3) | `resolution.unverified` | −4 each, capped −12 |
+
+An **allergen match is a hard stop**: any stored allergy (`allergen_aliases`
+maps the free text → an allergen `risk_compound`) matching any ingredient forces
+`score: 0`, `tier: "avoid"`, `hard_stop: true` — *regardless of the numeric
+score*, matching the proposal's "allergens are a full-screen stop, not a
+deduction." The allergen reason carries `points: 0`.
+
+Medication names are mapped to a `drug_class` via `drug_class_lookup` →
+`drug_class_stem_rules` (`-pril` → ACE inhibitor, …). A name that resolves to no
+class is reported (`identified: false`) and simply not checked for interactions
+— never a silent pass. Reading the vault writes an `audit_log` row (who / when /
+status, no content). Every `interaction_rules` row is a clinician-review DRAFT,
+so wording stays "keep intake consistent" / "caution", never medical advice.
+
 ## Health Identity Vault
 
 Every table is keyed to `users.id`. `users` stores only `phone_hash` — a keyed
@@ -265,28 +297,28 @@ app/
   db/base.py           DeclarativeBase + TimestampMixin
   db/types.py          EncryptedString column type (transparent at-rest encryption)
   db/session.py        engine + SessionLocal + get_db dependency
-  models/__init__.py   User, OtpChallenge, RefreshToken, HealthProfile, Condition, Allergy, Medication, ScanHistory, Product, RiskCompound, IngredientRiskAlias, RiskNutrientThreshold, FoodRiskTag, UnresolvedIngredient, AuditLog
+  models/__init__.py   auth + vault + Product + 4.3 risk tables + 4.4 InteractionRule / DrugClassLookup / DrugClassStemRule / ConditionDietRule / AllergenAlias + AuditLog
   schemas/auth.py, schemas/vault.py   request/response models
   services/phone.py    E.164 normalisation
   services/otp.py      challenge lifecycle: rate-limit / issue / verify
   services/otp_sender.py  ConsoleOtpSender (dev) | HttpOtpSender (adapt to your provider)
   services/ocr.py      pytesseract wrapper: open_image / extract_text / sanitize_text / guess_medication
   services/ingredient_risk.py  offline ingredient → risk_compound resolver (static tables only, no LLM)
+  services/verdict.py  Phase 4.4 scoring: deductions → 0-100 score + tier; allergen hard-stop
   scripts/load_risk_tables.py     deploy step: load dataset/data_prep/*.csv → Postgres reference tables
   scripts/classify_unresolved.py  offline batch job: drain unresolved_ingredients → review CSV → merge
   api/deps.py          DbSession, get_current_user / CurrentUser
   api/v1/router.py      aggregate v1 router  (add feature routers here)
-  api/v1/routes/        endpoint modules (health.py, auth.py, vault.py)
+  api/v1/routes/        endpoint modules (health.py, auth.py, products.py, scan.py, vault.py)
   vector/milvus_client.py   lazy MilvusClient helper
 ```
 
 ## Next
 
-- Phase 4.4: severity scoring (`scan → verdict`) — consume `resolve-risks`'
-  `risk_compounds` map **and** its `caution_factors` (the "unverified" line must
-  lower the verdict, not be ignored).
-- Load `drug_classes` / `interaction_rules` from `dataset/data_prep/*.csv` into
-  Postgres + Milvus (the food-side tables land via `scripts/load_risk_tables.py`).
+- Phase 4.5+: persist a `ScanHistory` row per verdict; surface the reasons on the
+  Flutter result screen.
+- Get `interaction_rules.csv` clinician-reviewed (every row is currently a DRAFT)
+  and widen `condition_diet_rules.csv` / brand-name → generic drug mapping.
 
 ## Lint / test
 

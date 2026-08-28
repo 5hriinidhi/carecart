@@ -415,3 +415,185 @@ final resolveRisksProvider = Provider<
         productName: productName,
       ),
 );
+
+// ---------------------------------------------------------------------------
+// Scan verdict (Phase 4.4). The backend scores the product's ingredients +
+// nutriments against the signed-in user's stored conditions, allergies and
+// active medications and returns a 0–100 [score] + [tier] (safe/caution/avoid,
+// the exact Phase 2.1 thresholds). An allergen match forces [hardStop] and
+// tier "avoid" regardless of score.
+// ---------------------------------------------------------------------------
+
+class VerdictReason {
+  const VerdictReason({
+    required this.kind,
+    required this.severity,
+    required this.points,
+    required this.title,
+    this.detail,
+  });
+
+  /// allergen | drug_interaction | condition_ceiling | condition_compound |
+  /// poor_fit | unverified | clear
+  final String kind;
+
+  /// high | moderate | low | info
+  final String severity;
+
+  /// Score deducted for this factor (0 for a hard stop / info line).
+  final int points;
+  final String title;
+  final String? detail;
+
+  bool get isAllergen => kind == 'allergen';
+
+  factory VerdictReason.fromJson(Map<String, dynamic> j) => VerdictReason(
+        kind: j['kind'] as String? ?? '',
+        severity: j['severity'] as String? ?? 'info',
+        points: (j['points'] as num?)?.toInt() ?? 0,
+        title: j['title'] as String? ?? '',
+        detail: j['detail'] as String?,
+      );
+}
+
+class MedMatch {
+  const MedMatch({
+    required this.name,
+    this.drugClasses = const [],
+    this.identified = false,
+  });
+
+  final String name;
+  final List<String> drugClasses;
+  final bool identified;
+
+  factory MedMatch.fromJson(Map<String, dynamic> j) => MedMatch(
+        name: j['name'] as String? ?? '',
+        drugClasses:
+            (j['drug_classes'] as List?)?.map((e) => e.toString()).toList() ??
+                const [],
+        identified: j['identified'] as bool? ?? false,
+      );
+}
+
+class ScanVerdict {
+  const ScanVerdict({
+    required this.score,
+    required this.tier,
+    required this.hardStop,
+    this.reasons = const [],
+    this.medications = const [],
+    this.riskCompounds = const {},
+    this.unverified = const [],
+    this.unverifiedCount = 0,
+  });
+
+  final int score;
+
+  /// safe | caution | avoid
+  final String tier;
+
+  /// True when an allergen match forced "avoid" regardless of the number.
+  final bool hardStop;
+  final List<VerdictReason> reasons;
+  final List<MedMatch> medications;
+  final Map<String, double> riskCompounds;
+  final List<String> unverified;
+  final int unverifiedCount;
+
+  factory ScanVerdict.fromJson(Map<String, dynamic> j) => ScanVerdict(
+        score: (j['score'] as num?)?.toInt() ?? 0,
+        tier: j['tier'] as String? ?? 'avoid',
+        hardStop: j['hard_stop'] as bool? ?? false,
+        reasons: (j['reasons'] as List?)
+                ?.map((e) => VerdictReason.fromJson(e as Map<String, dynamic>))
+                .toList() ??
+            const [],
+        medications: (j['medications'] as List?)
+                ?.map((e) => MedMatch.fromJson(e as Map<String, dynamic>))
+                .toList() ??
+            const [],
+        riskCompounds: (j['risk_compounds'] as Map?)?.map(
+              (k, v) => MapEntry(k.toString(), (v as num).toDouble()),
+            ) ??
+            const {},
+        unverified:
+            (j['unverified'] as List?)?.map((e) => e.toString()).toList() ??
+                const [],
+        unverifiedCount: (j['unverified_count'] as num?)?.toInt() ?? 0,
+      );
+}
+
+sealed class ScanVerdictOutcome {
+  const ScanVerdictOutcome();
+}
+
+class ScanVerdictReady extends ScanVerdictOutcome {
+  const ScanVerdictReady(this.verdict);
+  final ScanVerdict verdict;
+}
+
+class ScanVerdictFailed extends ScanVerdictOutcome {
+  const ScanVerdictFailed(this.message);
+  final String message;
+}
+
+/// One `POST /api/v1/scan/verdict`. Never throws.
+Future<ScanVerdictOutcome> scanVerdict(
+  Dio dio, {
+  required List<String> ingredients,
+  Map<String, num> nutriments = const {},
+  String? barcode,
+  String? productName,
+}) async {
+  try {
+    final res = await dio.post<Map<String, dynamic>>(
+      '/scan/verdict',
+      data: {
+        'ingredients': ingredients,
+        'nutriments': nutriments,
+        'barcode': ?barcode,
+        'product_name': ?productName,
+      },
+      options: Options(validateStatus: (s) => s != null),
+    );
+    final status = res.statusCode ?? 0;
+    if (status == 200) {
+      return ScanVerdictReady(ScanVerdict.fromJson(res.data ?? const {}));
+    }
+    return ScanVerdictFailed(switch (status) {
+      401 => 'Please sign in again.',
+      422 => "That scan didn't look valid.",
+      _ => "Couldn't score this product ($status).",
+    });
+  } on DioException catch (e) {
+    final offline = e.type == DioExceptionType.connectionError ||
+        e.type == DioExceptionType.connectionTimeout;
+    return ScanVerdictFailed(offline
+        ? 'No connection to the server.'
+        : "Couldn't score this product.");
+  }
+}
+
+/// Injectable — override in tests.
+final scanVerdictProvider = Provider<
+    Future<ScanVerdictOutcome> Function({
+      required List<String> ingredients,
+      Map<String, num> nutriments,
+      String? barcode,
+      String? productName,
+    })>(
+  (ref) => ({
+    required List<String> ingredients,
+    Map<String, num> nutriments = const {},
+    String? barcode,
+    String? productName,
+  }) =>
+      scanVerdict(
+        ref.read(dioProvider),
+        ingredients: ingredients,
+        nutriments: nutriments,
+        barcode: barcode,
+        productName: productName,
+      ),
+);

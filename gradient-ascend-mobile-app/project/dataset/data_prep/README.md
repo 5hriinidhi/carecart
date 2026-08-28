@@ -42,19 +42,29 @@ All scripts need `PYTHONUTF8=1` on Windows (rupee sign / BOM in the source CSVs)
 | `risk_nutrient_thresholds.csv` | numeric counterpart: per-100 g nutrient band (`nutrient_key,min_value`) -> `risk_compound` + `confidence` + `rationale`. FSA front-of-pack "high"/"medium" levels for sodium / sugar / saturated fat |
 | `drug_class_lookup.csv` | `active_ingredient -> drug_class`, ~1000 entries |
 | `drug_class_stem_rules.csv` | ordered suffix/prefix rules (`-pril` -> ACE inhibitor, `cef-` -> Cephalosporin, ...) |
+| `condition_diet_rules.csv` | per-condition dietary rules (Phase 4.4): `kind` = `nutrient_ceiling` (per-100 g limit) or `risk_compound` (compound to avoid) + `severity` |
+| `allergen_aliases.csv` | allergy free-text -> allergen `risk_compound` (Phase 4.4). A match is a HARD STOP in the verdict, not a deduction |
 
-### Consumed at runtime (Phase 4.3)
+### Consumed at runtime (Phases 4.3 + 4.4)
 
 `backend/scripts/load_risk_tables.py` loads `risk_compounds.csv`,
 `ingredient_aliases.csv`, `llm_ingredient_tags.csv`,
-`risk_nutrient_thresholds.csv` and `food_risk_tags.csv` into Postgres. The scan
-path (`POST /products/resolve-risks`) then resolves ingredients against those
-tables only — **no LLM call at runtime**. Ingredients that match nothing are
-queued in the `unresolved_ingredients` table; `backend/scripts/classify_unresolved.py`
-is the offline batch job that drains that queue with the same LLM-fallback
-approach as `make_llm_ingredient_tags.py` and, after human review, appends
-accepted rows to `llm_ingredient_tags.csv` (re-run `03_tag_foods.py` +
-`load_risk_tables.py` to deploy).
+`risk_nutrient_thresholds.csv`, `food_risk_tags.csv`, `interaction_rules.csv`,
+`drug_class_lookup.csv` + `llm_drug_classes.csv`, `drug_class_stem_rules.csv`,
+`condition_diet_rules.csv` and `allergen_aliases.csv` into Postgres.
+
+- `POST /products/resolve-risks` (4.3) resolves ingredients against the alias /
+  threshold tables only — **no LLM call at runtime**. Ingredients that match
+  nothing are queued in `unresolved_ingredients`;
+  `backend/scripts/classify_unresolved.py` is the offline batch job that drains
+  that queue with the same LLM-fallback approach as `make_llm_ingredient_tags.py`
+  and, after human review, appends accepted rows to `llm_ingredient_tags.csv`
+  (re-run `03_tag_foods.py` + `load_risk_tables.py` to deploy).
+- `POST /scan/verdict` (4.4) scores those resolved compounds + the product's
+  nutriments against the signed-in user's stored conditions / allergies / active
+  medications using `interaction_rules.csv` (drug_class × risk_compound),
+  `condition_diet_rules.csv` and `allergen_aliases.csv`. `interaction_rules.csv`
+  is still a clinician-review DRAFT (see below).
 
 ### LLM fallback (method=llm; spot-check these)
 | file | what |

@@ -1,4 +1,4 @@
-"""Load the pre-built STATIC risk-reference CSVs into Postgres (Phase 4.3).
+"""Load the pre-built STATIC risk-reference CSVs into Postgres (Phases 4.3 + 4.4).
 
 Deploy step - run once after ``alembic upgrade head`` and again whenever the
 CSVs change (e.g. after the offline batch job merges new aliases):
@@ -16,10 +16,15 @@ Source (``settings.risk_data_path`` by default =
 | llm_ingredient_tags.csv      | ingredient_risk_aliases   (source='llm', match_type='exact') |
 | risk_nutrient_thresholds.csv | risk_nutrient_thresholds  |
 | food_risk_tags.csv           | food_risk_tags            |
+| interaction_rules.csv        | interaction_rules         |
+| drug_class_lookup.csv        | drug_class_lookup         (source='keyword') |
+| llm_drug_classes.csv         | drug_class_lookup         (source='llm') |
+| drug_class_stem_rules.csv    | drug_class_stem_rules     |
+| condition_diet_rules.csv     | condition_diet_rules      |
+| allergen_aliases.csv         | allergen_aliases          |
 
-Reference rows are fully replaced on each run (``TRUNCATE risk_compounds
-CASCADE``). The ``unresolved_ingredients`` queue is a runtime table and is
-never touched here.
+Reference rows are fully replaced on each run (``TRUNCATE ... CASCADE``). The
+``unresolved_ingredients`` queue is a runtime table and is never touched here.
 """
 
 from __future__ import annotations
@@ -36,8 +41,13 @@ from sqlalchemy.orm import Session
 
 from app.db.session import SessionLocal
 from app.models import (
+    AllergenAlias,
+    ConditionDietRule,
+    DrugClassLookup,
+    DrugClassStemRule,
     FoodRiskTag,
     IngredientRiskAlias,
+    InteractionRule,
     RiskCompound,
     RiskNutrientThreshold,
 )
@@ -63,6 +73,13 @@ def _alias_confidence(note: str) -> float:
     return 0.9
 
 
+def _f(value) -> float | None:
+    try:
+        return float(value) if str(value).strip() != "" else None
+    except (TypeError, ValueError):
+        return None
+
+
 def load_all(db: Session, data_dir: str) -> dict[str, int]:
     """Replace every reference table from the CSVs in ``data_dir``. Returns row
     counts. Raises :class:`LoadError` on an unknown ``risk_compound`` reference."""
@@ -73,9 +90,16 @@ def load_all(db: Session, data_dir: str) -> dict[str, int]:
     llm_rows = _rows(os.path.join(data_dir, "llm_ingredient_tags.csv"))
     thr_rows = _rows(os.path.join(data_dir, "risk_nutrient_thresholds.csv"))
     food_rows = _rows(os.path.join(data_dir, "food_risk_tags.csv"))
+    irule_rows = _rows(os.path.join(data_dir, "interaction_rules.csv"))
+    dclass_rows = _rows(os.path.join(data_dir, "drug_class_lookup.csv"))
+    dllm_rows = _rows(os.path.join(data_dir, "llm_drug_classes.csv"))
+    stem_rows = _rows(os.path.join(data_dir, "drug_class_stem_rules.csv"))
+    cond_rows = _rows(os.path.join(data_dir, "condition_diet_rules.csv"))
+    allergen_rows = _rows(os.path.join(data_dir, "allergen_aliases.csv"))
 
     problems: list[str] = []
 
+    # ---- ingredient risk aliases (4.3) ----
     aliases: list[dict] = []
     for r in alias_rows:
         rc = r["risk_compound"].strip()
@@ -100,14 +124,10 @@ def load_all(db: Session, data_dir: str) -> dict[str, int]:
         if not token:
             continue
         rationale = (r.get("rationale") or "").strip() or None
-        try:
-            conf = float(r.get("confidence") or 0) or None
-        except ValueError:
-            conf = None
+        conf = _f(r.get("confidence"))
         rcs = [x.strip() for x in _RC_SPLIT.split(r.get("risk_compounds", "")) if x.strip()]
         rcs = [x for x in rcs if x not in ("none", "benign", "")]
         if not rcs:
-            # token reviewed as carrying no risk compound -> known-benign marker
             aliases.append(
                 dict(id=uuid.uuid4(), alias=token, risk_compound=None,
                      match_type="exact", confidence=None, source="llm",
@@ -124,6 +144,7 @@ def load_all(db: Session, data_dir: str) -> dict[str, int]:
                      notes=None, rationale=rationale)
             )
 
+    # ---- nutrient thresholds (4.3) ----
     thresholds: list[dict] = []
     for r in thr_rows:
         rc = r["risk_compound"].strip()
@@ -144,19 +165,106 @@ def load_all(db: Session, data_dir: str) -> dict[str, int]:
             )
         )
 
+    # ---- food risk tags (4.3) ----
     foods: list[dict] = []
     for r in food_rows:
         rc = r["risk_compound"].strip()
         if rc not in valid_rc:
             problems.append(f"food_risk_tags.csv: {r.get('food_id')} -> unknown '{rc}'")
             continue
-        try:
-            conf = float(r.get("confidence") or 0) or None
-        except ValueError:
-            conf = None
         foods.append(
             dict(id=uuid.uuid4(), food_id=r["food_id"].strip(), risk_compound=rc,
-                 confidence=conf, method=(r.get("method") or "").strip() or None)
+                 confidence=_f(r.get("confidence")),
+                 method=(r.get("method") or "").strip() or None)
+        )
+
+    # ---- interaction rules (4.4) ----
+    irules: list[dict] = []
+    for r in irule_rows:
+        rc = r["risk_compound"].strip()
+        if rc not in valid_rc:
+            problems.append(f"interaction_rules.csv: {r.get('drug_class')} -> unknown '{rc}'")
+            continue
+        irules.append(
+            dict(
+                id=uuid.uuid4(),
+                drug_class=r["drug_class"].strip(),
+                risk_compound=rc,
+                severity=r["severity"].strip().upper(),
+                mechanism=(r.get("mechanism") or "").strip() or None,
+                dietary_guidance=(r.get("dietary_guidance") or "").strip() or None,
+                evidence_strength=(r.get("evidence_strength") or "").strip() or None,
+                example_drugs=(r.get("example_drugs") or "").strip() or None,
+            )
+        )
+
+    # ---- drug class lookup + LLM fallback (4.4) ----
+    dclasses: list[dict] = []
+    for r in dclass_rows:
+        ing = (r.get("active_ingredient") or "").strip().lower()
+        cls = (r.get("drug_class") or "").strip()
+        if not ing or not cls:
+            continue
+        dclasses.append(dict(id=uuid.uuid4(), active_ingredient=ing, drug_class=cls,
+                             source="keyword", confidence=None))
+    for r in dllm_rows:
+        ing = (r.get("active_ingredient") or "").strip().lower()
+        cls = (r.get("drug_class") or "").strip()
+        if not ing or not cls:
+            continue
+        dclasses.append(dict(id=uuid.uuid4(), active_ingredient=ing, drug_class=cls,
+                             source="llm", confidence=_f(r.get("confidence"))))
+
+    # ---- drug class stem rules (4.4) ----
+    stems: list[dict] = []
+    for r in stem_rows:
+        try:
+            ordinal = int(r.get("order") or r.get("ordinal") or 0)
+        except ValueError:
+            ordinal = 0
+        stems.append(
+            dict(
+                id=uuid.uuid4(),
+                ordinal=ordinal,
+                pattern=(r.get("pattern") or "").strip().lower(),
+                position=(r.get("position") or "").strip().lower(),
+                drug_class=(r.get("drug_class") or "").strip(),
+            )
+        )
+
+    # ---- condition diet rules (4.4) ----
+    conds: list[dict] = []
+    for r in cond_rows:
+        kind = (r.get("kind") or "").strip()
+        rc = (r.get("risk_compound") or "").strip() or None
+        if kind == "risk_compound" and rc not in valid_rc:
+            problems.append(
+                f"condition_diet_rules.csv: {r.get('condition')} -> unknown '{rc}'"
+            )
+            continue
+        conds.append(
+            dict(
+                id=uuid.uuid4(),
+                condition=(r.get("condition") or "").strip().lower(),
+                kind=kind,
+                nutrient_key=(r.get("nutrient_key") or "").strip() or None,
+                ceiling_per_100g=_f(r.get("ceiling_per_100g")),
+                risk_compound=rc,
+                severity=(r.get("severity") or "MODERATE").strip().upper(),
+                guidance=(r.get("guidance") or "").strip() or None,
+            )
+        )
+
+    # ---- allergen aliases (4.4) ----
+    allergens: list[dict] = []
+    for r in allergen_rows:
+        rc = (r.get("risk_compound") or "").strip()
+        if rc not in valid_rc:
+            problems.append(f"allergen_aliases.csv: '{r.get('alias')}' -> unknown '{rc}'")
+            continue
+        allergens.append(
+            dict(id=uuid.uuid4(), alias=(r.get("alias") or "").strip().lower(),
+                 risk_compound=rc, notes=(r.get("notes") or "").strip() or None)
         )
 
     if problems:
@@ -164,8 +272,14 @@ def load_all(db: Session, data_dir: str) -> dict[str, int]:
             f"{len(problems)} reference problem(s):\n  " + "\n  ".join(problems[:25])
         )
 
-    # replace everything (CASCADE clears the three child tables too)
-    db.execute(text("TRUNCATE TABLE risk_compounds CASCADE"))
+    # replace everything (CASCADE from risk_compounds clears the FK-linked tables;
+    # the two drug-class tables have no FK so are listed explicitly)
+    db.execute(
+        text(
+            "TRUNCATE TABLE risk_compounds, drug_class_lookup, drug_class_stem_rules "
+            "CASCADE"
+        )
+    )
     db.bulk_insert_mappings(
         RiskCompound,
         [
@@ -184,6 +298,11 @@ def load_all(db: Session, data_dir: str) -> dict[str, int]:
     db.bulk_insert_mappings(IngredientRiskAlias, aliases)
     db.bulk_insert_mappings(RiskNutrientThreshold, thresholds)
     db.bulk_insert_mappings(FoodRiskTag, foods)
+    db.bulk_insert_mappings(InteractionRule, irules)
+    db.bulk_insert_mappings(DrugClassLookup, dclasses)
+    db.bulk_insert_mappings(DrugClassStemRule, stems)
+    db.bulk_insert_mappings(ConditionDietRule, conds)
+    db.bulk_insert_mappings(AllergenAlias, allergens)
     db.commit()
 
     return {
@@ -193,6 +312,11 @@ def load_all(db: Session, data_dir: str) -> dict[str, int]:
         "  - llm": sum(1 for a in aliases if a["source"] == "llm"),
         "risk_nutrient_thresholds": len(thresholds),
         "food_risk_tags": len(foods),
+        "interaction_rules": len(irules),
+        "drug_class_lookup": len(dclasses),
+        "drug_class_stem_rules": len(stems),
+        "condition_diet_rules": len(conds),
+        "allergen_aliases": len(allergens),
     }
 
 

@@ -323,6 +323,96 @@ class UnresolvedIngredient(Base):
     )
 
 
+# ================================ food-drug interaction & severity scoring (4.4) ==
+# More pre-built STATIC reference data - the rules `POST /scan/verdict` scores
+# against. No user data; loaded from dataset/data_prep/*.csv by
+# `scripts/load_risk_tables.py`. Every interaction row is a clinician-review
+# DRAFT (see interaction_rules.csv) - the endpoint returns "keep consistent" /
+# "caution" style verdicts, not medical advice.
+
+
+class InteractionRule(Base):
+    """One ``(drug_class x risk_compound)`` food-drug interaction pattern from
+    ``interaction_rules.csv`` (e.g. vitamin-K antagonist x vitamin_k,
+    mood-stabiliser x sodium). ``severity`` drives the score deduction."""
+
+    __tablename__ = "interaction_rules"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=_uuid)
+    drug_class: Mapped[str] = mapped_column(String(80), index=True)
+    risk_compound: Mapped[str] = mapped_column(
+        ForeignKey("risk_compounds.risk_compound", ondelete="RESTRICT"), index=True
+    )
+    severity: Mapped[str] = mapped_column(String(12))  # HIGH | MODERATE | LOW
+    mechanism: Mapped[str | None] = mapped_column(Text)
+    dietary_guidance: Mapped[str | None] = mapped_column(Text)
+    evidence_strength: Mapped[str | None] = mapped_column(String(24))
+    example_drugs: Mapped[str | None] = mapped_column(Text)
+
+
+class DrugClassLookup(Base):
+    """``active_ingredient -> drug_class`` (from ``drug_class_lookup.csv`` +
+    ``llm_drug_classes.csv``). Used to map a stored medication name onto a
+    ``drug_class`` so :class:`InteractionRule` rows can fire."""
+
+    __tablename__ = "drug_class_lookup"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=_uuid)
+    active_ingredient: Mapped[str] = mapped_column(String(120), index=True)
+    drug_class: Mapped[str] = mapped_column(String(80))
+    source: Mapped[str] = mapped_column(String(16))  # keyword | llm
+    confidence: Mapped[float | None] = mapped_column(Float)
+
+
+class DrugClassStemRule(Base):
+    """Ordered suffix/prefix stem rules (``-pril`` -> ACE inhibitor,
+    ``cef-`` -> Cephalosporin) from ``drug_class_stem_rules.csv`` - the fallback
+    when an exact ``drug_class_lookup`` match fails."""
+
+    __tablename__ = "drug_class_stem_rules"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=_uuid)
+    ordinal: Mapped[int] = mapped_column(Integer)
+    pattern: Mapped[str] = mapped_column(String(40))
+    position: Mapped[str] = mapped_column(String(8))  # prefix | suffix
+    drug_class: Mapped[str] = mapped_column(String(80))
+
+
+class ConditionDietRule(Base):
+    """Per-condition dietary rule from ``condition_diet_rules.csv``. Two kinds:
+    ``nutrient_ceiling`` (a per-100 g ceiling for a nutriment key) and
+    ``risk_compound`` (a compound this condition should avoid). ``severity``
+    drives the deduction."""
+
+    __tablename__ = "condition_diet_rules"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=_uuid)
+    condition: Mapped[str] = mapped_column(String(80), index=True)
+    kind: Mapped[str] = mapped_column(String(20))  # nutrient_ceiling | risk_compound
+    nutrient_key: Mapped[str | None] = mapped_column(String(48))
+    ceiling_per_100g: Mapped[float | None] = mapped_column(Float)
+    risk_compound: Mapped[str | None] = mapped_column(
+        ForeignKey("risk_compounds.risk_compound", ondelete="RESTRICT")
+    )
+    severity: Mapped[str] = mapped_column(String(12))  # HIGH | MODERATE | LOW
+    guidance: Mapped[str | None] = mapped_column(Text)
+
+
+class AllergenAlias(Base):
+    """``allergy free-text -> allergen risk_compound`` (from
+    ``allergen_aliases.csv``). A match between a stored allergy and any ingredient
+    carrying that compound is a HARD STOP - a full "avoid", not a deduction."""
+
+    __tablename__ = "allergen_aliases"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=_uuid)
+    alias: Mapped[str] = mapped_column(String(80), index=True)
+    risk_compound: Mapped[str] = mapped_column(
+        ForeignKey("risk_compounds.risk_compound", ondelete="RESTRICT")
+    )
+    notes: Mapped[str | None] = mapped_column(Text)
+
+
 class AuditLog(Base):
     """Append-only record of WHO touched WHICH health resource and WHEN.
 
@@ -361,5 +451,10 @@ __all__ = [
     "RiskNutrientThreshold",
     "FoodRiskTag",
     "UnresolvedIngredient",
+    "InteractionRule",
+    "DrugClassLookup",
+    "DrugClassStemRule",
+    "ConditionDietRule",
+    "AllergenAlias",
     "AuditLog",
 ]
