@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/text.dart';
 import '../core/theme.dart';
@@ -8,6 +9,7 @@ import '../features/history/history_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/meds/meds_screen.dart';
 import '../features/nudge/nudge_screen.dart';
+import '../features/onboarding/onboarding_screen.dart';
 import '../features/profile/profile_sheet.dart';
 import '../features/result/result_screen.dart';
 import '../features/scan/scan_screen.dart';
@@ -21,7 +23,17 @@ import 'health_status_tile.dart';
 /// screens themselves).
 typedef DebugEntry = ({String label, WidgetBuilder build, String? navTab});
 
+/// The onboarding preview flips its own state machine only; keep it off the
+/// real router gate ([onboardingCompleteProvider]).
+void _onboardingPreviewNoop() {}
+
 final debugScreens = <String, DebugEntry>{
+  'onboarding': (
+    label: 'Onboarding flow (sign-in → 6 steps → done)',
+    build: (_) => const ProviderScope(
+        child: OnboardingScreen(onComplete: _onboardingPreviewNoop)),
+    navTab: null
+  ),
   'home': (label: 'Home', build: (_) => const HomeScreen(), navTab: 'home'),
   'scan': (label: 'Scan', build: (_) => const ScanScreen(), navTab: null),
   'analyzing': (label: 'Analyzing', build: (_) => const AnalyzingScreen(), navTab: null),
