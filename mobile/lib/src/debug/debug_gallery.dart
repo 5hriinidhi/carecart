@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/analytics_api.dart';
 import '../core/text.dart';
 import '../core/theme.dart';
 import '../core/widgets.dart';
@@ -27,6 +28,29 @@ typedef DebugEntry = ({String label, WidgetBuilder build, String? navTab});
 /// real router gate ([onboardingCompleteProvider]).
 void _onboardingPreviewNoop() {}
 
+/// Synthetic /analytics/trends payload for the standalone Trends preview.
+final _demoTrends = TrendsLoaded(Trends(
+  timezone: 'Asia/Kolkata',
+  totalScans: 46,
+  dietHealthScore: 68,
+  deltaSevenDay: 4,
+  trend: 'improving',
+  weekly: [
+    for (var i = 0; i < 6; i++)
+      TrendBucket(
+        periodStart: DateTime(2026, 7, 6 + i * 7),
+        label: '${6 + i * 7} Jul',
+        scans: 6 + i,
+        avgScore: 54 + i * 3.0,
+        safe: 2 + i,
+        caution: 3,
+        avoid: (i < 2) ? 2 : 1,
+        dietHealthScore: 56 + i * 2,
+      ),
+  ],
+  monthly: const [],
+));
+
 final debugScreens = <String, DebugEntry>{
   'onboarding': (
     label: 'Onboarding flow (sign-in → 6 steps → done)',
@@ -40,7 +64,13 @@ final debugScreens = <String, DebugEntry>{
   'result': (label: 'Result — Avoid (noodles)', build: (_) => const ResultScreen(productId: 'noodles'), navTab: null),
   'result-caution': (label: 'Result — Caution (juice)', build: (_) => const ResultScreen(productId: 'juice'), navTab: null),
   'result-safe': (label: 'Result — Safe (chana)', build: (_) => const ResultScreen(productId: 'chana'), navTab: null),
-  'trends': (label: 'Trends', build: (_) => const TrendsScreen(), navTab: 'trends'),
+  'trends': (
+    label: 'Trends',
+    build: (_) => ProviderScope(
+        overrides: [trendsProvider.overrideWith((ref) async => _demoTrends)],
+        child: const TrendsScreen()),
+    navTab: 'trends'
+  ),
   'history': (label: 'History', build: (_) => const HistoryScreen(), navTab: 'history'),
   'meds': (label: 'Meds', build: (_) => const MedsScreen(), navTab: 'meds'),
   'search': (label: 'Search', build: (_) => const SearchScreen(), navTab: null),

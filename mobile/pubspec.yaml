@@ -43,6 +43,7 @@ dependencies:
   dio: ^5.11.0
   flutter_secure_storage: ^11.0.0
   mobile_scanner: ^6.0.10          # camera barcode scanning (Phase 4.1)
+  fl_chart: ^0.69.0                # trends line chart (Phase 5.2)
 
 dev_dependencies:
   flutter_test:

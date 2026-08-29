@@ -48,6 +48,9 @@ class User(Base, TimestampMixin):
     phone_hash: Mapped[str] = mapped_column(String(64), unique=True, index=True)
     display_name: Mapped[str | None] = mapped_column(String(120))
     is_active: Mapped[bool] = mapped_column(default=True)
+    # IANA name (e.g. "Asia/Kolkata"), learned from the client on GET
+    # /analytics/trends. NULL -> analytics bucket in UTC.
+    timezone: Mapped[str | None] = mapped_column(String(64))
 
     health_profile: Mapped[HealthProfile | None] = relationship(
         back_populates="user", cascade="all, delete-orphan", uselist=False

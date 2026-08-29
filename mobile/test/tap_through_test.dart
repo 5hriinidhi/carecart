@@ -14,6 +14,7 @@ import 'package:carecart/src/features/history/history_screen.dart';
 import 'package:carecart/src/features/home/home_screen.dart';
 import 'package:carecart/src/features/result/result_screen.dart';
 import 'package:carecart/src/features/scan/scan_screen.dart';
+import 'package:carecart/src/core/analytics_api.dart';
 import 'package:carecart/src/features/trends/trends_screen.dart';
 import 'package:carecart/src/state/main_app_state.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,11 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
-    final container = ProviderContainer();
+    final container = ProviderContainer(overrides: [
+      trendsProvider.overrideWith((ref) async => const TrendsLoaded(Trends(
+          timezone: 'UTC', totalScans: 0, dietHealthScore: 0,
+          deltaSevenDay: 0, trend: 'steady'))),
+    ]);
     addTearDown(container.dispose);
     MainAppState st() => container.read(mainAppProvider);
 

@@ -1,141 +1,356 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/analytics_api.dart';
 import '../../core/severity.dart';
 import '../../core/text.dart';
 import '../../core/theme.dart';
 import '../../core/widgets.dart';
 import '../../fixtures/demo_data.dart';
 
-/// Static trends screen — `state.screen == 'trends'`. Frozen on the 7-day range.
-class TrendsScreen extends StatelessWidget {
+/// Trends screen — `state.screen == 'trends'`. The Diet Health Score card + line
+/// chart are wired to `GET /analytics/trends` (Phase 5.2); the older
+/// TREND / TREND_LABELS fixtures are gone. (The nutrient-trajectory section is
+/// still fixture-backed — a separate future feature.)
+class TrendsScreen extends ConsumerStatefulWidget {
   const TrendsScreen({super.key, this.range = '7d', this.onNav, this.onScan});
   final String range;
   final void Function(String route)? onNav;
   final VoidCallback? onScan;
 
   @override
+  ConsumerState<TrendsScreen> createState() => _TrendsScreenState();
+}
+
+class _TrendsScreenState extends ConsumerState<TrendsScreen> {
+  bool _monthly = false;
+
+  @override
   Widget build(BuildContext context) {
-    final series = kTrend[range]!;
-    final labels = kTrendLabels[range]!;
+    final async = ref.watch(trendsProvider);
+    final loaded = async.asData?.value;
+    final trends = loaded is TrendsLoaded ? loaded.trends : null;
+    final subtitle = trends != null
+        ? 'Built from ${trends.totalScans} scan${trends.totalScans == 1 ? '' : 's'}. '
+            'No manual logging.'
+        : 'Built automatically from every scan.';
 
     return CcScreen(
       background: Cc.paper,
       child: ListView(
-          primary: false,
-          padding: const EdgeInsets.fromLTRB(18, 8, 18, 16),
-          children: [
-            const SizedBox(height: 6),
-            const Text('Your trend', style: CcText.h1),
-            const SizedBox(height: 4),
-            Text('Built from 46 scans. No manual logging.',
-                style: CcText.body.copyWith(color: Cc.muted)),
-            const SizedBox(height: 16),
-            Wrap(spacing: 7, children: [
-              CcPill('Last 7 days', active: range == '7d'),
-              CcPill('30 days', active: range == '30d'),
-              CcPill('90 days', active: range == '90d'),
-            ]),
-            const SizedBox(height: 14),
-
-            // score card + line chart
-            Container(
-              padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
-              decoration: BoxDecoration(
-                color: Cc.paperRaised,
-                borderRadius: BorderRadius.circular(22),
-                border: Border.all(color: const Color(0x12151510)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('Diet Health Score',
-                                style: TextStyle(
-                                    fontFamily: 'Bricolage',
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w700,
-                                    color: Cc.ink)),
-                            const SizedBox(height: 3),
-                            Text(kRangeLabels[range]!,
-                                style: CcText.bodySm.copyWith(color: Cc.muted)),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          const Text('$kDietScore',
-                              style: TextStyle(
-                                  fontFamily: 'Bricolage',
-                                  fontSize: 30,
-                                  height: 1,
-                                  fontWeight: FontWeight.w800,
-                                  color: Cc.ink)),
-                          const SizedBox(width: 7),
-                          Text('+4',
-                              style: CcText.mono.copyWith(
-                                  color: const Color(0xFF4A5A33), fontSize: 12)),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
-                  SizedBox(
-                    height: 120,
-                    width: double.infinity,
-                    child: CustomPaint(painter: _LineChartPainter(series)),
-                  ),
-                  const SizedBox(height: 6),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      for (final l in labels)
-                        Text(l,
-                            style: CcText.mono.copyWith(
-                                fontSize: 10, color: const Color(0xFFA3A491))),
-                    ],
-                  ),
-                ],
-              ),
+        primary: false,
+        padding: const EdgeInsets.fromLTRB(18, 8, 18, 16),
+        children: [
+          const SizedBox(height: 6),
+          const Text('Your trend', style: CcText.h1),
+          const SizedBox(height: 4),
+          Text(subtitle, style: CcText.body.copyWith(color: Cc.muted)),
+          const SizedBox(height: 16),
+          Wrap(spacing: 7, children: [
+            GestureDetector(
+              onTap: () => setState(() => _monthly = false),
+              child: CcPill('Weekly', active: !_monthly),
             ),
-            const SizedBox(height: 22),
+            GestureDetector(
+              onTap: () => setState(() => _monthly = true),
+              child: CcPill('Monthly', active: _monthly),
+            ),
+          ]),
+          const SizedBox(height: 14),
 
-            const Text('Nutrient trajectories', style: CcText.h2),
-            const SizedBox(height: 12),
-            for (final j in kTrajectories) ...[
-              _TrajectoryCard(t: j),
-              const SizedBox(height: 10),
-            ],
+          _ScoreCard(
+            state: async,
+            monthly: _monthly,
+            onScan: widget.onScan,
+          ),
 
-            const SizedBox(height: 8),
-            Container(
-              padding: const EdgeInsets.all(18),
-              decoration:
-                  BoxDecoration(color: Cc.sage, borderRadius: BorderRadius.circular(22)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('WHAT CHANGED',
-                      style: CcText.mono.copyWith(
-                          color: Cc.oliveDark, letterSpacing: 1.05, fontSize: 10.5)),
-                  const SizedBox(height: 9),
-                  Text(
-                      'You swapped instant noodles for millet noodles four times this month. '
-                      'That single habit accounts for most of your +4.',
-                      style: CcText.body.copyWith(
-                          color: Cc.inkSoft, fontSize: 14, height: 1.55)),
-                ],
+          const SizedBox(height: 22),
+          const Text('Nutrient trajectories', style: CcText.h2),
+          const SizedBox(height: 12),
+          for (final j in kTrajectories) ...[
+            _TrajectoryCard(t: j),
+            const SizedBox(height: 10),
+          ],
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.all(18),
+            decoration:
+                BoxDecoration(color: Cc.sage, borderRadius: BorderRadius.circular(22)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('WHAT CHANGED',
+                    style: CcText.mono.copyWith(
+                        color: Cc.oliveDark, letterSpacing: 1.05, fontSize: 10.5)),
+                const SizedBox(height: 9),
+                Text(
+                    'You swapped instant noodles for millet noodles four times this month. '
+                    'That single habit accounts for most of your +4.',
+                    style: CcText.body.copyWith(
+                        color: Cc.inkSoft, fontSize: 14, height: 1.55)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ScoreCard extends StatelessWidget {
+  const _ScoreCard({required this.state, required this.monthly, this.onScan});
+  final AsyncValue<TrendsResult> state;
+  final bool monthly;
+  final VoidCallback? onScan;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
+      decoration: BoxDecoration(
+        color: Cc.paperRaised,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: const Color(0x12151510)),
+      ),
+      child: state.when(
+        loading: () => const SizedBox(
+          height: 150,
+          child: Center(
+              child: SizedBox(
+                  width: 22,
+                  height: 22,
+                  child: CircularProgressIndicator(strokeWidth: 2))),
+        ),
+        error: (e, _) => _message("Couldn't load your trends."),
+        data: (r) => switch (r) {
+          TrendsFailed(:final message) => _message(message, onScan: onScan),
+          TrendsLoaded(:final trends) when trends.isEmpty => _message(
+              'Scan a few products — your Diet Health Score and weekly trend '
+              'show up here.',
+              onScan: onScan),
+          TrendsLoaded(:final trends) => _loaded(context, trends),
+        },
+      ),
+    );
+  }
+
+  Widget _message(String text, {VoidCallback? onScan}) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 22),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(text, style: CcText.body.copyWith(color: Cc.muted, height: 1.5)),
+            if (onScan != null) ...[
+              const SizedBox(height: 12),
+              GestureDetector(
+                onTap: onScan,
+                child: Text('Scan something →',
+                    style: CcText.bodySm.copyWith(
+                        color: Cc.olive, fontWeight: FontWeight.w600)),
               ),
+            ],
+          ],
+        ),
+      );
+
+  Widget _loaded(BuildContext context, Trends trends) {
+    final buckets = monthly ? trends.monthly : trends.weekly;
+    final delta = trends.deltaSevenDay;
+    final deltaColor = delta > 0
+        ? const Color(0xFF4A5A33)
+        : delta < 0
+            ? Cc.avoid
+            : Cc.muted;
+
+    final safe = buckets.fold<int>(0, (s, b) => s + b.safe);
+    final caution = buckets.fold<int>(0, (s, b) => s + b.caution);
+    final avoid = buckets.fold<int>(0, (s, b) => s + b.avoid);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Expanded(
+              child: Text('Diet Health Score',
+                  style: TextStyle(
+                      fontFamily: 'Bricolage',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: Cc.ink)),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Text('${trends.dietHealthScore}',
+                    key: const Key('dhs-value'),
+                    style: const TextStyle(
+                        fontFamily: 'Bricolage',
+                        fontSize: 30,
+                        height: 1,
+                        fontWeight: FontWeight.w800,
+                        color: Cc.ink)),
+                const SizedBox(width: 7),
+                Text(delta == 0 ? '±0' : (delta > 0 ? '+$delta' : '$delta'),
+                    key: const Key('dhs-delta'),
+                    style: CcText.mono.copyWith(color: deltaColor, fontSize: 12)),
+              ],
             ),
           ],
         ),
+        const SizedBox(height: 2),
+        Text('${trends.trend} · 7-day change · ${trends.timezone}',
+            style: CcText.bodySm.copyWith(color: Cc.muted)),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 132,
+          child: buckets.length < 2
+              ? Center(
+                  child: Text('Not enough history yet for a ${monthly ? 'monthly' : 'weekly'} line.',
+                      style: CcText.bodySm.copyWith(color: Cc.muted)))
+              : _DhsLineChart(buckets: buckets),
+        ),
+        const SizedBox(height: 14),
+        Row(
+          children: [
+            _TierChip('Safe', safe, Cc.safe, Cc.safeTint),
+            const SizedBox(width: 8),
+            _TierChip('Caution', caution, Cc.caution, Cc.cautionTint),
+            const SizedBox(width: 8),
+            _TierChip('Avoid', avoid, Cc.avoid, Cc.avoidTint),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _TierChip extends StatelessWidget {
+  const _TierChip(this.label, this.count, this.fg, this.bg);
+  final String label;
+  final int count;
+  final Color fg;
+  final Color bg;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 9),
+        alignment: Alignment.center,
+        decoration:
+            BoxDecoration(color: bg, borderRadius: BorderRadius.circular(12)),
+        child: Column(
+          children: [
+            Text('$count',
+                style: TextStyle(
+                    fontFamily: 'Bricolage',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    color: fg)),
+            Text(label,
+                style: CcText.mono.copyWith(fontSize: 9.5, color: fg)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DhsLineChart extends StatelessWidget {
+  const _DhsLineChart({required this.buckets});
+  final List<TrendBucket> buckets;
+
+  @override
+  Widget build(BuildContext context) {
+    final spots = <FlSpot>[
+      for (var i = 0; i < buckets.length; i++)
+        FlSpot(i.toDouble(), buckets[i].dietHealthScore.toDouble()),
+    ];
+    final lastX = (buckets.length - 1).toDouble();
+    // show at most ~4 x labels so they don't collide
+    final step = (buckets.length / 4).ceil().clamp(1, buckets.length);
+
+    return LineChart(
+      LineChartData(
+        minX: 0,
+        maxX: lastX,
+        minY: 0,
+        maxY: 100,
+        gridData: FlGridData(
+          show: true,
+          drawVerticalLine: false,
+          horizontalInterval: 25,
+          getDrawingHorizontalLine: (v) => FlLine(
+            color: (v == 45 || v == 70)
+                ? const Color(0x33202419) // tier thresholds
+                : const Color(0x14202419),
+            strokeWidth: 1,
+          ),
+        ),
+        borderData: FlBorderData(show: false),
+        titlesData: FlTitlesData(
+          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles:
+              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              interval: 50,
+              reservedSize: 26,
+              getTitlesWidget: (v, _) => Text('${v.toInt()}',
+                  style: CcText.mono.copyWith(
+                      fontSize: 9, color: const Color(0xFFA3A491))),
+            ),
+          ),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              interval: 1,
+              reservedSize: 20,
+              getTitlesWidget: (v, _) {
+                final i = v.round();
+                if (i < 0 || i >= buckets.length) return const SizedBox.shrink();
+                if (i != 0 && i != buckets.length - 1 && i % step != 0) {
+                  return const SizedBox.shrink();
+                }
+                return Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(buckets[i].label,
+                      style: CcText.mono.copyWith(
+                          fontSize: 9, color: const Color(0xFFA3A491))),
+                );
+              },
+            ),
+          ),
+        ),
+        lineTouchData: const LineTouchData(enabled: false),
+        lineBarsData: [
+          LineChartBarData(
+            spots: spots,
+            isCurved: true,
+            preventCurveOverShooting: true,
+            barWidth: 2.5,
+            color: Cc.olive,
+            dotData: FlDotData(
+              show: true,
+              getDotPainter: (spot, percent, bar, index) => FlDotCirclePainter(
+                radius: spot.x == lastX ? 4 : 2.5,
+                color: spot.x == lastX ? Cc.accent : Cc.olive,
+                strokeWidth: 2,
+                strokeColor: Cc.paperRaised,
+              ),
+            ),
+            belowBarData: BarAreaData(
+              show: true,
+              color: const Color(0x2263753F),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -208,59 +423,4 @@ class _TrajectoryCard extends StatelessWidget {
         Severity.caution => 50,
         Severity.safe => 85,
       };
-}
-
-class _LineChartPainter extends CustomPainter {
-  _LineChartPainter(this.series);
-  final List<int> series;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final grid = Paint()
-      ..color = const Color(0x14202419)
-      ..strokeWidth = 1;
-    canvas.drawLine(Offset(0, size.height * .25), Offset(size.width, size.height * .25), grid);
-    canvas.drawLine(Offset(0, size.height * .62), Offset(size.width, size.height * .62), grid);
-
-    final pts = <Offset>[];
-    for (var i = 0; i < series.length; i++) {
-      final x = i / (series.length - 1) * size.width;
-      final y = size.height - ((series[i] - 35) / 55) * size.height * 0.9;
-      pts.add(Offset(x, y.clamp(0, size.height)));
-    }
-
-    final path = Path()..moveTo(pts.first.dx, pts.first.dy);
-    for (final p in pts.skip(1)) {
-      path.lineTo(p.dx, p.dy);
-    }
-    final area = Path.from(path)
-      ..lineTo(size.width, size.height)
-      ..lineTo(0, size.height)
-      ..close();
-    canvas.drawPath(area, Paint()..color = const Color(0x2463753F));
-    canvas.drawPath(
-        path,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 2.5
-          ..strokeJoin = StrokeJoin.round
-          ..strokeCap = StrokeCap.round
-          ..color = Cc.olive);
-    for (var i = 0; i < pts.length; i++) {
-      canvas.drawCircle(
-          pts[i],
-          i == pts.length - 1 ? 5 : 3,
-          Paint()..color = i == pts.length - 1 ? Cc.accent : Cc.olive);
-      canvas.drawCircle(
-          pts[i],
-          i == pts.length - 1 ? 5 : 3,
-          Paint()
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 2
-            ..color = Cc.paperRaised);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_LineChartPainter old) => old.series != series;
 }

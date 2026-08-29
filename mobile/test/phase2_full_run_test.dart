@@ -24,6 +24,7 @@ import 'package:carecart/src/features/nudge/nudge_screen.dart';
 import 'package:carecart/src/features/result/result_screen.dart';
 import 'package:carecart/src/features/scan/scan_screen.dart';
 import 'package:carecart/src/features/search/search_screen.dart';
+import 'package:carecart/src/core/analytics_api.dart';
 import 'package:carecart/src/features/trends/trends_screen.dart';
 import 'package:carecart/src/core/widgets.dart';
 import 'package:carecart/src/state/main_app_state.dart';
@@ -44,7 +45,11 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
-    final container = ProviderContainer();
+    final container = ProviderContainer(overrides: [
+      trendsProvider.overrideWith((ref) async => const TrendsLoaded(Trends(
+          timezone: 'UTC', totalScans: 0, dietHealthScore: 0,
+          deltaSevenDay: 0, trend: 'steady'))),
+    ]);
     addTearDown(container.dispose);
     OnboardingState onb() => container.read(onboardingFlowProvider);
     MainAppState app() => container.read(mainAppProvider);
@@ -178,11 +183,13 @@ void main() {
     expect(find.byType(TrendsScreen), findsOneWidget);
     expect(find.byType(CcBottomNav), findsOneWidget);
     expect(find.text('Your trend'), findsOneWidget);
-    expect(find.text('Built from 46 scans. No manual logging.'), findsOneWidget);
+    // Diet Health Score card is wired to GET /analytics/trends (stubbed empty here)
+    expect(find.text('Built from 0 scans. No manual logging.'), findsOneWidget);
+    expect(find.textContaining('Diet Health Score and weekly trend'), findsOneWidget);
     expect(find.text('Nutrient trajectories'), findsOneWidget);
-    expect(find.text('Sodium'), findsWidgets); // real trajectory fixture
+    expect(find.text('Sodium'), findsWidgets); // trajectory fixture (separate feature)
     noException('trends');
-    _ok('TRENDS — "Your trend", chart, nutrient trajectories, nav visible');
+    _ok('TRENDS — "Your trend", live score card (empty state), trajectories, nav');
 
     await tester.tap(find.text('History'));
     await tester.pumpAndSettle();

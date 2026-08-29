@@ -20,6 +20,7 @@ cryptography==44.0.0              # Fernet: application-layer encryption at rest
 
 # --- http / misc ---
 httpx==0.28.1
+tzdata==2026.3                    # IANA tz database for zoneinfo (analytics/trends bucketing on Windows)
 
 # --- OCR (medication label scan) ---
 pytesseract==0.3.13              # needs the `tesseract` binary on PATH (see Dockerfile)

@@ -211,6 +211,24 @@ offset, has_more }`, ordered `seq DESC`, **scoped to the caller only**
 (`WHERE user_id = current_user.id`). `limit` 1–100 (default 20), `offset` ≥ 0.
 Rows cascade-delete with the account.
 
+### `GET /api/v1/analytics/trends` — weekly / monthly + Diet Health Score (Phase 5.2)
+
+Aggregates the user's `scan_history` (JWT required):
+
+- **weekly** & **monthly** buckets: `period_start` (local Mon / 1st), `scans`,
+  `avg_score`, `safe` / `caution` / `avoid` counts, and the rolling
+  `diet_health_score` as of that bucket's last scan.
+- **Diet Health Score** — a 0–100 number recalculated on *every* scan: an EMA of
+  the scan scores (`alpha = 0.2`, seeded at the first score), so it tracks recent
+  behaviour smoothly. Response carries the current value, `diet_health_score_delta_7d`
+  (signed change vs ~7 days ago) and `trend` (`improving` / `declining` / `steady`).
+- **Timezones**: `scanned_at` is stored UTC; bucketing uses — in order —
+  `?tz=` (IANA name, validated then **remembered on `users.timezone`**),
+  `?tz_offset_minutes=` (a fixed offset for that request only; the Flutter client
+  sends the device's `timeZoneOffset`), the stored `users.timezone`, else UTC.
+  An unknown `?tz=` is a `422`. Week / month boundaries always land on local
+  midnight so buckets don't shift between requests.
+
 ## Health Identity Vault
 
 Every table is keyed to `users.id`. `users` stores only `phone_hash` — a keyed
@@ -358,11 +376,12 @@ app/
   services/ocr.py      pytesseract wrapper: open_image / extract_text / sanitize_text / guess_medication
   services/ingredient_risk.py  offline ingredient → risk_compound resolver (static tables only, no LLM)
   services/verdict.py  Phase 4.4 scoring: deductions → 0-100 score + tier; allergen hard-stop
+  services/trends.py   Phase 5.2 aggregates: weekly/monthly buckets + rolling Diet Health Score (EMA)
   scripts/load_risk_tables.py     deploy step: load dataset/data_prep/*.csv → Postgres reference tables
   scripts/classify_unresolved.py  offline batch job: drain unresolved_ingredients → review CSV → merge
   api/deps.py          DbSession, get_current_user / CurrentUser
   api/v1/router.py      aggregate v1 router  (add feature routers here)
-  api/v1/routes/        endpoint modules (health.py, auth.py, products.py, scan.py, history.py, vault.py)
+  api/v1/routes/        endpoint modules (health.py, auth.py, products.py, scan.py, history.py, analytics.py, vault.py)
   vector/milvus_client.py   lazy MilvusClient helper
 ```
 
