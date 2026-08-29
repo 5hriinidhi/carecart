@@ -5,6 +5,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'api_client.dart';
 
+/// Turn a Dio failure into a short, honest, user-facing line. A timeout (Open
+/// Food Facts or the backend slow / rate-limited mid-scan) is called out
+/// separately from a hard "no connection" so the UI never just says "offline"
+/// when the phone actually has signal — and never spins forever (Dio's
+/// connect/receive timeouts in [dioProvider] guarantee this catch is reached).
+String networkErrorMessage(DioException e, {required String fallback}) {
+  return switch (e.type) {
+    DioExceptionType.connectionError => 'No connection to the server.',
+    DioExceptionType.connectionTimeout ||
+    DioExceptionType.receiveTimeout ||
+    DioExceptionType.sendTimeout =>
+      'The server is taking too long to respond. Check your connection and try again.',
+    _ => fallback,
+  };
+}
+
 /// A product returned by `GET /products/{barcode}` (Open Food Facts, normalised
 /// + cached by the backend). Phase 4.2 turns this into a personalised verdict.
 class ScannedProduct {
@@ -102,11 +118,8 @@ Future<ProductLookup> lookupProduct(Dio dio, String barcode) async {
       _ => ProductLookupError('Product lookup failed ($status).'),
     };
   } on DioException catch (e) {
-    final offline = e.type == DioExceptionType.connectionError ||
-        e.type == DioExceptionType.connectionTimeout ||
-        e.type == DioExceptionType.receiveTimeout;
     return ProductLookupError(
-        offline ? 'No connection to the server.' : 'Product lookup failed.');
+        networkErrorMessage(e, fallback: 'Product lookup failed.'));
   }
 }
 
@@ -206,10 +219,8 @@ Future<IngredientScan> scanIngredientLabel(
       _ => "Couldn't read the label ($status).",
     });
   } on DioException catch (e) {
-    final offline = e.type == DioExceptionType.connectionError ||
-        e.type == DioExceptionType.connectionTimeout;
     return IngredientScanFailed(
-        offline ? 'No connection to the server.' : "Couldn't read the label.");
+        networkErrorMessage(e, fallback: "Couldn't read the label."));
   }
 }
 
@@ -385,11 +396,8 @@ Future<RiskResolutionOutcome> resolveRisks(
       _ => "Couldn't check this product's ingredients ($status).",
     });
   } on DioException catch (e) {
-    final offline = e.type == DioExceptionType.connectionError ||
-        e.type == DioExceptionType.connectionTimeout;
-    return RiskResolutionFailed(offline
-        ? 'No connection to the server.'
-        : "Couldn't check this product's ingredients.");
+    return RiskResolutionFailed(networkErrorMessage(e,
+        fallback: "Couldn't check this product's ingredients."));
   }
 }
 
@@ -567,11 +575,8 @@ Future<ScanVerdictOutcome> scanVerdict(
       _ => "Couldn't score this product ($status).",
     });
   } on DioException catch (e) {
-    final offline = e.type == DioExceptionType.connectionError ||
-        e.type == DioExceptionType.connectionTimeout;
-    return ScanVerdictFailed(offline
-        ? 'No connection to the server.'
-        : "Couldn't score this product.");
+    return ScanVerdictFailed(
+        networkErrorMessage(e, fallback: "Couldn't score this product."));
   }
 }
 

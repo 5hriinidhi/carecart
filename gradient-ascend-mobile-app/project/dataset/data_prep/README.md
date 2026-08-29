@@ -44,6 +44,7 @@ All scripts need `PYTHONUTF8=1` on Windows (rupee sign / BOM in the source CSVs)
 | `drug_class_stem_rules.csv` | ordered suffix/prefix rules (`-pril` -> ACE inhibitor, `cef-` -> Cephalosporin, ...) |
 | `condition_diet_rules.csv` | per-condition dietary rules (Phase 4.4): `kind` = `nutrient_ceiling` (per-100 g limit) or `risk_compound` (compound to avoid) + `severity` |
 | `allergen_aliases.csv` | allergy free-text -> allergen `risk_compound` (Phase 4.4). A match is a HARD STOP in the verdict, not a deduction |
+| `drug_name_aliases.csv` | brand -> generic active ingredient ("Ecosprin" -> aspirin), so a stored brand name still matches the interaction table. Consulted before `drug_class_lookup` |
 
 ### Consumed at runtime (Phases 4.3 + 4.4)
 

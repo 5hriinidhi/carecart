@@ -151,12 +151,47 @@ maps the free text → an allergen `risk_compound`) matching any ingredient forc
 score*, matching the proposal's "allergens are a full-screen stop, not a
 deduction." The allergen reason carries `points: 0`.
 
-Medication names are mapped to a `drug_class` via `drug_class_lookup` →
-`drug_class_stem_rules` (`-pril` → ACE inhibitor, …). A name that resolves to no
-class is reported (`identified: false`) and simply not checked for interactions
-— never a silent pass. Reading the vault writes an `audit_log` row (who / when /
-status, no content). Every `interaction_rules` row is a clinician-review DRAFT,
-so wording stays "keep intake consistent" / "caution", never medical advice.
+Medication names are mapped to a `drug_class`: `drug_name_aliases` (brand →
+generic — "Ecosprin" → aspirin) **first**, then `drug_class_lookup`, then
+`drug_class_stem_rules` (`-pril` → ACE inhibitor, `-floxacin` → Fluoroquinolone,
+…). A name that still resolves to no class is reported (`identified: false`) and
+not checked for interactions — never a silent pass. Reading the vault writes an
+`audit_log` row (who / when / status, no content). Every `interaction_rules` row
+is a clinician-review DRAFT, so wording stays "keep intake consistent" /
+"caution", never medical advice.
+
+**Precedence** when a product matches several rules at once:
+
+1. **Allergen match wins outright** — `score 0`, `tier avoid`, `hard_stop`, no
+   matter the arithmetic.
+2. Otherwise **every other factor stacks additively**, de-duped first: a
+   compound cited by a drug interaction or condition rule isn't *also* counted
+   as general poor-fit, and two nutrient keys for one concern (`sodium_mg` +
+   `salt_g`) count once. Score clamps to 0–100.
+3. **HIGH-severity floor** — if any HIGH-severity drug interaction / condition
+   ceiling / condition compound fired, the tier is at least `caution` even when
+   the number lands ≥ 70 (a well-established clinical interaction never reads
+   "Safe for you").
+4. `reasons` come back most-serious-first: allergen → drug_interaction →
+   condition_ceiling → condition_compound → poor_fit → unverified → clear.
+
+### Timeouts & offline behaviour (Phase 4)
+
+- **Open Food Facts**: `httpx` call bounded by `OFF_TIMEOUT_SECONDS` (8 s). On a
+  timeout / error the route serves an expired cache entry (`X-Cache: STALE`) if
+  it has one, else a `502` with the OCR-fallback hint — it never hangs.
+- **`/scan/verdict`** makes no outbound calls (pure DB) — typ. < 120 ms.
+- **Claude API** is *offline only* (the `classify_unresolved.py` batch job,
+  30 s timeout, failure → "unclassified"). Never on the scan path.
+- **Mobile**: `dioProvider` sets a 10 s connect / 15 s receive timeout, so the
+  UI always resolves — a slow/rate-limited backend surfaces "The server is
+  taking too long…", a dead one "No connection to the server."; the scan-screen
+  banner shows the message instead of spinning.
+- **What needs connectivity**: every scan (product lookup *and* verdict are
+  server-side — the rule tables and the user's vault live on the backend). What
+  degrades gracefully: OFF down but the product already cached → verdict still
+  computed off the stale copy; backend down → a clear error on the scan screen,
+  no partial/false verdict.
 
 ## Health Identity Vault
 

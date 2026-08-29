@@ -413,6 +413,23 @@ class AllergenAlias(Base):
     notes: Mapped[str | None] = mapped_column(Text)
 
 
+class DrugNameAlias(Base):
+    """``brand name -> generic active ingredient`` (from ``drug_name_aliases.csv``).
+
+    A stored medication is usually a brand ("Ecosprin", "Telma"), but
+    ``interaction_rules`` / ``drug_class_lookup`` key off the generic
+    ("aspirin", "telmisartan"). The verdict resolver maps through this table
+    before the class lookup so brand/generic mismatches don't silently skip an
+    interaction check."""
+
+    __tablename__ = "drug_name_aliases"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=_uuid)
+    alias: Mapped[str] = mapped_column(String(80), index=True)
+    generic: Mapped[str] = mapped_column(String(120))
+    notes: Mapped[str | None] = mapped_column(Text)
+
+
 class AuditLog(Base):
     """Append-only record of WHO touched WHICH health resource and WHEN.
 
@@ -456,5 +473,6 @@ __all__ = [
     "DrugClassStemRule",
     "ConditionDietRule",
     "AllergenAlias",
+    "DrugNameAlias",
     "AuditLog",
 ]

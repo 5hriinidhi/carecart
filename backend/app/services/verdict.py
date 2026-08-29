@@ -16,8 +16,25 @@ Model: start at 100 and subtract a deduction for each matched risk factor -
   refined carb not otherwise tied to the user),
 - **unverified** ingredients (Phase 4.3 couldn't confirm them).
 
-An **allergen match short-circuits to a hard "avoid"** regardless of the numeric
-score - allergens are a full stop, not a deduction (per the proposal).
+Precedence when a product matches several rules at once:
+  1. **Allergen match wins outright** - score 0, tier ``avoid``, ``hard_stop``,
+     no matter the arithmetic. Allergens are a full stop, not a deduction.
+  2. Otherwise **all other factors stack additively**. They are de-duped first:
+     a compound cited by a drug interaction or a condition rule is not also
+     counted as general poor-fit, and two nutrient keys for one concern
+     (``sodium_mg`` + ``salt_g``) count once. Score is clamped to 0-100.
+  3. **HIGH-severity floor**: if any HIGH-severity drug interaction / condition
+     ceiling / condition compound fired, the tier is at least ``caution`` even
+     if the number lands >= 70.
+  4. Reasons are returned most-serious first:
+     allergen > drug_interaction > condition_ceiling > condition_compound >
+     poor_fit > unverified > clear, then by points.
+
+Brand vs generic: a stored medication name is run through ``drug_name_aliases``
+(brand -> generic) before the ``drug_class_lookup`` / stem-rule match, so
+"Ecosprin" is checked as "aspirin". A name that still resolves to no class is
+reported (``identified: False``) and skipped for interactions - never a silent
+pass.
 
 Nothing here is medical advice: ``interaction_rules`` is a clinician-review
 DRAFT and the wording stays "keep consistent" / "caution" style.
@@ -37,6 +54,7 @@ from app.models import (
     ConditionDietRule,
     DrugClassLookup,
     DrugClassStemRule,
+    DrugNameAlias,
     InteractionRule,
     RiskCompound,
 )
@@ -181,6 +199,7 @@ class _Rules:
     interactions: dict[str, list[InteractionRule]]
     conditions: dict[str, list[ConditionDietRule]]
     allergens: list[tuple[str, str]]  # (alias, risk_compound)
+    name_aliases: dict[str, str]      # brand -> generic active ingredient
 
 
 def _load_rules(db: Session) -> _Rules:
@@ -214,7 +233,15 @@ def _load_rules(db: Session) -> _Rules:
         (a.alias, a.risk_compound)
         for a in db.scalars(select(AllergenAlias)).all()
     ]
-    return _Rules(display, lookup, stems, interactions, conditions, allergens)
+    name_aliases = {
+        alias: generic
+        for alias, generic in db.execute(
+            select(DrugNameAlias.alias, DrugNameAlias.generic)
+        ).all()
+    }
+    return _Rules(
+        display, lookup, stems, interactions, conditions, allergens, name_aliases
+    )
 
 
 def _drug_classes_for(name: str, rules: _Rules) -> list[str]:
@@ -229,9 +256,24 @@ def _drug_classes_for(name: str, rules: _Rules) -> list[str]:
             out.append(cls)
             seen.add(cls)
 
-    if s in rules.lookup:
-        _add(rules.lookup[s])
-    tokens = [t for t in re.split(r"[\s/+-]+", s) if len(t) >= 4]
+    # brand -> generic first: the stored name is usually a brand, the tables key
+    # off the generic. Map the whole string and each token.
+    candidates = [s]
+    if s in rules.name_aliases:
+        candidates.append(rules.name_aliases[s])
+    for t in re.split(r"[\s/+-]+", s):
+        if t in rules.name_aliases:
+            candidates.append(rules.name_aliases[t])
+
+    for cand in candidates:
+        if cand in rules.lookup:
+            _add(rules.lookup[cand])
+    tokens = [
+        t
+        for cand in candidates
+        for t in re.split(r"[\s/+-]+", cand)
+        if len(t) >= 4
+    ]
     for t in tokens:
         if t in rules.lookup:
             _add(rules.lookup[t])
@@ -452,13 +494,27 @@ def score_verdict(
             )
         )
 
-    # ---- score + tier ----
+    # ---- score + tier (precedence) ----
+    # 1. an allergen match is an absolute hard stop - score 0 / avoid, no matter
+    #    what the arithmetic says.
+    # 2. otherwise every factor stacks additively (already de-duped so one
+    #    compound is never counted twice), clamped to 0-100, mapped to a tier on
+    #    the exact Phase 2.1 thresholds.
+    # 3. a floor: if any HIGH-severity clinical factor fired (a well-established
+    #    drug-food interaction, or a condition ceiling / compound), the verdict
+    #    can't read "Safe for you" even if the number lands >= 70 - it is at
+    #    least "caution".
     score = max(0, min(100, 100 - deduction))
     if hard_stop:
         score = 0
         tier = "avoid"
     else:
         tier = tier_for(score)
+        _high_clinical = {"drug_interaction", "condition_ceiling", "condition_compound"}
+        if tier == "safe" and any(
+            r.severity == "high" and r.kind in _high_clinical for r in reasons
+        ):
+            tier = "caution"
 
     if not reasons:
         reasons.append(

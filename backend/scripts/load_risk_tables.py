@@ -22,6 +22,7 @@ Source (``settings.risk_data_path`` by default =
 | drug_class_stem_rules.csv    | drug_class_stem_rules     |
 | condition_diet_rules.csv     | condition_diet_rules      |
 | allergen_aliases.csv         | allergen_aliases          |
+| drug_name_aliases.csv        | drug_name_aliases         (brand -> generic) |
 
 Reference rows are fully replaced on each run (``TRUNCATE ... CASCADE``). The
 ``unresolved_ingredients`` queue is a runtime table and is never touched here.
@@ -45,6 +46,7 @@ from app.models import (
     ConditionDietRule,
     DrugClassLookup,
     DrugClassStemRule,
+    DrugNameAlias,
     FoodRiskTag,
     IngredientRiskAlias,
     InteractionRule,
@@ -96,6 +98,7 @@ def load_all(db: Session, data_dir: str) -> dict[str, int]:
     stem_rows = _rows(os.path.join(data_dir, "drug_class_stem_rules.csv"))
     cond_rows = _rows(os.path.join(data_dir, "condition_diet_rules.csv"))
     allergen_rows = _rows(os.path.join(data_dir, "allergen_aliases.csv"))
+    dname_rows = _rows(os.path.join(data_dir, "drug_name_aliases.csv"))
 
     problems: list[str] = []
 
@@ -267,6 +270,30 @@ def load_all(db: Session, data_dir: str) -> dict[str, int]:
                  risk_compound=rc, notes=(r.get("notes") or "").strip() or None)
         )
 
+    # ---- brand -> generic drug name aliases (Phase 4 edge cases) ----
+    known_generics = {d["active_ingredient"] for d in dclasses}
+    dnames: list[dict] = []
+    unresolved_generics: list[str] = []
+    for r in dname_rows:
+        alias = (r.get("alias") or "").strip().lower()
+        generic = (r.get("generic") or "").strip().lower()
+        if not alias or not generic:
+            continue
+        if generic not in known_generics:
+            unresolved_generics.append(f"{alias} -> {generic}")
+        dnames.append(
+            dict(id=uuid.uuid4(), alias=alias, generic=generic,
+                 notes=(r.get("notes") or "").strip() or None)
+        )
+    if unresolved_generics:
+        # not fatal - the alias is just unhelpful until the generic is in
+        # drug_class_lookup - but surface it so the CSV stays honest
+        print(
+            f"  note: {len(unresolved_generics)} drug_name_aliases generic(s) not in "
+            f"drug_class_lookup: {', '.join(unresolved_generics[:8])}"
+            + ("..." if len(unresolved_generics) > 8 else "")
+        )
+
     if problems:
         raise LoadError(
             f"{len(problems)} reference problem(s):\n  " + "\n  ".join(problems[:25])
@@ -276,8 +303,8 @@ def load_all(db: Session, data_dir: str) -> dict[str, int]:
     # the two drug-class tables have no FK so are listed explicitly)
     db.execute(
         text(
-            "TRUNCATE TABLE risk_compounds, drug_class_lookup, drug_class_stem_rules "
-            "CASCADE"
+            "TRUNCATE TABLE risk_compounds, drug_class_lookup, drug_class_stem_rules, "
+            "drug_name_aliases CASCADE"
         )
     )
     db.bulk_insert_mappings(
@@ -303,6 +330,7 @@ def load_all(db: Session, data_dir: str) -> dict[str, int]:
     db.bulk_insert_mappings(DrugClassStemRule, stems)
     db.bulk_insert_mappings(ConditionDietRule, conds)
     db.bulk_insert_mappings(AllergenAlias, allergens)
+    db.bulk_insert_mappings(DrugNameAlias, dnames)
     db.commit()
 
     return {
@@ -317,6 +345,7 @@ def load_all(db: Session, data_dir: str) -> dict[str, int]:
         "drug_class_stem_rules": len(stems),
         "condition_diet_rules": len(conds),
         "allergen_aliases": len(allergens),
+        "drug_name_aliases": len(dnames),
     }
 
 
