@@ -17,7 +17,7 @@ from __future__ import annotations
 import datetime as dt
 import re
 from dataclasses import dataclass, field
-from statistics import fmean
+from statistics import fmean, median
 from zoneinfo import ZoneInfo
 
 _OFFSET_RE = re.compile(r"^UTC([+-])(\d{2}):(\d{2})$")
@@ -37,6 +37,12 @@ class Bucket:
     label: str
     scans: int
     avg_score: float
+    # median/min/max make a single outlier visible instead of letting it quietly
+    # skew the mean (the chart itself plots diet_health_score, an EMA, which is
+    # already outlier-resistant).
+    median_score: float
+    min_score: int
+    max_score: int
     safe: int
     caution: int
     avoid: int
@@ -87,6 +93,9 @@ def _bucket(rows, key_fn, label_fn, cap: int) -> list[Bucket]:
                 label=label_fn(period_start),
                 scans=len(entries),
                 avg_score=round(fmean(scores), 1),
+                median_score=round(median(scores), 1),
+                min_score=min(scores),
+                max_score=max(scores),
                 safe=tiers.count("safe"),
                 caution=tiers.count("caution"),
                 avoid=tiers.count("avoid"),

@@ -167,6 +167,9 @@ class _ScoreCard extends StatelessWidget {
     final caution = buckets.fold<int>(0, (s, b) => s + b.caution);
     final avoid = buckets.fold<int>(0, (s, b) => s + b.avoid);
 
+    final latest = buckets.isNotEmpty ? buckets.last : null;
+    final skewed = latest != null && latest.meanSkewed;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -223,7 +226,43 @@ class _ScoreCard extends StatelessWidget {
             _TierChip('Avoid', avoid, Cc.avoid, Cc.avoidTint),
           ],
         ),
+        if (skewed) ...[
+          const SizedBox(height: 12),
+          _SkewNote(latest),
+        ],
       ],
+    );
+  }
+}
+
+/// Shown when one unusual scan is dragging a bucket's mean away from its median,
+/// so "average 71" doesn't read as "a bad week". The line chart plots the Diet
+/// Health Score (an EMA), which already resists this.
+class _SkewNote extends StatelessWidget {
+  const _SkewNote(this.b);
+  final TrendBucket b;
+
+  @override
+  Widget build(BuildContext context) {
+    final low = b.avgScore < b.medianScore;
+    final extreme = low ? b.minScore : b.maxScore;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: Cc.cautionTint,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        key: const Key('trend-skew-note'),
+        low
+            ? 'One low scan ($extreme) pulled ${b.label}\'s average to '
+                '${b.avgScore.toStringAsFixed(0)}. Most scans that week were '
+                'nearer ${b.medianScore.toStringAsFixed(0)}.'
+            : 'One high scan ($extreme) lifted ${b.label}\'s average to '
+                '${b.avgScore.toStringAsFixed(0)}. Most scans that week were '
+                'nearer ${b.medianScore.toStringAsFixed(0)}.',
+        style: CcText.bodySm.copyWith(color: Cc.oliveDark, height: 1.45),
+      ),
     );
   }
 }

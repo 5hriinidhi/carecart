@@ -45,6 +45,7 @@ dependencies:
   mobile_scanner: ^6.0.10          # camera barcode scanning (Phase 4.1)
   fl_chart: ^0.69.0                # trends line chart (Phase 5.2)
   flutter_local_notifications: ^18.0.1  # optional local push for nudges (Phase 5.3)
+  flutter_timezone: ">=3.0.0 <4.0.0"   # device IANA tz name -> DST-correct weekly buckets
 
 dev_dependencies:
   flutter_test:

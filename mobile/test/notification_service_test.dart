@@ -34,4 +34,19 @@ void main() {
     await granted.showNudge(title: 'A pattern', body: 'cut the sodium');
     expect(granted.shown.single.body, 'cut the sodium');
   });
+
+  test('permission revoked at the OS level after a grant -> showNudge goes quiet',
+      () async {
+    final s = FakeNotificationService(granted: true);
+    await s.showNudge(title: 'A pattern', body: 'first');
+    expect(s.shown.length, 1);
+
+    // user turns CareCart notifications off in system settings
+    s.granted = false;
+
+    await s.showNudge(title: 'A pattern', body: 'second');
+    expect(s.shown.length, 1, reason: 'no delivery once the OS revokes it');
+    // and it is re-checked every call, not cached from the earlier grant
+    expect(await s.isGranted(), isFalse);
+  });
 }

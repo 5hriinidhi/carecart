@@ -216,18 +216,31 @@ Rows cascade-delete with the account.
 Aggregates the user's `scan_history` (JWT required):
 
 - **weekly** & **monthly** buckets: `period_start` (local Mon / 1st), `scans`,
-  `avg_score`, `safe` / `caution` / `avoid` counts, and the rolling
-  `diet_health_score` as of that bucket's last scan.
+  `avg_score`, `median_score` / `min_score` / `max_score`, `safe` / `caution` /
+  `avoid` counts, and the rolling `diet_health_score` as of that bucket's last
+  scan.
 - **Diet Health Score** — a 0–100 number recalculated on *every* scan: an EMA of
   the scan scores (`alpha = 0.2`, seeded at the first score), so it tracks recent
   behaviour smoothly. Response carries the current value, `diet_health_score_delta_7d`
   (signed change vs ~7 days ago) and `trend` (`improving` / `declining` / `steady`).
+- **Outliers**: the chart plots `diet_health_score` (the EMA), which already
+  resists a single bad scan. `median_score` / `min_score` / `max_score` are
+  carried alongside `avg_score` so the client can show *"one low scan (8) pulled
+  this week's average to 74"* when the mean and median diverge, instead of a
+  misleading week-average.
 - **Timezones**: `scanned_at` is stored UTC; bucketing uses — in order —
   `?tz=` (IANA name, validated then **remembered on `users.timezone`**),
-  `?tz_offset_minutes=` (a fixed offset for that request only; the Flutter client
-  sends the device's `timeZoneOffset`), the stored `users.timezone`, else UTC.
-  An unknown `?tz=` is a `422`. Week / month boundaries always land on local
-  midnight so buckets don't shift between requests.
+  `?tz_offset_minutes=` (a fixed offset for that request only), the stored
+  `users.timezone`, else UTC. An unknown `?tz=` is a `422`. Week / month
+  boundaries always land on local midnight so buckets don't shift between
+  requests.
+- **DST**: an IANA `?tz=` is daylight-saving-correct — `zoneinfo` picks the right
+  offset per scan instant, so a scan just after a spring-forward / fall-back
+  still lands in the right local week. A fixed `?tz_offset_minutes=` is DST-naive
+  (it can misbucket scans within the transition week by ±1 h). The Flutter client
+  sends the device's IANA name (`flutter_timezone`) and keeps the numeric offset
+  only as a fallback; on a `422` for an unrecognised name it retries with the
+  offset alone.
 
 ### Behavioural nudges — `GET /api/v1/nudges` (Phase 5.3)
 

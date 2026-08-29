@@ -12,6 +12,11 @@ class TrendBucket(BaseModel):
     label: str
     scans: int
     avg_score: float
+    median_score: float = Field(
+        description="Robust to a single outlier; compare with avg_score to spot skew."
+    )
+    min_score: int
+    max_score: int
     safe: int
     caution: int
     avoid: int
