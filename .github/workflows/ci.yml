@@ -1,0 +1,172 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FLUTTER_VERSION: "3.38.5"
+  PYTHON_VERSION: "3.11"
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────────────
+  # Backend: lint + the whole pytest suite (incl. the continuous end-to-end
+  # journey test_phase6_e2e.py) against a real Postgres.
+  # ─────────────────────────────────────────────────────────────────────────
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: carecart
+          POSTGRES_PASSWORD: carecart
+          POSTGRES_DB: carecart
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U carecart"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: carecart
+      POSTGRES_PASSWORD: carecart
+      POSTGRES_DB: carecart
+      PYTHONUTF8: "1"
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install tesseract (medication / label OCR tests)
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends tesseract-ocr
+
+      - run: pip install -r requirements.txt
+
+      - name: Ruff
+        run: ruff check .
+
+      - name: Pytest
+        run: python -m pytest -q
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Mobile: analyzer + the widget/unit test suite (drives the fully-wired
+  # onboarding + shell flow against in-memory backend fakes).
+  # ─────────────────────────────────────────────────────────────────────────
+  mobile-unit:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Mobile E2E: the same journey as test_phase6_e2e.py, but through the ACTUAL
+  # Flutter UI on an Android emulator, against a real backend on the host.
+  # ─────────────────────────────────────────────────────────────────────────
+  mobile-e2e:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: carecart
+          POSTGRES_PASSWORD: carecart
+          POSTGRES_DB: carecart
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U carecart"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: carecart
+      POSTGRES_PASSWORD: carecart
+      POSTGRES_DB: carecart
+      PYTHONUTF8: "1"
+      ENVIRONMENT: development   # so POST /auth/request-otp echoes the code
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install tesseract
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends tesseract-ocr
+
+      - name: Backend deps + schema + reference data
+        working-directory: backend
+        run: |
+          pip install -r requirements.txt
+          alembic upgrade head
+          python -m scripts.load_risk_tables
+          python -m scripts.seed_demo_products
+
+      - name: Start backend (0.0.0.0:8000, reachable from the emulator at 10.0.2.2)
+        working-directory: backend
+        run: |
+          nohup python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --log-level warning > "$RUNNER_TEMP/uvicorn.log" 2>&1 &
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:8000/health && break
+            sleep 2
+          done
+          curl -sf http://localhost:8000/health
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+        working-directory: mobile
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Integration test on an Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          profile: pixel_6
+          working-directory: mobile
+          script: flutter test integration_test/full_journey_test.dart
+
+      - name: Backend log (on failure)
+        if: failure()
+        run: cat "$RUNNER_TEMP/uvicorn.log" || true

@@ -38,6 +38,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
+                  key: const Key('home-profile-button'),
                   onTap: onOpenProfiles,
                   child: Container(
                     width: 44,

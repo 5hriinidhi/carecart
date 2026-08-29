@@ -373,6 +373,7 @@ class _ManualBarcodeFieldState extends State<_ManualBarcodeField> {
               border: Border.all(color: const Color(0x24F1F0E4)),
             ),
             child: TextField(
+              key: const Key('scan-barcode-field'),
               controller: _c,
               keyboardType: TextInputType.number,
               onSubmitted: (_) => _submit(),
@@ -391,6 +392,7 @@ class _ManualBarcodeFieldState extends State<_ManualBarcodeField> {
         ),
         const SizedBox(width: 10),
         GestureDetector(
+          key: const Key('scan-barcode-submit'),
           onTap: _submit,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),

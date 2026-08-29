@@ -425,6 +425,7 @@ app/
   services/nudges.py   Phase 5.3 rule-based nudge detector (3+ non-safe scans / factor / 14 days -> actionable message)
   scripts/load_risk_tables.py     deploy step: load dataset/data_prep/*.csv → Postgres reference tables
   scripts/classify_unresolved.py  offline batch job: drain unresolved_ingredients → review CSV → merge
+  scripts/seed_demo_products.py   CI/demo: seed a few products into the OFF cache so GET /products/{barcode} is deterministic
   api/deps.py          DbSession, get_current_user / CurrentUser
   api/v1/router.py      aggregate v1 router  (add feature routers here)
   api/v1/routes/        endpoint modules (health.py, auth.py, products.py, scan.py, history.py, analytics.py, nudges.py, vault.py)
@@ -445,3 +446,9 @@ ruff check app
 ruff format app
 pytest
 ```
+
+`tests/test_phase6_e2e.py` is the continuous end-to-end journey — signup →
+OTP verify → onboarding → medication upload → barcode scan → verdict → history →
+trends → nudge → account deletion — against the real test DB. `.github/workflows/ci.yml`
+runs the whole pytest suite plus a Flutter `integration_test` (the same journey
+through the app UI on an Android emulator) on every pull request.
