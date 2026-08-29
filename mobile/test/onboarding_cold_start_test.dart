@@ -20,6 +20,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/fake_backend.dart';
+
 void _step(String s) {
   // ignore: avoid_print
   print('  ▶ $s');
@@ -32,7 +34,8 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+        overrides: fakeBackendOverrides(auth: FakeAuthApi(devCode: '424242')));
     addTearDown(container.dispose);
 
     OnboardingState onb() => container.read(onboardingFlowProvider);
@@ -62,33 +65,32 @@ void main() {
     assertMainUntouched('login');
     _step('COLD START → redirected to /onboarding, oScreen=login, oStep=0');
 
-    // ---- enter a fake phone number ----
-    await tester.enterText(find.byType(TextField), '98765 43210');
+    // ---- enter a phone number ----
+    await tester.enterText(find.byType(TextField).first, '98765 43210');
     await tester.pump();
     expect(onb().oPhone, '98765 43210');
     _step('typed phone "98765 43210" → oPhone updated');
 
-    // ---- Continue → OTP screen ----
+    // ---- Continue → request-otp → OTP screen ----
     await tester.tap(find.text('Continue'));
     await tester.pumpAndSettle();
     expect(onb().oScreen, OnbScreen.otp);
     expect(find.text('Enter the code'), findsOneWidget);
-    expect(onb().oOtp, '');
     assertMainUntouched('otp (just arrived)');
-    _step('tapped Continue → oScreen=otp, oOtp="" ');
+    _step('tapped Continue → request-otp → oScreen=otp');
 
-    // ---- fake OTP timer fills the code, then it auto-progresses on continue ----
-    await tester.pump(const Duration(milliseconds: 1800));
-    expect(onb().oOtp, '4192');
+    // ---- dev backend echoes the code; it stages into the boxes ----
+    await tester.pump(const Duration(milliseconds: 1400));
+    expect(onb().oOtp, '424242');
     expect(onb().otpComplete, isTrue);
-    _step('fake timer filled oOtp="4192" (otpComplete=true)');
+    _step('dev code staged: oOtp="424242" (otpComplete=true)');
 
     await tester.tap(find.text('Verified — continue'));
     await tester.pumpAndSettle();
     expect(onb().oScreen, OnbScreen.steps);
     expect(onb().oStep, 0);
     assertMainUntouched('steps/0');
-    _step('code accepted → oScreen=steps, oStep=0');
+    _step('code accepted → token stored → oScreen=steps, oStep=0');
 
     // ---- walk all 6 profile steps ----
     const titles = <int, String>{
@@ -121,34 +123,17 @@ void main() {
       }
 
       await tester.tap(find.text(i == 5 ? 'Complete' : 'Next'));
-      // don't pumpAndSettle past step 6 — the building screen spins forever
-      if (i == 5) {
-        await tester.pump();
-      } else {
-        await tester.pumpAndSettle();
-      }
+      await tester.pumpAndSettle();
       _step('STEP ${i + 1}/6 "${titles[i]}"'
           '${pick != null ? '  (picked "$pick")' : ''} → '
           '${i == 5 ? 'Complete' : 'Next'}');
     }
 
-    // ---- building ----
-    expect(onb().oScreen, OnbScreen.building);
-    expect(onb().oBuild, 0);
-    expect(find.text('Building your profile'), findsOneWidget);
-    assertMainUntouched('building');
-    _step('oScreen=building, oBuild=0');
-
-    // fake progression: oBuild 1/2/3 @ 700/1350/1950ms, done @ 2600ms
-    await tester.pump(const Duration(milliseconds: 800));
-    expect(onb().oBuild, 1);
-    await tester.pump(const Duration(milliseconds: 1200)); // ~2000ms
-    expect(onb().oBuild, 3);
-    await tester.pump(const Duration(milliseconds: 700)); // ~2700ms
+    // ---- building writes the profile to the vault, then -> done ----
     expect(onb().oScreen, OnbScreen.done);
     expect(find.text("You're set up, Aarav"), findsOneWidget);
     assertMainUntouched('done (pre-handoff)');
-    _step('fake timers → oBuild 1→3 → oScreen=done; main app STILL untouched');
+    _step('profile written to the vault → oScreen=done; main app STILL untouched');
 
     // ---- handoff: auto-fires ~1500ms after reaching done ----
     await tester.pump(const Duration(milliseconds: 1600));

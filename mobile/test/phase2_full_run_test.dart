@@ -25,6 +25,7 @@ import 'package:carecart/src/features/result/result_screen.dart';
 import 'package:carecart/src/features/scan/scan_screen.dart';
 import 'package:carecart/src/features/search/search_screen.dart';
 import 'package:carecart/src/core/analytics_api.dart';
+import 'package:carecart/src/core/history_api.dart';
 import 'package:carecart/src/core/notifications.dart';
 import 'package:carecart/src/core/nudges_api.dart';
 import 'package:carecart/src/features/trends/trends_screen.dart';
@@ -34,6 +35,8 @@ import 'package:carecart/src/state/onboarding_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'support/fake_backend.dart';
 
 void _ok(String s) {
   // ignore: avoid_print
@@ -47,24 +50,50 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
+    final vault = FakeVaultApi()
+      ..medications.addAll(const [
+        (name: 'Telmisartan', dosage: '40 mg'),
+        (name: 'Levothyroxine', dosage: '75 mcg'),
+      ]);
+    final history = HistoryLoaded(HistoryPage(
+      total: 1,
+      limit: 50,
+      offset: 0,
+      hasMore: false,
+      items: [
+        ScanHistoryEntry(
+          id: '1',
+          productName: 'Instant Masala Noodles',
+          score: 24,
+          tier: 'avoid',
+          scannedAt: DateTime.now().toUtc(),
+        ),
+      ],
+    ));
+
     final container = ProviderContainer(overrides: [
-      trendsProvider.overrideWith((ref) async => const TrendsLoaded(Trends(
-          timezone: 'UTC', totalScans: 0, dietHealthScore: 0,
-          deltaSevenDay: 0, trend: 'steady'))),
-      nudgesProvider.overrideWith((ref) async => NudgesLoaded(NudgesPage(
-            latestSeq: 1,
-            items: [
-              Nudge(
-                  id: 'n1',
-                  seq: 1,
-                  factor: 'sodium',
-                  hitCount: 3,
-                  windowDays: 14,
-                  createdAt: DateTime(2026, 8, 20),
-                  message: 'Sodium was flagged in 3 of your last 14 days of '
-                      'scans. Try a low-sodium namkeen and rinse canned pulses.'),
-            ],
-          ))),
+      ...fakeBackendOverrides(
+        auth: FakeAuthApi(devCode: '424242'),
+        vault: vault,
+        history: history,
+        trends: const TrendsLoaded(Trends(
+            timezone: 'UTC', totalScans: 0, dietHealthScore: 0,
+            deltaSevenDay: 0, trend: 'steady')),
+        nudges: NudgesLoaded(NudgesPage(
+          latestSeq: 1,
+          items: [
+            Nudge(
+                id: 'n1',
+                seq: 1,
+                factor: 'sodium',
+                hitCount: 3,
+                windowDays: 14,
+                createdAt: DateTime(2026, 8, 20),
+                message: 'Sodium was flagged in 3 of your last 14 days of '
+                    'scans. Try a low-sodium namkeen and rinse canned pulses.'),
+          ],
+        )),
+      ),
       notificationServiceProvider.overrideWithValue(const NoopNotificationService()),
     ]);
     addTearDown(container.dispose);
@@ -83,15 +112,15 @@ void main() {
     // ===================== ONBOARDING =====================
     expect(find.text('CareCart'), findsOneWidget);
     expect(onb().oScreen, OnbScreen.login);
-    await tester.enterText(find.byType(TextField), '98765 43210');
+    await tester.enterText(find.byType(TextField).first, '98765 43210');
     await tester.tap(find.text('Continue'));
-    await tester.pumpAndSettle();
+    await tester.pump(); // request-otp -> OTP screen
     expect(find.text('Enter the code'), findsOneWidget);
-    await tester.pump(const Duration(milliseconds: 1800)); // fake OTP autofill
-    expect(onb().oOtp, '4192');
+    await tester.pump(const Duration(milliseconds: 1400)); // dev code stages in
+    expect(onb().oOtp, '424242');
     await tester.tap(find.text('Verified — continue'));
     await tester.pumpAndSettle();
-    _ok('onboarding: login → OTP (auto-filled) → steps');
+    _ok('onboarding: login → OTP (dev code) → token stored → steps');
 
     const stepTitles = [
       'A few things about you',
@@ -112,20 +141,14 @@ void main() {
         await tester.pump();
       }
       await tester.tap(find.text(i == 5 ? 'Complete' : 'Next'));
-      if (i == 5) {
-        await tester.pump();
-      } else {
-        await tester.pumpAndSettle();
-      }
+      await tester.pumpAndSettle();
     }
     _ok('onboarding: walked all 6 profile steps');
 
-    expect(onb().oScreen, OnbScreen.building);
-    expect(find.text('Building your profile'), findsOneWidget);
-    await tester.pump(const Duration(milliseconds: 2700)); // fake build progression
+    // building writes the profile to the vault (fakes here), then -> done
     expect(onb().oScreen, OnbScreen.done);
     expect(find.text("You're set up, Aarav"), findsOneWidget);
-    _ok('onboarding: building → done');
+    _ok('onboarding: profile written → done');
 
     await tester.pump(const Duration(milliseconds: 1600)); // auto-handoff
     await tester.pumpAndSettle();
@@ -212,11 +235,11 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(HistoryScreen), findsOneWidget);
     expect(find.text('Food history'), findsOneWidget);
-    expect(find.text('Every scan is kept locally. Export or wipe it any time.'),
-        findsOneWidget);
-    expect(find.textContaining('TODAY · 24 AUG'), findsWidgets);
+    expect(find.textContaining('logged automatically'), findsOneWidget);
+    expect(find.textContaining('TODAY'), findsWidgets); // day group from GET /history
+    expect(find.text('Instant Masala Noodles'), findsWidgets);
     noException('history');
-    _ok('HISTORY — "Food history", day groups from fixtures, nav visible');
+    _ok('HISTORY — "Food history", live GET /history rows, nav visible');
 
     await tester.tap(find.text('Meds'));
     await tester.pumpAndSettle();
@@ -225,9 +248,8 @@ void main() {
     expect(find.text('Each one changes what we flag on a label.'), findsOneWidget);
     expect(find.text('Telmisartan'), findsOneWidget);
     expect(find.text('Levothyroxine'), findsOneWidget);
-    expect(find.text('Conditions on file'), findsOneWidget);
     noException('meds');
-    _ok('MEDS — 4 medication cards + conditions, nav visible');
+    _ok('MEDS — live GET /me/medications cards, nav visible');
 
     await tester.tap(find.text('Home'));
     await tester.pumpAndSettle();

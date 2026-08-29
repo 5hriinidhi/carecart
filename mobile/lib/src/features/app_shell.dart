@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/analytics_api.dart';
+import '../core/auth_repository.dart';
+import '../core/history_api.dart';
+import '../core/nudges_api.dart';
 import '../core/theme.dart';
+import '../core/vault_api.dart';
 import '../core/widgets.dart';
+import '../routing/app_router.dart';
 import '../state/main_app_state.dart';
+import '../state/onboarding_state.dart';
 import 'analyzing/analyzing_screen.dart';
 import 'history/history_screen.dart';
 import 'home/home_screen.dart';
@@ -41,6 +48,19 @@ class MainAppShell extends ConsumerWidget {
         case 'scan':
           app.goScan();
       }
+    }
+
+    Future<void> deleteAccount() async {
+      // best-effort server delete, then forget the session and reset the app
+      await ref.read(vaultApiProvider).deleteAccount();
+      await ref.read(authControllerProvider).signOut();
+      ref.invalidate(historyPageProvider);
+      ref.invalidate(trendsProvider);
+      ref.invalidate(nudgesProvider);
+      ref.invalidate(medicationsProvider);
+      ref.invalidate(mainAppProvider);
+      ref.invalidate(onboardingFlowProvider);
+      ref.read(onboardingCompleteProvider.notifier).reset(); // -> router shows /onboarding
     }
 
     final tabIndex = kNavTabs.indexOf(s.tab).clamp(0, kNavTabs.length - 1);
@@ -116,6 +136,7 @@ class MainAppShell extends ConsumerWidget {
           ProfileSheetOverlay(
             onDismiss: app.closeProfiles,
             onPick: (p) => app.selectProfile(p.name.split(' ').first),
+            onDeleteAccount: deleteAccount,
           ),
       ],
     );

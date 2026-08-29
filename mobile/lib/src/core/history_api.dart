@@ -131,3 +131,9 @@ final historyProvider =
   (ref) => ({int limit = 20, int offset = 0}) =>
       fetchHistory(ref.read(dioProvider), limit: limit, offset: offset),
 );
+
+/// Drives the history screen: the first page, most-recent-first. Auto-disposes
+/// so it refetches on reopen (e.g. after a scan added a row).
+final historyPageProvider = FutureProvider.autoDispose<HistoryResult>(
+  (ref) => ref.read(historyProvider)(limit: 50),
+);

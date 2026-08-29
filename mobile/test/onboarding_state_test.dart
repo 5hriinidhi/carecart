@@ -1,8 +1,10 @@
 // The onboarding state machine (the `o*`-prefixed keys, turn 2a of the
-// prototype). Covers login -> otp -> 6 steps -> building -> done, the faked
-// timer async, and that it never touches the main-app machine or the router
-// gate.
+// prototype). Phase 6.1: sign-in and the profile writes are real backend calls
+// now, driven here against in-memory fakes. Covers login -> otp -> 6 steps ->
+// building (real vault writes) -> done, and that it never touches the main-app
+// machine or the router gate.
 
+import 'package:carecart/src/core/api_client.dart';
 import 'package:carecart/src/routing/app_router.dart';
 import 'package:carecart/src/state/main_app_state.dart';
 import 'package:carecart/src/state/onboarding_state.dart';
@@ -10,13 +12,32 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/fake_backend.dart';
+
 void main() {
   late ProviderContainer c;
+  late FakeAuthApi auth;
+  late FakeVaultApi vault;
+
   OnboardingFlow flow() => c.read(onboardingFlowProvider.notifier);
   OnboardingState st() => c.read(onboardingFlowProvider);
 
-  setUp(() => c = ProviderContainer());
+  setUp(() {
+    auth = FakeAuthApi(devCode: '123456');
+    vault = FakeVaultApi();
+    c = ProviderContainer(overrides: fakeBackendOverrides(auth: auth, vault: vault));
+  });
   tearDown(() => c.dispose());
+
+  /// login -> otp screen -> code filled -> steps
+  Future<void> signIn() async {
+    flow().setPhone('9876543210');
+    await flow().submitPhone();
+    expect(st().oScreen, OnbScreen.otp);
+    flow().setOtp('123456');
+    await flow().verifyOtp();
+    expect(st().oScreen, OnbScreen.steps);
+  }
 
   test('defaults mirror the prototype o* keys', () {
     final s = st();
@@ -35,15 +56,61 @@ void main() {
     expect(s.oPhoneShown, '98765 43210');
   });
 
-  test('skipAuth jumps straight to the first profile step', () {
-    flow().skipAuth();
-    expect(st().oScreen, OnbScreen.steps);
+  test('submitPhone calls request-otp and moves to the OTP screen', () async {
+    flow().setPhone('98765 43210');
+    await flow().submitPhone();
+    expect(auth.requestedPhones.single, '+919876543210');
+    expect(st().oScreen, OnbScreen.otp);
+    expect(st().oDevCode, '123456');
+  });
+
+  test('submitPhone rejects a too-short number without calling the API', () async {
+    flow().setPhone('123');
+    await flow().submitPhone();
+    expect(auth.requestedPhones, isEmpty);
+    expect(st().oScreen, OnbScreen.login);
+    expect(st().oError, isNotNull);
+  });
+
+  test('a request-otp failure surfaces on the login screen', () async {
+    auth.requestFails = 'Too many code requests.';
+    flow().setPhone('9876543210');
+    await flow().submitPhone();
+    expect(st().oScreen, OnbScreen.login);
+    expect(st().oError, 'Too many code requests.');
+    expect(st().oBusy, isFalse);
+  });
+
+  test('verifyOtp is a no-op until all 6 digits are present', () async {
+    flow().setPhone('9876543210');
+    await flow().submitPhone();
+    flow().setOtp('123');
+    expect(st().otpComplete, isFalse);
+    await flow().verifyOtp();
+    expect(st().oScreen, OnbScreen.otp, reason: 'still waiting for the code');
+  });
+
+  test('verifyOtp stores the token and advances to the steps', () async {
+    await signIn();
+    expect(auth.verifiedWith.single.code, '123456');
+    expect(c.read(authTokenProvider), 'fake.access.+919876543210');
     expect(st().oStep, 0);
     expect(st().oStepKind, OnbStep.gender);
   });
 
-  test('next walks the 6 steps in order, then enters building', () {
-    flow().skipAuth();
+  test('a wrong code clears the field and shows an error', () async {
+    auth.verifyFails = 'That code is wrong or has expired.';
+    flow().setPhone('9876543210');
+    await flow().submitPhone();
+    flow().setOtp('000000');
+    await flow().verifyOtp();
+    expect(st().oScreen, OnbScreen.otp);
+    expect(st().oOtp, '');
+    expect(st().oError, 'That code is wrong or has expired.');
+  });
+
+  test('next walks the 6 steps in order, then enters building', () async {
+    await signIn();
     final seen = <OnbStep>[st().oStepKind];
     for (var i = 0; i < 5; i++) {
       flow().next();
@@ -62,8 +129,8 @@ void main() {
     expect(st().oScreen, OnbScreen.building);
   });
 
-  test('back: first step and the OTP screen both return to login', () {
-    flow().skipAuth();
+  test('back: first step and the OTP screen both return to login', () async {
+    await signIn();
     flow().next();
     expect(st().oStep, 1);
     flow().back();
@@ -71,23 +138,16 @@ void main() {
     flow().back();
     expect(st().oScreen, OnbScreen.login);
 
-    flow().submitPhone();
+    flow().setPhone('9876543210');
+    await flow().submitPhone();
     expect(st().oScreen, OnbScreen.otp);
-    flow().back(); // also cancels the pending fake-OTP timers
+    flow().back();
     expect(st().oScreen, OnbScreen.login);
     expect(st().oOtp, '');
   });
 
-  test('verifyOtp is a no-op until all 4 digits are present', () {
-    flow().submitPhone();
-    expect(st().otpComplete, isFalse);
-    flow().verifyOtp();
-    expect(st().oScreen, OnbScreen.otp, reason: 'still waiting for the code');
-    flow().back();
-  });
-
-  test('gender and activity are single-select', () {
-    flow().skipAuth();
+  test('gender and activity are single-select', () async {
+    await signIn();
     flow().setGender('Male');
     flow().setGender('Female');
     expect(st().oGender, 'Female');
@@ -96,8 +156,8 @@ void main() {
     expect(st().oActivity, 'Moderate');
   });
 
-  test('diet / allergy toggle in and out; body fields update', () {
-    flow().skipAuth();
+  test('diet / allergy toggle in and out; body fields update', () async {
+    await signIn();
     flow().toggleDiet('Low sodium');
     flow().toggleDiet('Vegan');
     flow().toggleDiet('Low sodium');
@@ -106,12 +166,10 @@ void main() {
     expect(st().oAllergy, const ['Peanuts']);
     flow().setOther('mustard');
     flow().setUnitW('Lb');
-    flow().setUnitH('inch');
     flow().setWeight('70');
     flow().setHeight('180');
     final s = st();
     expect(s.oUnitW, 'Lb');
-    expect(s.oUnitH, 'inch');
     expect(s.oWeight, '70');
     expect(s.oHeight, '180');
     expect(s.oOther, 'mustard');
@@ -119,105 +177,101 @@ void main() {
 
   test('scanRx / addRx / removeRx manage the prescription list', () {
     flow().scanRx();
-    expect(st().oRx.map((r) => r.name), const ['Telmisartan', 'Metformin']);
+    expect(flow().state.oRx.map((r) => r.name), const ['Telmisartan', 'Metformin']);
     flow().addRx();
-    expect(st().oRx.map((r) => r.name),
+    expect(flow().state.oRx.map((r) => r.name),
         const ['Telmisartan', 'Metformin', 'Atorvastatin']);
     flow().removeRx(1);
-    expect(st().oRx.map((r) => r.name), const ['Telmisartan', 'Atorvastatin']);
+    expect(flow().state.oRx.map((r) => r.name), const ['Telmisartan', 'Atorvastatin']);
   });
 
-  test('summaryRows reflects the collected profile', () {
-    flow().skipAuth();
+  test('startBuilding writes the whole profile to the vault, then -> done',
+      () async {
+    await signIn();
     flow().setGender('Female');
     flow().next();
-    flow().setActivity('Heavy');
-    flow().toggleDiet('High protein');
-    flow().toggleAllergy('Soy');
-    flow().scanRx();
-    final rows =
-        Map.fromEntries(st().summaryRows.map((r) => MapEntry(r.$1, r.$2)));
-    expect(rows['Sex'], 'Female');
-    expect(rows['Activity'], 'Heavy');
-    expect(rows['Preferences'], 'High protein');
-    expect(rows['Avoiding'], 'Soy');
-    expect(rows['Medications'], 'Telmisartan, Metformin');
-    expect(rows['Body'], '72 KG · 174 cm', reason: 'placeholder fallbacks');
+    flow().setActivity('Moderate');
+    flow().next();
+    flow().setWeight('61');
+    flow().setHeight('164');
+    flow().next();
+    flow().toggleDiet('Low sodium');
+    flow().next();
+    flow().toggleAllergy('Tree nuts');
+    flow().setOther('mustard');
+    flow().next();
+    flow().scanRx(); // Telmisartan + Metformin
+    await flow().next(); // last step -> startBuilding()
+
+    expect(st().oScreen, OnbScreen.done);
+    expect(vault.profile!['gender'], 'female');
+    expect(vault.profile!['activity_level'], 'moderate');
+    expect(vault.profile!['diet'], const ['Low sodium']);
+    expect(vault.allergies, const ['Tree nuts', 'mustard']);
+    expect(vault.medications.map((m) => m.name), const ['Telmisartan', 'Metformin']);
+
+    // reaching done does NOT itself flip the router gate — that's the widget's job
+    expect(c.read(onboardingCompleteProvider), isFalse);
   });
 
-  test('restart wipes the machine back to login', () {
-    flow().skipAuth();
+  test('a failed vault write stops on the building screen with an error',
+      () async {
+    vault.failOn = {'health-profile'};
+    await signIn();
+    for (var i = 0; i < 5; i++) {
+      flow().next();
+    }
+    await flow().next(); // -> startBuilding, which fails on the first write
+    expect(st().oScreen, OnbScreen.building);
+    expect(st().oError, contains('health-profile'));
+
+    // retry succeeds once the failure is cleared
+    vault.failOn = const {};
+    await flow().retryBuilding();
+    expect(st().oScreen, OnbScreen.done);
+  });
+
+  test('restart signs out and wipes the machine back to login', () async {
+    await signIn();
     flow().setGender('Male');
     flow().toggleDiet('Vegan');
-    flow().restart();
+    await flow().restart();
     final s = st();
     expect(s.oScreen, OnbScreen.login);
-    expect(s.oStep, 0);
     expect(s.oGender, isNull);
     expect(s.oDiet, isEmpty);
+    expect(c.read(authTokenProvider), isNull);
   });
 
-  testWidgets('submitPhone runs the fake OTP autofill', (tester) async {
+  test('is fully independent of the main-app machine', () async {
+    await signIn();
+    flow().setActivity('Moderate');
+    expect(c.read(mainAppProvider).screen, MainScreen.home);
+
+    c.read(mainAppProvider.notifier).goTab(MainScreen.meds);
+    expect(st().oScreen, OnbScreen.steps);
+    expect(st().oActivity, 'Moderate');
+    expect(c.read(onboardingCompleteProvider), isFalse);
+  });
+
+  testWidgets('a dev-code backend stages the real code into the boxes',
+      (tester) async {
     await tester.pumpWidget(const SizedBox());
-    final cc = ProviderContainer();
+    final cc = ProviderContainer(
+        overrides: fakeBackendOverrides(auth: FakeAuthApi(devCode: '246810')));
     addTearDown(cc.dispose);
     final f = cc.read(onboardingFlowProvider.notifier);
     OnboardingState s() => cc.read(onboardingFlowProvider);
 
-    f.submitPhone();
+    f.setPhone('9876543210');
+    await f.submitPhone();
     expect(s().oScreen, OnbScreen.otp);
     expect(s().oOtp, '');
 
-    await tester.pump(const Duration(milliseconds: 950));
-    expect(s().oOtp, '4');
-
-    await tester.pump(const Duration(milliseconds: 1000)); // ~1950ms elapsed
-    expect(s().oOtp, '4192');
+    await tester.pump(const Duration(milliseconds: 700));
+    expect(s().oOtp.isNotEmpty, isTrue);
+    await tester.pump(const Duration(seconds: 1));
+    expect(s().oOtp, '246810');
     expect(s().otpComplete, isTrue);
-
-    f.verifyOtp();
-    expect(s().oScreen, OnbScreen.steps);
-    expect(s().oStep, 0);
-  });
-
-  testWidgets('last step -> build() progresses to done via timers',
-      (tester) async {
-    await tester.pumpWidget(const SizedBox());
-    final cc = ProviderContainer();
-    addTearDown(cc.dispose);
-    final f = cc.read(onboardingFlowProvider.notifier);
-    OnboardingState s() => cc.read(onboardingFlowProvider);
-
-    f.skipAuth();
-    for (var i = 0; i < 5; i++) {
-      f.next();
-    }
-    expect(s().oStep, 5);
-    f.next(); // step 5 -> startBuilding()
-    expect(s().oScreen, OnbScreen.building);
-    expect(s().oBuild, 0);
-
-    await tester.pump(const Duration(milliseconds: 800));
-    expect(s().oBuild, 1);
-    await tester.pump(const Duration(milliseconds: 1200)); // ~2000ms
-    expect(s().oBuild, 3);
-    await tester.pump(const Duration(milliseconds: 700)); // ~2700ms
-    expect(s().oScreen, OnbScreen.done);
-
-    // reaching done does NOT itself flip the router gate - that is the
-    // widget's job (OnboardingScreen.onComplete).
-    expect(cc.read(onboardingCompleteProvider), isFalse);
-  });
-
-  test('is fully independent of the main-app machine', () {
-    flow().skipAuth();
-    flow().setActivity('Moderate');
-    expect(c.read(mainAppProvider).screen, MainScreen.home,
-        reason: 'main-app machine untouched by onboarding');
-
-    c.read(mainAppProvider.notifier).goTab(MainScreen.meds);
-    expect(st().oScreen, OnbScreen.steps, reason: 'onboarding state not disturbed');
-    expect(st().oActivity, 'Moderate');
-    expect(c.read(onboardingCompleteProvider), isFalse);
   });
 }

@@ -21,6 +21,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/fake_backend.dart';
+
 void _step(String s) {
   // ignore: avoid_print
   print('  ▶ $s');
@@ -33,11 +35,13 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
-    final container = ProviderContainer(overrides: [
-      trendsProvider.overrideWith((ref) async => const TrendsLoaded(Trends(
-          timezone: 'UTC', totalScans: 0, dietHealthScore: 0,
-          deltaSevenDay: 0, trend: 'steady'))),
-    ]);
+    final container = ProviderContainer(
+      overrides: fakeBackendOverrides(
+        trends: const TrendsLoaded(Trends(
+            timezone: 'UTC', totalScans: 0, dietHealthScore: 0,
+            deltaSevenDay: 0, trend: 'steady')),
+      ),
+    );
     addTearDown(container.dispose);
     MainAppState st() => container.read(mainAppProvider);
 

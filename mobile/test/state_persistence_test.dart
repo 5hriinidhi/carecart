@@ -6,6 +6,7 @@
 //   flutter test test/state_persistence_test.dart -r expanded
 
 import 'package:carecart/src/app.dart';
+import 'package:carecart/src/core/analytics_api.dart';
 import 'package:carecart/src/features/app_shell.dart';
 import 'package:carecart/src/features/trends/trends_screen.dart';
 import 'package:carecart/src/state/main_app_state.dart';
@@ -14,6 +15,18 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/fake_backend.dart';
+
+/// login -> otp -> steps, through the real flow against in-memory fakes.
+Future<void> _signIn(ProviderContainer c, WidgetTester tester) async {
+  final f = c.read(onboardingFlowProvider.notifier);
+  f.setPhone('9876543210');
+  await f.submitPhone();
+  f.setOtp('123456');
+  await f.verifyOtp();
+  await tester.pumpAndSettle();
+}
+
 void main() {
   testWidgets('onboarding progress survives rotation + background/resume',
       (tester) async {
@@ -21,7 +34,8 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+        overrides: fakeBackendOverrides(auth: FakeAuthApi(devCode: '123456')));
     addTearDown(container.dispose);
     final onbNotifier = container.read(onboardingFlowProvider.notifier);
     OnboardingState onb() => container.read(onboardingFlowProvider);
@@ -32,12 +46,13 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
+    await _signIn(container, tester);
+
     // walk a few steps into the wizard and record some choices
-    onbNotifier.skipAuth();
     onbNotifier.setGender('Female');
-    onbNotifier.next(); // -> activity
+    await onbNotifier.next(); // -> activity
     onbNotifier.setActivity('Heavy');
-    onbNotifier.next(); // -> body
+    await onbNotifier.next(); // -> body
     await tester.pumpAndSettle();
 
     expect(onb().oScreen, OnbScreen.steps);
@@ -58,7 +73,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(onb().oStep, 2);
 
-    // ---- background then resume (stepping through the valid lifecycle chain) ----
+    // ---- background then resume ----
     for (final st in const [
       AppLifecycleState.inactive,
       AppLifecycleState.hidden,
@@ -88,7 +103,14 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+      overrides: fakeBackendOverrides(
+        auth: FakeAuthApi(devCode: '123456'),
+        trends: const TrendsLoaded(Trends(
+            timezone: 'UTC', totalScans: 0, dietHealthScore: 0,
+            deltaSevenDay: 0, trend: 'steady')),
+      ),
+    );
     addTearDown(container.dispose);
     MainAppState app() => container.read(mainAppProvider);
 
@@ -98,19 +120,19 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
-    // fast-forward onboarding to done, then hand off to /app
+    await _signIn(container, tester);
+
+    // fast-forward the wizard to done, then hand off to /app
     final onb = container.read(onboardingFlowProvider.notifier);
-    onb.skipAuth();
     for (var i = 0; i < 6; i++) {
-      onb.next();
+      await onb.next();
     }
-    await tester.pump(const Duration(milliseconds: 2700)); // build -> done
-    await tester.pump(const Duration(milliseconds: 1600)); // auto-handoff
+    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 1600)); // auto-handoff beat
     await tester.pumpAndSettle();
 
     expect(find.byType(MainAppShell), findsOneWidget);
 
-    // go to the Trends tab and scroll it
     container.read(mainAppProvider.notifier).goTab(MainScreen.trends);
     await tester.pumpAndSettle();
     expect(app().tab, MainScreen.trends);
@@ -121,7 +143,6 @@ void main() {
     final offset = tester.state<ScrollableState>(scrollable).position.pixels;
     expect(offset, greaterThan(80));
 
-    // ---- rotate ----
     tester.view.physicalSize = const Size(920, 430);
     await tester.pumpAndSettle();
     expect(app().screen, MainScreen.trends, reason: 'tab kept across rotation');
@@ -131,24 +152,23 @@ void main() {
     tester.view.physicalSize = const Size(430, 920);
     await tester.pumpAndSettle();
     expect(app().tab, MainScreen.trends);
-    // IndexedStack keeps the tab mounted -> scroll position preserved
     expect(tester.state<ScrollableState>(scrollable).position.pixels,
         moreOrLessEquals(offset, epsilon: 1),
         reason: 'Trends scroll offset survived rotation');
   });
 
   test('core providers are not autoDispose (state outlives listener removal)', () {
-    final c = ProviderContainer();
+    final c = ProviderContainer(overrides: fakeBackendOverrides());
     addTearDown(c.dispose);
 
     c.read(mainAppProvider.notifier).goTab(MainScreen.meds);
-    c.read(onboardingFlowProvider.notifier).skipAuth();
+    c.read(onboardingFlowProvider.notifier).setPhone('9876500000');
 
     // a one-shot read adds then drops a listener; autoDispose would reset here
     c.read(mainAppProvider);
     c.read(onboardingFlowProvider);
 
     expect(c.read(mainAppProvider).tab, MainScreen.meds);
-    expect(c.read(onboardingFlowProvider).oScreen, OnbScreen.steps);
+    expect(c.read(onboardingFlowProvider).oPhone, '9876500000');
   });
 }

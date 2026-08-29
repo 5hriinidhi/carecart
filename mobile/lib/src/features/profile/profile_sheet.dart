@@ -9,8 +9,12 @@ import '../../fixtures/demo_data.dart';
 /// Use [ProfileSheet.show] in the real flow; [ProfileSheetPreview] renders it
 /// full-screen (scrim + panel) for the debug gallery.
 class ProfileSheet extends StatelessWidget {
-  const ProfileSheet({super.key, this.onPick});
+  const ProfileSheet({super.key, this.onPick, this.onDeleteAccount});
   final void Function(DemoProfile profile)? onPick;
+
+  /// When set, a "Delete account & all data" control is shown. Wired in the app
+  /// shell to `DELETE /me/account` (Phase 3.4) + local sign-out.
+  final Future<void> Function()? onDeleteAccount;
 
   static Future<void> show(BuildContext context) => showModalBottomSheet(
         context: context,
@@ -56,7 +60,74 @@ class ProfileSheet extends StatelessWidget {
             _ProfileRow(profile: kProfiles[i], onTap: () => onPick?.call(kProfiles[i])),
             if (i != kProfiles.length - 1) const SizedBox(height: 9),
           ],
+          if (onDeleteAccount != null) ...[
+            const SizedBox(height: 18),
+            _DeleteAccountButton(onConfirm: onDeleteAccount!),
+          ],
         ],
+      ),
+    );
+  }
+}
+
+class _DeleteAccountButton extends StatefulWidget {
+  const _DeleteAccountButton({required this.onConfirm});
+  final Future<void> Function() onConfirm;
+
+  @override
+  State<_DeleteAccountButton> createState() => _DeleteAccountButtonState();
+}
+
+class _DeleteAccountButtonState extends State<_DeleteAccountButton> {
+  bool _busy = false;
+
+  Future<void> _run() async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (dctx) => AlertDialog(
+        backgroundColor: Cc.paper,
+        title: const Text('Delete everything?'),
+        content: const Text(
+          'This permanently removes your profile, medications, scan history and '
+          'trends from the server. It cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dctx).pop(false),
+            child: const Text('Keep my data'),
+          ),
+          TextButton(
+            key: const Key('profile-delete-confirm'),
+            onPressed: () => Navigator.of(dctx).pop(true),
+            child: const Text('Delete', style: TextStyle(color: Cc.avoid)),
+          ),
+        ],
+      ),
+    );
+    if (ok != true) return;
+    setState(() => _busy = true);
+    await widget.onConfirm();
+    if (mounted) setState(() => _busy = false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      key: const Key('profile-delete-account'),
+      onTap: _busy ? null : _run,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: const Color(0xFFF7E2D5),
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Text(
+          _busy ? 'Deleting…' : 'Delete account & all data',
+          style: CcText.body.copyWith(
+              color: const Color(0xFF8A4526), fontWeight: FontWeight.w600),
+        ),
       ),
     );
   }
@@ -137,9 +208,11 @@ class _ProfileRow extends StatelessWidget {
 /// app shell, as the `state.showProfiles` overlay. Tapping the scrim calls
 /// [onDismiss].
 class ProfileSheetOverlay extends StatelessWidget {
-  const ProfileSheetOverlay({super.key, this.onDismiss, this.onPick});
+  const ProfileSheetOverlay(
+      {super.key, this.onDismiss, this.onPick, this.onDeleteAccount});
   final VoidCallback? onDismiss;
   final void Function(DemoProfile profile)? onPick;
+  final Future<void> Function()? onDeleteAccount;
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +227,10 @@ class ProfileSheetOverlay extends StatelessWidget {
         ),
         Align(
           alignment: Alignment.bottomCenter,
-          child: SafeArea(child: ProfileSheet(onPick: onPick)),
+          child: SafeArea(
+            child: ProfileSheet(
+                onPick: onPick, onDeleteAccount: onDeleteAccount),
+          ),
         ),
       ],
     );

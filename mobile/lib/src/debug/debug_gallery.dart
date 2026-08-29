@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/analytics_api.dart';
+import '../core/history_api.dart';
 import '../core/nudges_api.dart';
 import '../core/text.dart';
+import '../core/vault_api.dart';
 import '../core/theme.dart';
 import '../core/widgets.dart';
 import '../features/analyzing/analyzing_screen.dart';
@@ -75,6 +77,59 @@ final _demoTrends = TrendsLoaded(Trends(
   monthly: const [],
 ));
 
+/// Synthetic GET /history payload for the standalone History preview.
+final _demoHistory = HistoryLoaded(HistoryPage(
+  total: 3,
+  limit: 50,
+  offset: 0,
+  hasMore: false,
+  items: [
+    ScanHistoryEntry(
+      id: '3',
+      productName: 'Sea-Salt Crackers',
+      score: 52,
+      tier: 'caution',
+      scannedAt: DateTime.now().toUtc().subtract(const Duration(hours: 2)),
+      keyReasons: const [
+        HistoryReason(
+            kind: 'condition_ceiling',
+            severity: 'high',
+            title: 'Sodium over your per-serving ceiling',
+            factor: 'sodium'),
+      ],
+    ),
+    ScanHistoryEntry(
+      id: '2',
+      productName: 'Cashew Energy Bar',
+      score: 0,
+      tier: 'avoid',
+      hardStop: true,
+      scannedAt: DateTime.now().toUtc().subtract(const Duration(hours: 5)),
+      keyReasons: const [
+        HistoryReason(
+            kind: 'allergen',
+            severity: 'high',
+            title: 'Contains tree nuts — you told us you are allergic',
+            factor: 'nut_allergen'),
+      ],
+    ),
+    ScanHistoryEntry(
+      id: '1',
+      productName: 'Rolled Oats',
+      score: 96,
+      tier: 'safe',
+      scannedAt: DateTime.now().toUtc().subtract(const Duration(days: 1, hours: 1)),
+    ),
+  ],
+));
+
+/// Synthetic GET /me/medications payload for the standalone Meds preview.
+final _demoMeds = MedicationsLoaded(const [
+  Medication(id: '1', name: 'Telmisartan', dosage: '40 mg'),
+  Medication(id: '2', name: 'Metformin', dosage: '500 mg'),
+  Medication(id: '3', name: 'Warfarin', dosage: '5 mg'),
+]);
+
 final debugScreens = <String, DebugEntry>{
   'onboarding': (
     label: 'Onboarding flow (sign-in → 6 steps → done)',
@@ -95,8 +150,20 @@ final debugScreens = <String, DebugEntry>{
         child: const TrendsScreen()),
     navTab: 'trends'
   ),
-  'history': (label: 'History', build: (_) => const HistoryScreen(), navTab: 'history'),
-  'meds': (label: 'Meds', build: (_) => const MedsScreen(), navTab: 'meds'),
+  'history': (
+    label: 'History',
+    build: (_) => ProviderScope(
+        overrides: [historyPageProvider.overrideWith((ref) async => _demoHistory)],
+        child: const HistoryScreen()),
+    navTab: 'history'
+  ),
+  'meds': (
+    label: 'Meds',
+    build: (_) => ProviderScope(
+        overrides: [medicationsProvider.overrideWith((ref) async => _demoMeds)],
+        child: const MedsScreen()),
+    navTab: 'meds'
+  ),
   'search': (label: 'Search', build: (_) => const SearchScreen(), navTab: null),
   'search-empty': (label: 'Search — no results', build: (_) => const SearchScreen(showEmpty: true), navTab: null),
   'nudge': (

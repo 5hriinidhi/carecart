@@ -147,6 +147,8 @@ class _LoginView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final flow = ref.read(onboardingFlowProvider.notifier);
+    final busy = ref.watch(onboardingFlowProvider.select((s) => s.oBusy));
+    final error = ref.watch(onboardingFlowProvider.select((s) => s.oError));
     return CcScreen(
       background: Cc.paper,
       child: SingleChildScrollView(
@@ -156,7 +158,7 @@ class _LoginView extends ConsumerWidget {
             const SizedBox(height: 24),
             const _Brand(),
             const SizedBox(height: 44),
-            _LoginForm(flow: flow),
+            _LoginForm(flow: flow, busy: busy, error: error),
           ],
         ),
       ),
@@ -242,8 +244,10 @@ class _Brand extends StatelessWidget {
 }
 
 class _LoginForm extends StatelessWidget {
-  const _LoginForm({required this.flow});
+  const _LoginForm({required this.flow, this.busy = false, this.error});
   final OnboardingFlow flow;
+  final bool busy;
+  final String? error;
 
   @override
   Widget build(BuildContext context) {
@@ -291,12 +295,18 @@ class _LoginForm extends StatelessWidget {
             ],
           ),
         ),
+        if (error != null) ...[
+          const SizedBox(height: 10),
+          Text(error!,
+              key: const Key('onb-login-error'),
+              style: _sans(12, color: Cc.avoid, height: 1.4)),
+        ],
         const SizedBox(height: 11),
         _BigButton(
-          label: 'Continue',
-          bg: Cc.accent,
-          fg: Cc.inkSoft,
-          onTap: flow.submitPhone,
+          label: busy ? 'Sending code…' : 'Continue',
+          bg: busy ? _dim : Cc.accent,
+          fg: busy ? _faint : Cc.inkSoft,
+          onTap: busy ? null : flow.submitPhone,
         ),
         const _OrDivider(),
         _SocialButton(
@@ -320,13 +330,34 @@ class _LoginForm extends StatelessWidget {
 // otp
 // ---------------------------------------------------------------------------
 
-class _OtpView extends ConsumerWidget {
+class _OtpView extends ConsumerStatefulWidget {
   const _OtpView();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_OtpView> createState() => _OtpViewState();
+}
+
+class _OtpViewState extends ConsumerState<_OtpView> {
+  final _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final flow = ref.read(onboardingFlowProvider.notifier);
     final s = ref.watch(onboardingFlowProvider);
+
+    // keep the field in sync when the dev-code auto-fills the digits
+    if (_controller.text != s.oOtp) {
+      _controller.value = TextEditingValue(
+        text: s.oOtp,
+        selection: TextSelection.collapsed(offset: s.oOtp.length),
+      );
+    }
 
     return CcScreen(
       background: Cc.paper,
@@ -350,35 +381,72 @@ class _OtpView extends ConsumerWidget {
             Text('Enter the code', style: _bric(26, FontWeight.w700, height: 1.18)),
             const SizedBox(height: 9),
             Text(
-              "Sent to +91 ${s.oPhoneShown}. It'll fill in by itself in a second.",
+              s.oDevCode != null
+                  ? "Sent to +91 ${s.oPhoneShown}. It'll fill in by itself in a second."
+                  : "Sent to +91 ${s.oPhoneShown}. Enter the $kOtpLength-digit code.",
               style: _sans(13.5, color: Cc.muted, height: 1.55),
             ),
-            const SizedBox(height: 26),
+            const SizedBox(height: 22),
             Row(
               children: [
-                for (var i = 0; i < 4; i++) ...[
+                for (var i = 0; i < kOtpLength; i++) ...[
                   Expanded(
                     child: _OtpBox(
                       digit: i < s.oOtp.length ? s.oOtp[i] : '',
                       active: i == s.oOtp.length,
                     ),
                   ),
-                  if (i < 3) const SizedBox(width: 11),
+                  if (i < kOtpLength - 1) const SizedBox(width: 8),
                 ],
               ],
             ),
-            const SizedBox(height: 18),
-            GestureDetector(
-              onTap: flow.resendOtp,
-              child: Text('Resend in 0:24',
-                  style: _sans(12.5, color: Cc.olive)),
+            const SizedBox(height: 14),
+            TextField(
+              key: const Key('onb-otp-field'),
+              controller: _controller,
+              keyboardType: TextInputType.number,
+              maxLength: kOtpLength,
+              onChanged: flow.setOtp,
+              onSubmitted: (_) => flow.verifyOtp(),
+              style: _sans(15),
+              decoration: InputDecoration(
+                counterText: '',
+                isCollapsed: true,
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+                hintText: 'Type the code',
+                hintStyle: _sans(14, color: _faint),
+                filled: true,
+                fillColor: Cc.paperRaised,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(color: _hair),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(color: _hair),
+                ),
+              ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 10),
+            GestureDetector(
+              onTap: s.oBusy ? null : flow.resendOtp,
+              child: Text('Resend code', style: _sans(12.5, color: Cc.olive)),
+            ),
+            if (s.oError != null) ...[
+              const SizedBox(height: 12),
+              Text(s.oError!,
+                  key: const Key('onb-otp-error'),
+                  style: _sans(12, color: Cc.avoid, height: 1.4)),
+            ],
+            const SizedBox(height: 28),
             _BigButton(
-              label: s.otpComplete ? 'Verified — continue' : 'Waiting for the code…',
-              bg: s.otpComplete ? Cc.accent : _dim,
-              fg: s.otpComplete ? Cc.inkSoft : _faint,
-              onTap: s.otpComplete ? flow.verifyOtp : null,
+              label: s.oBusy
+                  ? 'Verifying…'
+                  : (s.otpComplete ? 'Verified — continue' : 'Waiting for the code'),
+              bg: (s.otpComplete && !s.oBusy) ? Cc.accent : _dim,
+              fg: (s.otpComplete && !s.oBusy) ? Cc.inkSoft : _faint,
+              onTap: (s.otpComplete && !s.oBusy) ? flow.verifyOtp : null,
             ),
           ],
         ),
@@ -1170,7 +1238,9 @@ class _BuildingView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final flow = ref.read(onboardingFlowProvider.notifier);
     final oBuild = ref.watch(onboardingFlowProvider.select((s) => s.oBuild));
+    final oError = ref.watch(onboardingFlowProvider.select((s) => s.oError));
 
     return CcScreen(
       background: Cc.paper,
@@ -1184,22 +1254,34 @@ class _BuildingView extends ConsumerWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const SizedBox(
-                      width: 74,
-                      height: 74,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 5,
-                        valueColor: AlwaysStoppedAnimation<Color>(Cc.olive),
-                        backgroundColor: Color(0x2E63753F),
+                    if (oError == null)
+                      const SizedBox(
+                        width: 74,
+                        height: 74,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 5,
+                          valueColor: AlwaysStoppedAnimation<Color>(Cc.olive),
+                          backgroundColor: Color(0x2E63753F),
+                        ),
+                      )
+                    else
+                      Container(
+                        width: 74,
+                        height: 74,
+                        alignment: Alignment.center,
+                        decoration: const BoxDecoration(
+                            color: _peach, shape: BoxShape.circle),
+                        child: const Icon(Icons.cloud_off_rounded,
+                            size: 30, color: _peachInk),
                       ),
-                    ),
                     const SizedBox(height: 28),
-                    Text('Building your profile',
+                    Text(oError == null ? 'Building your profile' : "That didn't save",
                         style: _bric(20, FontWeight.w700, height: 1.25)),
                     const SizedBox(height: 6),
                     Text(
-                      'Setting your ceilings and loading the interaction rules '
-                      'for your medications.',
+                      oError ??
+                          'Setting your ceilings and loading the interaction '
+                              'rules for your medications.',
                       textAlign: TextAlign.center,
                       style: _sans(12.5, color: Cc.muted, height: 1.5),
                     ),
@@ -1210,9 +1292,18 @@ class _BuildingView extends ConsumerWidget {
                         child: _BuildRow(
                           label: _buildSteps[i],
                           done: i < oBuild,
-                          current: i == oBuild,
+                          current: i == oBuild && oError == null,
                         ),
                       ),
+                    if (oError != null) ...[
+                      const SizedBox(height: 8),
+                      _BigButton(
+                        label: 'Try again',
+                        bg: Cc.accent,
+                        fg: Cc.inkSoft,
+                        onTap: flow.retryBuilding,
+                      ),
+                    ],
                   ],
                 ),
               ),

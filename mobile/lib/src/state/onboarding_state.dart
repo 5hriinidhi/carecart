@@ -3,6 +3,10 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/auth_api.dart';
+import '../core/auth_repository.dart';
+import '../core/vault_api.dart';
+
 /// SECOND, independent state machine — the sign-in + 6-step profile wizard
 /// (turn `2a` in CareCart App.dc.html). Every key is `o`-prefixed and lives in
 /// its own provider so it can never collide with the main-app machine
@@ -10,6 +14,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 ///
 /// `onboardingCompleteProvider` (the router gate) is a different thing again —
 /// this machine flips it once, on reaching `done`, to hand off to the app.
+///
+/// Phase 6.1: this now talks to the real backend — `POST /auth/request-otp`,
+/// `POST /auth/verify-otp`, then `PUT /me/health-profile` + `POST /me/allergies`
+/// + `POST /me/medications` during the "building" step. The staged timers that
+/// used to fake all of this are gone; the only cosmetic delay left is a short
+/// beat on the `done` screen (handled in the widget).
 
 enum OnbScreen { login, otp, steps, building, done }
 
@@ -23,6 +33,9 @@ const kOnbSteps = [
   OnbStep.allergies,
   OnbStep.meds,
 ];
+
+/// Digits in the SMS code (`settings.otp_length` on the backend).
+const kOtpLength = 6;
 
 @immutable
 class RxEntry {
@@ -50,12 +63,15 @@ class OnboardingState {
     this.oOther = '',
     this.oRx = const [],
     this.oBuild = 0,
+    this.oBusy = false,
+    this.oError,
+    this.oDevCode,
   });
 
   final OnbScreen oScreen;
   final int oStep; // 0..5
   final String oPhone;
-  final String oOtp; // 0..4 digits, auto-filled by fake OTP
+  final String oOtp; // up to kOtpLength digits
   final String? oGender; // Male | Female | Prefer not to say
   final String? oActivity; // Sedentary | Moderate | Heavy
   final String oUnitW; // KG | Lb
@@ -68,11 +84,29 @@ class OnboardingState {
   final List<RxEntry> oRx;
   final int oBuild; // 0..4 build-step progress
 
+  /// A network call is in flight (disables the primary button).
+  final bool oBusy;
+
+  /// Last error to show inline (login / OTP / building). Cleared on the next
+  /// action.
+  final String? oError;
+
+  /// The SMS code echoed by a dev / test backend so local + CI runs work with
+  /// no SMS provider. Null against a production backend — the user types it.
+  final String? oDevCode;
+
   OnbStep get oStepKind => kOnbSteps[oStep];
   int get oStepNo => oStep + 1;
   double get oBarFraction => (oStep + 1) / kOnbSteps.length;
-  bool get otpComplete => oOtp.length == 4;
+  bool get otpComplete => oOtp.length == kOtpLength;
   String get oPhoneShown => oPhone.isEmpty ? '98765 43210' : oPhone;
+
+  /// Phone in E.164 for the API (UI shows a +91 prefix and a national number).
+  String get oPhoneE164 {
+    final digits = oPhone.replaceAll(RegExp(r'\D'), '');
+    if (digits.isEmpty) return '';
+    return digits.startsWith('91') && digits.length > 10 ? '+$digits' : '+91$digits';
+  }
 
   /// The rows shown on the `done` screen (prototype `summaryRows`).
   List<(String, String)> get summaryRows {
@@ -105,6 +139,9 @@ class OnboardingState {
     String? oOther,
     List<RxEntry>? oRx,
     int? oBuild,
+    bool? oBusy,
+    Object? oError = _sentinel,
+    Object? oDevCode = _sentinel,
   }) {
     return OnboardingState(
       oScreen: oScreen ?? this.oScreen,
@@ -123,20 +160,20 @@ class OnboardingState {
       oOther: oOther ?? this.oOther,
       oRx: oRx ?? this.oRx,
       oBuild: oBuild ?? this.oBuild,
+      oBusy: oBusy ?? this.oBusy,
+      oError: identical(oError, _sentinel) ? this.oError : oError as String?,
+      oDevCode:
+          identical(oDevCode, _sentinel) ? this.oDevCode : oDevCode as String?,
     );
   }
 
   static const _sentinel = Object();
 }
 
-/// The wizard controller. Methods mirror the prototype handlers
-/// (`goOtp`, `oOtpNext`, `oSkipAuth`, `oBack`, `oNext`, `build`, `toggleIn`,
-/// `oScanRx`, `oAddRx`, `oRestart`). OTP verification and the "building"
-/// progression are faked with local timers, exactly like the prototype's
-/// `setTimeout` chain - there is no backend yet.
+/// The wizard controller. Sign-in and profile writes are real HTTP calls now;
+/// step navigation and selection are still local.
 class OnboardingFlow extends Notifier<OnboardingState> {
   final List<Timer> _timers = [];
-  int _gen = 0; // bumped on every phase change; stale timer callbacks bail
 
   @override
   OnboardingState build() {
@@ -151,54 +188,86 @@ class OnboardingFlow extends Notifier<OnboardingState> {
     _timers.clear();
   }
 
-  void _phase(void Function() apply) {
-    _cancelTimers();
-    _gen++;
-    apply();
-  }
-
-  /// schedule [fn] after [ms]; it only runs if no newer phase started meanwhile.
-  void _later(int ms, void Function() fn) {
-    final gen = _gen;
-    _timers.add(Timer(Duration(milliseconds: ms), () {
-      if (gen == _gen) fn();
-    }));
-  }
-
   // ---- login ----
   void setPhone(String v) => state = state.copyWith(oPhone: v);
 
-  /// prototype `goOtp` - move to the OTP screen and fake the code arriving.
-  void submitPhone() {
-    _phase(() => state = state.copyWith(oScreen: OnbScreen.otp, oOtp: ''));
-    const fills = ['4', '41', '419', '4192'];
-    for (var i = 0; i < fills.length; i++) {
-      _later(900 + i * 260, () => state = state.copyWith(oOtp: fills[i]));
+  /// `POST /auth/request-otp` → move to the OTP screen. A dev / test backend
+  /// echoes the code, which we stage into the boxes so local + CI runs don't
+  /// need an SMS. Against production the user types it.
+  Future<void> submitPhone() async {
+    if (state.oBusy) return;
+    if (state.oPhoneE164.length < 12) {
+      state = state.copyWith(oError: 'Enter your 10-digit mobile number.');
+      return;
+    }
+    state = state.copyWith(oBusy: true, oError: null);
+    final res = await ref.read(authApiProvider).requestOtp(state.oPhoneE164);
+    _cancelTimers();
+    switch (res) {
+      case OtpRequested(:final devCode):
+        state = state.copyWith(
+          oScreen: OnbScreen.otp,
+          oOtp: '',
+          oBusy: false,
+          oError: null,
+          oDevCode: devCode,
+        );
+        if (devCode != null && devCode.length == kOtpLength) {
+          // stage the real code in one digit at a time — same feel as before,
+          // but it's the code the backend will actually accept.
+          for (var i = 1; i <= devCode.length; i++) {
+            _timers.add(Timer(Duration(milliseconds: 500 + i * 120), () {
+              if (state.oScreen == OnbScreen.otp) {
+                state = state.copyWith(oOtp: devCode.substring(0, i));
+              }
+            }));
+          }
+        }
+      case OtpRequestFailed(:final message):
+        state = state.copyWith(oBusy: false, oError: message);
     }
   }
 
-  /// prototype `oSkipAuth` on the login screen - straight to the profile steps.
-  void skipAuth() =>
-      _phase(() => state = state.copyWith(oScreen: OnbScreen.steps, oStep: 0));
+  /// No real social auth yet — nudge the user to the phone flow.
+  void skipAuth() => state = state.copyWith(
+      oError: 'Social sign-in is coming soon — sign in with your phone number.');
 
   // ---- otp ----
-  /// prototype `oOtpNext` - only advances once the 4 digits have "arrived".
-  void verifyOtp() {
-    if (!state.otpComplete) return;
-    _phase(() => state = state.copyWith(oScreen: OnbScreen.steps, oStep: 0));
+  void setOtp(String v) {
+    final digits = v.replaceAll(RegExp(r'\D'), '');
+    state = state.copyWith(
+      oOtp: digits.length > kOtpLength ? digits.substring(0, kOtpLength) : digits,
+      oError: null,
+    );
+  }
+
+  /// `POST /auth/verify-otp` → store the token pair → profile steps.
+  Future<void> verifyOtp() async {
+    if (state.oBusy || !state.otpComplete) return;
+    _cancelTimers(); // stop the dev-code stagger — we have the full code now
+    state = state.copyWith(oBusy: true, oError: null);
+    final res =
+        await ref.read(authApiProvider).verifyOtp(state.oPhoneE164, state.oOtp);
+    switch (res) {
+      case OtpVerified(:final session):
+        await ref.read(authControllerProvider).signIn(session);
+        state = state.copyWith(
+            oScreen: OnbScreen.steps, oStep: 0, oBusy: false, oError: null);
+      case OtpVerifyFailed(:final message):
+        state = state.copyWith(oBusy: false, oOtp: '', oError: message);
+    }
   }
 
   void resendOtp() => submitPhone();
 
   // ---- steps ----
-  /// prototype `oBack`: from OTP or the first step -> back to login,
-  /// otherwise step back one.
   void back() {
     switch (state.oScreen) {
       case OnbScreen.otp:
-        _phase(() => state = state.copyWith(oScreen: OnbScreen.login, oOtp: ''));
+        _cancelTimers();
+        state = state.copyWith(oScreen: OnbScreen.login, oOtp: '', oError: null);
       case OnbScreen.steps when state.oStep == 0:
-        _phase(() => state = state.copyWith(oScreen: OnbScreen.login));
+        state = state.copyWith(oScreen: OnbScreen.login);
       case OnbScreen.steps:
         state = state.copyWith(oStep: state.oStep - 1);
       case OnbScreen.login:
@@ -208,20 +277,17 @@ class OnboardingFlow extends Notifier<OnboardingState> {
     }
   }
 
-  /// prototype `oNext`: last step -> build(), else next step.
-  void next() {
+  /// last step -> build(), else next step.
+  Future<void> next() async {
     if (state.oScreen != OnbScreen.steps) return;
     if (state.oStep == kOnbSteps.length - 1) {
-      startBuilding();
+      await startBuilding();
     } else {
       state = state.copyWith(oStep: state.oStep + 1);
     }
   }
 
-  /// "Skip for now" on the steps header - build the profile with what we have.
-  /// (The prototype reuses `oSkipAuth` here, which just resets to step 0; that
-  /// is a copy-paste artefact, so we do the sensible thing instead.)
-  void skipRemainingSteps() => startBuilding();
+  Future<void> skipRemainingSteps() => startBuilding();
 
   void setGender(String g) => state = state.copyWith(oGender: g);
   void setActivity(String a) => state = state.copyWith(oActivity: a);
@@ -238,33 +304,79 @@ class OnboardingFlow extends Notifier<OnboardingState> {
   static List<String> _toggle(List<String> list, String v) =>
       list.contains(v) ? [for (final x in list) if (x != v) x] : [...list, v];
 
-  /// prototype `oScanRx` - pretend the scanner read two prescriptions.
+  /// prototype `oScanRx` — kept as a quick "the scanner found these" shortcut so
+  /// the wizard has content to save. A real label scan lives on the meds screen.
   void scanRx() => state = state.copyWith(oRx: const [
         RxEntry('Telmisartan', '40 mg', 'morning'),
         RxEntry('Metformin', '500 mg', 'twice daily'),
       ]);
 
-  /// prototype `oAddRx` - pretend the user typed one in.
   void addRx() => state = state.copyWith(
       oRx: [...state.oRx, const RxEntry('Atorvastatin', '10 mg', 'night')]);
 
   void removeRx(int i) =>
       state = state.copyWith(oRx: [for (var j = 0; j < state.oRx.length; j++) if (j != i) state.oRx[j]]);
 
-  // ---- building ----
-  /// prototype `build()` - fake the profile-build progression, then -> done.
-  void startBuilding() {
-    _phase(() =>
-        state = state.copyWith(oScreen: OnbScreen.building, oBuild: 0));
-    _later(700, () => state = state.copyWith(oBuild: 1));
-    _later(1350, () => state = state.copyWith(oBuild: 2));
-    _later(1950, () => state = state.copyWith(oBuild: 3));
-    _later(2600, () => state = state.copyWith(oScreen: OnbScreen.done));
+  // ---- building: the real profile writes ----
+  double? _num(String s) => s.trim().isEmpty ? null : double.tryParse(s.trim());
+
+  /// Write the profile to the vault, one visible step at a time, then -> done.
+  /// A failure surfaces on this screen with a Retry; nothing half-written blocks
+  /// the user (the app also lets them edit everything later).
+  Future<void> startBuilding() async {
+    state = state.copyWith(oScreen: OnbScreen.building, oBuild: 0, oError: null);
+    final vault = ref.read(vaultApiProvider);
+
+    VaultWrite step = await vault.putHealthProfile(
+      gender: state.oGender?.toLowerCase(),
+      activityLevel: state.oActivity?.toLowerCase(),
+      weight: _num(state.oWeight),
+      height: _num(state.oHeight),
+      weightUnit: state.oUnitW.toLowerCase(),
+      heightUnit: state.oUnitH,
+      diet: state.oDiet,
+    );
+    if (step case VaultError(:final message)) {
+      state = state.copyWith(oError: message);
+      return;
+    }
+    state = state.copyWith(oBuild: 1);
+
+    final allergens = [...state.oAllergy, if (state.oOther.trim().isNotEmpty) state.oOther.trim()];
+    for (final a in allergens) {
+      step = await vault.addAllergy(a);
+      if (step case VaultError(:final message)) {
+        state = state.copyWith(oError: message);
+        return;
+      }
+    }
+    state = state.copyWith(oBuild: 2);
+
+    for (final rx in state.oRx) {
+      step = await vault.addMedication(rx.name, dosage: rx.dose);
+      if (step case VaultError(:final message)) {
+        state = state.copyWith(oError: message);
+        return;
+      }
+    }
+    state = state.copyWith(oBuild: 3);
+
+    // (nothing more to persist; step 4 is "encrypting on device" flavour)
+    state = state.copyWith(oBuild: 4, oScreen: OnbScreen.done);
+  }
+
+  /// Retry from the "building" screen after a failed write.
+  Future<void> retryBuilding() async {
+    if (state.oScreen == OnbScreen.building) await startBuilding();
   }
 
   // ---- done ----
-  /// prototype `oRestart` - run the walkthrough again from the top.
-  void restart() => _phase(() => state = const OnboardingState());
+  /// Sign out locally and start over (used by "run the walkthrough again").
+  Future<void> restart() async {
+    _cancelTimers();
+    await ref.read(authControllerProvider).signOut();
+    state = const OnboardingState();
+  }
 }
 
 final onboardingFlowProvider =
