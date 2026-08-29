@@ -246,6 +246,7 @@ class _TierChip extends StatelessWidget {
         child: Column(
           children: [
             Text('$count',
+                key: Key('tier-$label-count'),
                 style: TextStyle(
                     fontFamily: 'Bricolage',
                     fontSize: 16,
