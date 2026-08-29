@@ -203,7 +203,7 @@ logged unconditionally (hard-stop verdicts included).
 | column | notes |
 |---|---|
 | `user_id`, `score`, `tier`, `hard_stop`, `scanned_at` | plaintext — structural; Phase 5.2 trends aggregate on `score`/`tier`/`scanned_at` |
-| `product_name`, `barcode`, `key_reasons` (`[{kind,severity,title}]`, top 4) | **Fernet-encrypted at rest**, like the rest of the vault — a scan history reveals health behaviour |
+| `product_name`, `barcode`, `key_reasons` (`[{kind,severity,title,factor}]`, top 4 — `factor` = the recurring risk_compound, used by the 5.3 nudge detector) | **Fernet-encrypted at rest**, like the rest of the vault — a scan history reveals health behaviour |
 | `seq` (`BIGINT IDENTITY`) | monotonic insertion order — the authoritative "most recent first" key, so pagination is stable even when two scans share a `scanned_at` |
 
 `GET /api/v1/history?limit=&offset=` (JWT required) → `{ items[], total, limit,

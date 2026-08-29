@@ -81,6 +81,7 @@ class HistoryReason(BaseModel):
     kind: str
     severity: str
     title: str
+    factor: str | None = None  # recurring risk_compound (Phase 5.3 grouping)
 
 
 class ScanHistoryItem(BaseModel):

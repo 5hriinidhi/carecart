@@ -44,15 +44,19 @@ class ScanHistoryEntry {
 
 class HistoryReason {
   const HistoryReason(
-      {required this.kind, required this.severity, required this.title});
+      {required this.kind, required this.severity, required this.title, this.factor});
   final String kind;
   final String severity;
   final String title;
+
+  /// The recurring risk_compound this reason is about (Phase 5.3 grouping).
+  final String? factor;
 
   factory HistoryReason.fromJson(Map<String, dynamic> j) => HistoryReason(
         kind: j['kind'] as String? ?? '',
         severity: j['severity'] as String? ?? 'info',
         title: j['title'] as String? ?? '',
+        factor: j['factor'] as String?,
       );
 }
 
