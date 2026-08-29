@@ -47,7 +47,7 @@ def _normalized(phone: str) -> str:
         return normalize_e164(phone)
     except InvalidPhoneNumber:
         raise HTTPException(
-            status.HTTP_422_UNPROCESSABLE_ENTITY, "Enter a valid phone number."
+            status.HTTP_422_UNPROCESSABLE_CONTENT, "Enter a valid phone number."
         ) from None
 
 

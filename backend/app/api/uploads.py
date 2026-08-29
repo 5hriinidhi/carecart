@@ -37,7 +37,7 @@ async def read_image_upload(file: UploadFile) -> bytes:
     limit_mb = cap // (1024 * 1024)
     if file.size is not None and file.size > cap:
         raise HTTPException(
-            status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, f"Image is larger than {limit_mb} MB."
+            status.HTTP_413_CONTENT_TOO_LARGE, f"Image is larger than {limit_mb} MB."
         )
 
     buf = bytearray()
@@ -45,8 +45,8 @@ async def read_image_upload(file: UploadFile) -> bytes:
         buf.extend(chunk)
         if len(buf) > cap:
             raise HTTPException(
-                status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, f"Image is larger than {limit_mb} MB."
+                status.HTTP_413_CONTENT_TOO_LARGE, f"Image is larger than {limit_mb} MB."
             )
     if not buf:
-        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, "The uploaded file is empty.")
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "The uploaded file is empty.")
     return bytes(buf)

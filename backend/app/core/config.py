@@ -42,11 +42,14 @@ _OPTIONAL_KEYS: dict[str, tuple[str, str]] = {
     "claude_api_key": ("CLAUDE_API_KEY", "offline batch tagging of unknown ingredients"),
 }
 
-_DEV_JWT_SECRET = "dev-only-change-me"
-# Dev-only placeholders. Both are rejected at startup when ENVIRONMENT=production
-# (see missing_required). Generate real values:
+# Dev-only placeholders. All three are rejected at startup for ANY environment
+# that is not explicitly `development` / `test` (see missing_required -> a deploy
+# with ENVIRONMENT unset, `prod`, or `staging` fails closed, not open on these).
+# Generate real values:
+#   JWT_SECRET      -> secrets.token_urlsafe(48)
 #   ENCRYPTION_KEY  -> Fernet.generate_key().decode()
 #   PHONE_HASH_KEY  -> secrets.token_urlsafe(32)
+_DEV_JWT_SECRET = "dev-only-change-me-not-for-production-use"  # >= 32 bytes (RFC 7518)
 _DEV_ENCRYPTION_KEY = "I49r_FgAfGuifDRRvTW5pi6RehT0q1KWV4IB-XHWuXE="
 _DEV_PHONE_HASH_KEY = "dev-only-phone-pepper-change-me"
 
@@ -69,7 +72,11 @@ class Settings(BaseSettings):
     postgres_db: str = "carecart"
     postgres_host: str = "localhost"  # docker-compose overrides -> "postgres"
     postgres_port: int = 5432
-    database_url: str | None = None  # full override; wins over the parts above
+    database_url: str | None = None  # full OWNER override; wins over the parts above
+    # Least-privilege DML-only DSN the *running app* connects with (Phase 6.2 F1).
+    # Blank -> app falls back to the owner DSN (fine for dev, not production).
+    # Migrations and tests always use the owner DSN, never this.
+    app_database_url: str = ""
 
     # --- auth: tokens ---
     jwt_secret: str = _DEV_JWT_SECRET
@@ -136,7 +143,7 @@ class Settings(BaseSettings):
     @classmethod
     def _default_blank_jwt_secret(cls, v: str) -> str:
         # `JWT_SECRET=` (blank) in .env -> fall back to the dev placeholder, which
-        # missing_required() then rejects when ENVIRONMENT=production.
+        # missing_required() rejects unless ENVIRONMENT is development/test.
         return v.strip() or _DEV_JWT_SECRET
 
     @field_validator("encryption_key", mode="after")
@@ -167,13 +174,26 @@ class Settings(BaseSettings):
 
     # ------------------------------------------------------------------ derived
     @property
-    def sqlalchemy_url(self) -> str:
+    def _owner_url(self) -> str:
         if self.database_url:
             return self.database_url
         return (
             f"postgresql+psycopg://{self.postgres_user}:{self.postgres_password}"
             f"@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
         )
+
+    @property
+    def sqlalchemy_url(self) -> str:
+        """DSN the *running app* connects with. Uses the least-privilege
+        ``APP_DATABASE_URL`` (carecart_app, DML-only) when set; otherwise the
+        owner DSN (fine for local dev, not production — see Phase 6.2 F1)."""
+        return self.app_database_url.strip() or self._owner_url
+
+    @property
+    def migration_url(self) -> str:
+        """DSN for schema work (Alembic) and the test harness (which CREATEs
+        databases). Always the owner — never ``APP_DATABASE_URL``."""
+        return self._owner_url
 
     @property
     def sqlalchemy_url_safe(self) -> str:
@@ -195,6 +215,15 @@ class Settings(BaseSettings):
     @property
     def is_production(self) -> bool:
         return self.environment.strip().lower() == "production"
+
+    @property
+    def secrets_must_be_real(self) -> bool:
+        """Fail closed: the dev placeholder JWT / encryption / phone-hash keys are
+        only tolerated when ENVIRONMENT is explicitly `development` or `test`.
+        Anything else (unset, `prod`, `staging`, a typo) requires real values —
+        so a misconfigured deploy refuses to boot rather than silently using the
+        committed placeholders."""
+        return self.environment.strip().lower() not in {"development", "test"}
 
     @property
     def otp_echo_in_response(self) -> bool:
@@ -234,10 +263,12 @@ class Settings(BaseSettings):
             if value is None or str(value).strip() == "":
                 problems.append(f"{env} is required but is empty")
 
-        if self.is_production:
+        # Fail closed on the committed dev placeholders for any non-dev/test env.
+        if self.secrets_must_be_real:
             if self.jwt_secret == _DEV_JWT_SECRET:
                 problems.append(
-                    "JWT_SECRET is still the dev placeholder - set a real secret in production"
+                    "JWT_SECRET is still the dev placeholder - set a real secret "
+                    f"(ENVIRONMENT={self.environment!r} is not development/test)"
                 )
             if self.encryption_key == _DEV_ENCRYPTION_KEY:
                 problems.append(
@@ -245,7 +276,14 @@ class Settings(BaseSettings):
                 )
             if self.phone_hash_key == _DEV_PHONE_HASH_KEY:
                 problems.append(
-                    "PHONE_HASH_KEY is still the dev placeholder - set a real value in production"
+                    "PHONE_HASH_KEY is still the dev placeholder - set a real value"
+                )
+
+        if self.is_production:
+            if self.cors_origin_list == ["*"]:
+                problems.append(
+                    "CORS_ORIGINS must be an explicit allow-list in production "
+                    "(wildcard origin with allow_credentials=True is unsafe)"
                 )
             for attr, (env, feature) in _OPTIONAL_KEYS.items():
                 if not getattr(self, attr):

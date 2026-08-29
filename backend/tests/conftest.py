@@ -25,7 +25,7 @@ from app.main import app
 
 def _split_url() -> tuple[str, str]:
     """(prefix, dbname) from the configured SQLAlchemy URL."""
-    prefix, dbname = settings.sqlalchemy_url.rsplit("/", 1)
+    prefix, dbname = settings.migration_url.rsplit("/", 1)
     return prefix, dbname
 
 

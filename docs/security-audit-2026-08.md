@@ -1,8 +1,12 @@
 # Security & Data Privacy Audit — Phase 6.2
 
-**Date:** 2026-08-30 · **Scope:** full codebase, 34-commit git history, Python + Dart/Flutter dependency trees · **Method:** read-only review (one throwaway DB row created and deleted to verify cascade/encryption).
+**Date:** 2026-08-30 · **Scope:** full codebase, git history, Python + Dart/Flutter dependency trees · **Method:** read-only review (one throwaway DB row created and deleted to verify cascade/encryption).
 
-**Result:** 4 of 5 checklist items pass clean. Action items: a Python dependency refresh (2 HIGH), and a Postgres least-privilege gap (F1).
+**Result:** 4 of 5 checklist items passed clean on first review. The 5th (Python
+dependency scan) and findings F1–F3, F5 were **remediated the same day** —
+see [Remediation](#remediation-2026-08-30) at the bottom. Post-fix state:
+`pip-audit` clean, `carecart_app` least-privilege role wired + verified,
+fail-closed config guards, cascade-guard test added. 327 backend tests green.
 
 ---
 
@@ -135,3 +139,68 @@ OTP travel in POST bodies, never URL query strings.
 | **F3** | LOW | Committed dev fallback keys guarded only by exact `ENVIRONMENT=="production"` (§2). | Fail closed on placeholder keys regardless of `ENVIRONMENT`. |
 | **F4** | LOW | `otp_challenges.phone_e164` stored plaintext (transient; bcrypt on the code; rows swept < 1 day). | Acceptable given TTL; optionally hash it too. |
 | **F5** | INFO | No guard that a future `user_id` table gets `ON DELETE CASCADE` (§4). | Add an `information_schema` introspection test. |
+
+---
+
+## Remediation (2026-08-30)
+
+Applied the same day; every fix re-verified.
+
+### Python dependencies — RESOLVED
+`requirements.txt` bumped; `pip-audit -r requirements.txt` → **"No known vulnerabilities found"**.
+
+| Package | 6.2 audit | now |
+|---|---|---|
+| pyjwt | 2.10.1 | **2.13.0** |
+| Pillow | 11.0.0 | **12.3.0** |
+| python-multipart | 0.0.20 | **0.0.32** |
+| cryptography | 44.0.0 | **50.0.1** |
+| fastapi / starlette | 0.115.6 / 0.41.3 | **0.141.1 / 1.6.0** |
+| pytest / pytest-asyncio | 8.3.4 / 0.25.0 | **9.1.1 / 1.4.0** |
+
+Fallout fixed: `test_phase3_security.py::_me_routes()` rewritten to read
+`app.openapi()["paths"]` (FastAPI ≥0.128 nests routers, so `app.routes` no longer
+carries fully-prefixed paths); deprecated `HTTP_422_UNPROCESSABLE_ENTITY` /
+`HTTP_413_REQUEST_ENTITY_TOO_LARGE` constants swapped for their starlette-1.x
+names. Full backend suite: **327 passed, 1 skipped** (was 323/1). Dart/Flutter
+tree was already clean.
+*Residual:* one `StarletteDeprecationWarning` — `starlette.testclient` wants
+`httpx2`; TestClient still works, migration deferred.
+
+### F1 — least-privilege Postgres role — RESOLVED
+- `backend/scripts/create_app_role.sql` — idempotent: `carecart_app` LOGIN role,
+  `NOSUPERUSER NOCREATEDB NOCREATEROLE`, granted `SELECT/INSERT/UPDATE/DELETE` on
+  `public` tables + `USAGE,SELECT` on sequences + matching `ALTER DEFAULT
+  PRIVILEGES` for future migrations; `REVOKE CREATE ON SCHEMA public`.
+- `infra/db-init/10-app-role.sh` + `docker-compose.yml` mounts — created on first
+  cluster init when `APP_DB_PASSWORD` is set; documented one-liner for existing volumes.
+- `config.py`: new `APP_DATABASE_URL` (the app's runtime DSN) vs `migration_url`
+  (owner; used by Alembic + the test harness + `load_risk_tables`). Blank
+  `APP_DATABASE_URL` ⇒ unchanged behaviour for local dev / CI / tests.
+- `.env.example` documents both DSNs.
+- **Verified live:** connected as `carecart_app` → `SELECT` allowed; `CREATE
+  TABLE`, `DROP TABLE users`, `SELECT FROM pg_authid`, `CREATE ROLE`,
+  `COPY … TO PROGRAM` all **BLOCKED**.
+
+### F2 — CORS wildcard in production — RESOLVED
+`missing_required()` now refuses to boot when `is_production` and
+`cors_origin_list == ["*"]`. Test: `test_config.py::test_production_rejects_wildcard_cors`.
+
+### F3 — fail-closed on placeholder keys — RESOLVED
+New `Settings.secrets_must_be_real` — the committed dev JWT / encryption /
+phone-hash placeholders are rejected for **any** `ENVIRONMENT` that is not
+explicitly `development` / `test` (`prod`, `staging`, unset, a typo → won't
+start). `_DEV_JWT_SECRET` lengthened to ≥32 bytes (clears PyJWT's
+`InsecureKeyLengthWarning`). Tests:
+`test_config.py::test_placeholder_keys_rejected_for_any_non_dev_test_env`,
+`::test_dev_and_test_envs_still_tolerate_placeholders`.
+
+### F5 — cascade-guard test — RESOLVED
+`test_phase3_security.py::test_every_fk_to_users_is_on_delete_cascade` introspects
+`information_schema.referential_constraints` and fails if any FK to `users.id`
+is not `ON DELETE CASCADE` (plus a sanity check that discovery found the 8
+user-owned tables).
+
+### F4 — plaintext transient OTP phone — ACCEPTED
+`otp_challenges.phone_e164` is short-lived (bcrypt on the code, rows swept < 1
+day). Left as-is; noted for a future pass.

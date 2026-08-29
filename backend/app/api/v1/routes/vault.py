@@ -104,7 +104,7 @@ def _collection_router(*, model, schema_in, schema_patch, schema_out, prefix, ta
         row = _owned_or_404(db, model, item_id, user.id)
         data = body.model_dump(exclude_unset=True)
         if not data:
-            raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, "No fields to update.")
+            raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "No fields to update.")
         for field, value in data.items():
             setattr(row, field, value)
         _audit(db, user.id, "write", tag, resource_id=item_id)
@@ -175,7 +175,7 @@ def patch_health_profile(body: HealthProfilePatch, user: CurrentUser, db: DbSess
         raise HTTPException(status.HTTP_404_NOT_FOUND, "No health profile yet.")
     data = body.model_dump(exclude_unset=True)
     if not data:
-        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, "No fields to update.")
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "No fields to update.")
     for field, value in data.items():
         setattr(profile, field, value)
     _audit(db, user.id, "write", "health_profile", resource_id=profile.id)
@@ -241,7 +241,7 @@ async def scan_medication_label(
         raw_text, mean_conf = ocr.extract_text(image_bytes)
     except ocr.InvalidImage:
         raise HTTPException(
-            status.HTTP_422_UNPROCESSABLE_ENTITY, "That file isn't a readable image."
+            status.HTTP_422_UNPROCESSABLE_CONTENT, "That file isn't a readable image."
         ) from None
     except ocr.OcrUnavailable:
         raise HTTPException(

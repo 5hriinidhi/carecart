@@ -91,7 +91,7 @@ def get_product(barcode: str, user: CurrentUser, db: DbSession, response: Respon
     barcode = barcode.strip()
     if not (barcode.isdigit() and 8 <= len(barcode) <= 14):
         raise HTTPException(
-            status.HTTP_422_UNPROCESSABLE_ENTITY, "Barcode must be 8–14 digits."
+            status.HTTP_422_UNPROCESSABLE_CONTENT, "Barcode must be 8–14 digits."
         )
 
     ttl = dt.timedelta(hours=settings.product_cache_ttl_hours)
@@ -160,7 +160,7 @@ async def scan_ingredient_label(user: CurrentUser, file: UploadFile = File(...))
         raw_text, mean_conf = ocr.extract_text(image_bytes)
     except ocr.InvalidImage:
         raise HTTPException(
-            status.HTTP_422_UNPROCESSABLE_ENTITY, "That file isn't a readable image."
+            status.HTTP_422_UNPROCESSABLE_CONTENT, "That file isn't a readable image."
         ) from None
     except ocr.OcrUnavailable:
         raise HTTPException(

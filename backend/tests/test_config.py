@@ -1,6 +1,13 @@
 import pytest
 
-from app.core.config import ConfigError, Settings, get_settings
+from app.core.config import (
+    _DEV_ENCRYPTION_KEY,
+    _DEV_JWT_SECRET,
+    _DEV_PHONE_HASH_KEY,
+    ConfigError,
+    Settings,
+    get_settings,
+)
 
 
 def test_settings_is_cached_singleton():
@@ -27,7 +34,10 @@ def test_production_enforces_optional_keys_and_real_jwt_secret():
     # whatever a local backend/.env happens to contain
     problems = Settings(
         environment="production",
-        jwt_secret="dev-only-change-me",
+        jwt_secret=_DEV_JWT_SECRET,
+        encryption_key=_DEV_ENCRYPTION_KEY,
+        phone_hash_key=_DEV_PHONE_HASH_KEY,
+        cors_origins="https://app.carecart.example",
         otp_provider_api_key="",
         claude_api_key="",
         openfda_api_key="",
@@ -41,14 +51,42 @@ def test_production_enforces_optional_keys_and_real_jwt_secret():
     assert "PHONE_HASH_KEY" in joined
 
 
+def test_placeholder_keys_rejected_for_any_non_dev_test_env():
+    """6.2 audit F3: fail closed — ENVIRONMENT=staging / unset / typo must NOT
+    silently run on the committed dev placeholders."""
+    for env in ("staging", "prod", "Production", "qa", "misspelled"):
+        problems = Settings(
+            environment=env,
+            jwt_secret=_DEV_JWT_SECRET,
+            encryption_key=_DEV_ENCRYPTION_KEY,
+            phone_hash_key=_DEV_PHONE_HASH_KEY,
+        ).missing_required()
+        joined = " ".join(problems)
+        assert "JWT_SECRET" in joined, env
+        assert "ENCRYPTION_KEY" in joined, env
+        assert "PHONE_HASH_KEY" in joined, env
+
+
+def test_dev_and_test_envs_still_tolerate_placeholders():
+    for env in ("development", "test"):
+        assert Settings(environment=env).missing_required() == []
+
+
+def test_production_rejects_wildcard_cors():
+    """6.2 audit F2: '*' origin + allow_credentials=True is unsafe in prod."""
+    problems = Settings(environment="production", cors_origins="*").missing_required()
+    assert any("CORS_ORIGINS" in p for p in problems)
+
+
 def test_production_passes_when_everything_supplied():
     from cryptography.fernet import Fernet
 
     ok = Settings(
         environment="production",
-        jwt_secret="a-real-long-secret",
+        jwt_secret="a-real-long-secret-value-well-over-32-bytes",
         encryption_key=Fernet.generate_key().decode(),
         phone_hash_key="a-real-phone-pepper",
+        cors_origins="https://app.carecart.example",
         otp_provider_api_key="x",
         claude_api_key="x",
         openfda_api_key="x",

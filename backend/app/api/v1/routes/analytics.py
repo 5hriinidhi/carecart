@@ -26,7 +26,7 @@ def _resolve_zone(db, user, tz: str | None, tz_offset_minutes: int | None) -> st
             _, canonical = trends_svc.resolve_timezone(tz)
         except ValueError as exc:
             raise HTTPException(
-                status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc)
+                status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)
             ) from None
         if user.timezone != canonical:
             user.timezone = canonical  # learn it for next time (and other surfaces)

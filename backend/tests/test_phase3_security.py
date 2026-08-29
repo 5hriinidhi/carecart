@@ -43,11 +43,13 @@ def auth(db):
 
 # --------------------------------------------------- every /me/ route needs auth
 def _me_routes() -> list[tuple[str, str]]:
+    """(METHOD, full_path) for every /me/* endpoint, read off the OpenAPI schema
+    (a stable public API — FastAPI ≥0.128 nests routers so ``app.routes`` no
+    longer exposes fully-prefixed paths)."""
     routes: list[tuple[str, str]] = []
-    for route in app.routes:
-        path = getattr(route, "path", "")
+    for path, ops in app.openapi()["paths"].items():
         if "/me/" in path or path.endswith("/me"):
-            for method in sorted(getattr(route, "methods", set()) - {"HEAD", "OPTIONS"}):
+            for method in sorted(m.upper() for m in ops if m.lower() != "parameters"):
                 routes.append((method, path))
     return routes
 
@@ -183,6 +185,34 @@ def test_account_deletion_also_wipes_the_audit_trail(client, db):
     assert client.delete(f"{BASE}/me/account", headers=ha).status_code == 204
     assert audit_count(uid_a) == 0            # cascaded away — nothing left queryable
     assert audit_count(uid_b) >= 1            # scoped: B's trail is untouched
+
+
+def test_every_fk_to_users_is_on_delete_cascade(db):
+    """6.2 audit F5: `DELETE /me/account` = `DELETE FROM users` and relies purely
+    on DB-level cascade. Any future table added with a `user_id` FK that is NOT
+    `ON DELETE CASCADE` would silently orphan personal data on deletion — catch
+    that here rather than in a breach post-mortem."""
+    rows = db.execute(
+        text(
+            """
+            SELECT tc.table_name, rc.delete_rule
+            FROM information_schema.table_constraints tc
+            JOIN information_schema.constraint_column_usage ccu
+              ON tc.constraint_name = ccu.constraint_name
+            JOIN information_schema.referential_constraints rc
+              ON tc.constraint_name = rc.constraint_name
+            WHERE tc.constraint_type = 'FOREIGN KEY'
+              AND ccu.table_name = 'users' AND ccu.column_name = 'id'
+            ORDER BY tc.table_name
+            """
+        )
+    ).all()
+    offenders = [t for t, rule in rows if rule != "CASCADE"]
+    assert not offenders, f"FK(s) to users.id without ON DELETE CASCADE: {offenders}"
+    # sanity: discovery actually found the user-owned tables
+    tables = {t for t, _ in rows}
+    assert {"conditions", "allergies", "medications", "scan_history", "nudges",
+            "health_profiles", "refresh_tokens", "audit_log"} <= tables
 
 
 # ------------------------------------------- no internal leakage on 500

@@ -1,8 +1,11 @@
 # --- web framework ---
-fastapi==0.115.6
+# fastapi + starlette bumped for a patched starlette (Phase 6.2 audit: CVE-2026-48710
+# "BadHost", CVE-2025-62727, CVE-2026-54282/54283, CVE-2026-48817/48818).
+fastapi==0.141.1
+starlette==1.6.0
 uvicorn[standard]==0.34.0
 gunicorn==23.0.0
-python-multipart==0.0.20          # form / file uploads (label scans)
+python-multipart==0.0.32          # form / file uploads; 0.0.20 had multipart-DoS CVEs (6.2 audit)
 
 # --- config / validation ---
 pydantic==2.10.4
@@ -14,9 +17,9 @@ alembic==1.14.0
 psycopg[binary]==3.2.3            # psycopg 3 driver
 
 # --- auth / crypto ---
-pyjwt==2.10.1
+pyjwt==2.13.0                     # 2.10.1 had CVE-2026-32597 + CVE-2026-48522..48526 (6.2 audit; auth-critical)
 bcrypt==4.2.1
-cryptography==44.0.0              # Fernet: application-layer encryption at rest
+cryptography==50.0.1            # Fernet at rest; 44.0.0 had CVE-2024-12797 + bundled-OpenSSL + PKCS7 CVEs (6.2 audit)
 
 # --- http / misc ---
 httpx==0.28.1
@@ -24,7 +27,7 @@ tzdata==2026.3                    # IANA tz database for zoneinfo (analytics/tre
 
 # --- OCR (medication label scan) ---
 pytesseract==0.3.13              # needs the `tesseract` binary on PATH (see Dockerfile)
-Pillow==11.0.0
+Pillow==12.3.0                   # 11.0.0 had CVE-2026-54059 (remote DoS via crafted image; 6.2 audit)
 
 # --- vector database ---
 pymilvus==2.5.0
@@ -34,6 +37,6 @@ pymilvus==2.5.0
 # neo4j==5.27.0
 
 # --- dev / test ---
-pytest==8.3.4
-pytest-asyncio==0.25.0
+pytest==9.1.1                     # 8.3.4 had CVE-2025-71176 (dev-only; 6.2 audit)
+pytest-asyncio==1.4.0           # 0.25.0 requires pytest<9
 ruff==0.8.4

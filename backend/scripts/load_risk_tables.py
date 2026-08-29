@@ -6,6 +6,10 @@ CSVs change (e.g. after the offline batch job merges new aliases):
     python -m scripts.load_risk_tables            # from backend/, venv active
     python -m scripts.load_risk_tables --data-dir /path/to/data_prep
 
+It ``TRUNCATE``s the reference tables, so run it with the OWNER credentials
+(``DATABASE_URL`` / ``POSTGRES_*``), not the least-privilege ``APP_DATABASE_URL``
+role — same as migrations. In local dev the two are the same.
+
 Source (``settings.risk_data_path`` by default =
 ``gradient-ascend-mobile-app/project/dataset/data_prep``):
 

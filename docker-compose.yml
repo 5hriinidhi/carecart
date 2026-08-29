@@ -30,6 +30,11 @@ services:
       - "${POSTGRES_HOST_PORT:-5433}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      # least-privilege app role (Phase 6.2 audit F1) — created on first cluster
+      # init when APP_DB_PASSWORD is set in backend/.env. For an existing volume,
+      # run infra/db-init/10-app-role.sh by hand (see that file).
+      - ./infra/db-init/10-app-role.sh:/docker-entrypoint-initdb.d/10-app-role.sh:ro
+      - ./backend/scripts/create_app_role.sql:/opt/carecart/create_app_role.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER:-carecart}\" -d \"$${POSTGRES_DB:-carecart}\""]
       interval: 5s
