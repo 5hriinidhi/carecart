@@ -4,6 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'api_client.dart';
+import 'connectivity.dart';
+import 'local_cache.dart';
 
 /// Turn a Dio failure into a short, honest, user-facing line. A timeout (Open
 /// Food Facts or the backend slow / rate-limited mid-scan) is called out
@@ -35,6 +37,7 @@ class ScannedProduct {
     this.imageUrl,
     this.cached = false,
     this.stale = false,
+    this.fromLocalCache = false,
   });
 
   final String barcode;
@@ -54,6 +57,10 @@ class ScannedProduct {
   /// The source was unreachable and an expired cache entry was served.
   final bool stale;
 
+  /// Served from the on-device cache because the backend was unreachable
+  /// (Phase 6.3). The screen shows an "offline — saved copy" state.
+  final bool fromLocalCache;
+
   String get displayName => (name != null && name!.trim().isNotEmpty)
       ? name!.trim()
       : 'Unnamed product';
@@ -72,6 +79,35 @@ class ScannedProduct {
         imageUrl: j['image_url'] as String?,
         cached: j['cached'] as bool? ?? false,
         stale: j['stale'] as bool? ?? false,
+      );
+
+  /// Round-trips through [ScannedProduct.fromJson] — used by the on-device cache.
+  Map<String, dynamic> toJson() => {
+        'barcode': barcode,
+        'name': name,
+        'brand': brand,
+        'ingredients': ingredients,
+        'ingredients_text': ingredientsText,
+        'nutriments': nutriments,
+        'serving_size': servingSize,
+        'image_url': imageUrl,
+        'cached': cached,
+        'stale': stale,
+      };
+
+  ScannedProduct copyWith({bool? cached, bool? stale, bool? fromLocalCache}) =>
+      ScannedProduct(
+        barcode: barcode,
+        name: name,
+        brand: brand,
+        ingredients: ingredients,
+        ingredientsText: ingredientsText,
+        nutriments: nutriments,
+        servingSize: servingSize,
+        imageUrl: imageUrl,
+        cached: cached ?? this.cached,
+        stale: stale ?? this.stale,
+        fromLocalCache: fromLocalCache ?? this.fromLocalCache,
       );
 }
 
@@ -124,8 +160,33 @@ Future<ProductLookup> lookupProduct(Dio dio, String barcode) async {
 }
 
 /// Injectable lookup function — override in tests, or point at a fake backend.
+///
+/// Phase 6.3: a successful lookup is cached on-device; if a later lookup for a
+/// known barcode fails because the backend is unreachable, the saved copy is
+/// returned with [ScannedProduct.fromLocalCache] set so the screen can say
+/// "offline — showing saved details".
 final productLookupProvider = Provider<Future<ProductLookup> Function(String)>(
-  (ref) => (barcode) => lookupProduct(ref.read(dioProvider), barcode),
+  (ref) => (barcode) async {
+    final code = barcode.trim();
+    final cache = ref.read(localCacheProvider);
+    final result = await lookupProduct(ref.read(dioProvider), code);
+    switch (result) {
+      case ProductFound(:final product):
+        await cache.putProduct(product);
+        return result;
+      case ProductLookupError():
+        if (ref.read(isOfflineProvider)) {
+          final hit = await cache.getProduct(code);
+          if (hit != null) {
+            return ProductFound(
+                hit.product.copyWith(fromLocalCache: true, stale: true));
+          }
+        }
+        return result;
+      case ProductNotFound():
+        return result;
+    }
+  },
 );
 
 // ---------------------------------------------------------------------------

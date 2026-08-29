@@ -101,11 +101,18 @@ class OnboardingState {
   bool get otpComplete => oOtp.length == kOtpLength;
   String get oPhoneShown => oPhone.isEmpty ? '98765 43210' : oPhone;
 
+  /// Just the digits the user typed (any spaces / dashes stripped).
+  String get oPhoneDigits => oPhone.replaceAll(RegExp(r'\D'), '');
+
+  /// A 10-digit Indian mobile number starting 6–9 (client-side gate; the server
+  /// re-validates via `normalize_e164`).
+  bool get oPhoneValid => RegExp(r'^[6-9]\d{9}$').hasMatch(oPhoneDigits);
+
   /// Phone in E.164 for the API (UI shows a +91 prefix and a national number).
   String get oPhoneE164 {
-    final digits = oPhone.replaceAll(RegExp(r'\D'), '');
-    if (digits.isEmpty) return '';
-    return digits.startsWith('91') && digits.length > 10 ? '+$digits' : '+91$digits';
+    final d = oPhoneDigits;
+    if (d.isEmpty) return '';
+    return d.startsWith('91') && d.length > 10 ? '+$d' : '+91$d';
   }
 
   /// The rows shown on the `done` screen (prototype `summaryRows`).
@@ -196,8 +203,9 @@ class OnboardingFlow extends Notifier<OnboardingState> {
   /// need an SMS. Against production the user types it.
   Future<void> submitPhone() async {
     if (state.oBusy) return;
-    if (state.oPhoneE164.length < 12) {
-      state = state.copyWith(oError: 'Enter your 10-digit mobile number.');
+    if (!state.oPhoneValid) {
+      state = state.copyWith(
+          oError: 'Enter a 10-digit mobile number (starting 6–9).');
       return;
     }
     state = state.copyWith(oBusy: true, oError: null);
@@ -295,7 +303,16 @@ class OnboardingFlow extends Notifier<OnboardingState> {
   void setUnitH(String u) => state = state.copyWith(oUnitH: u);
   void setWeight(String v) => state = state.copyWith(oWeight: v);
   void setHeight(String v) => state = state.copyWith(oHeight: v);
-  void setOther(String v) => state = state.copyWith(oOther: v);
+
+  /// "Something else you must avoid" — trim, strip control chars, cap at the
+  /// server's 120-char limit so a bad paste never reaches the vault.
+  void setOther(String v) {
+    final cleaned = v
+        .replaceAll(RegExp(r'[\x00-\x1f\x7f]'), '')
+        .trimLeft();
+    state = state.copyWith(
+        oOther: cleaned.length > 120 ? cleaned.substring(0, 120) : cleaned);
+  }
 
   void toggleDiet(String v) => state = state.copyWith(oDiet: _toggle(state.oDiet, v));
   void toggleAllergy(String v) =>
@@ -318,7 +335,14 @@ class OnboardingFlow extends Notifier<OnboardingState> {
       state = state.copyWith(oRx: [for (var j = 0; j < state.oRx.length; j++) if (j != i) state.oRx[j]]);
 
   // ---- building: the real profile writes ----
-  double? _num(String s) => s.trim().isEmpty ? null : double.tryParse(s.trim());
+  /// Parse a body-metric field, but only pass it on if it's a sane number —
+  /// otherwise send null so the vault never stores "999999" or "abc". The
+  /// server also range-checks (BodyMetrics ge/le), this is the first gate.
+  double? _num(String s, {required double min, required double max}) {
+    final n = double.tryParse(s.trim());
+    if (n == null || n < min || n > max) return null;
+    return n;
+  }
 
   /// Write the profile to the vault, one visible step at a time, then -> done.
   /// A failure surfaces on this screen with a Retry; nothing half-written blocks
@@ -330,8 +354,12 @@ class OnboardingFlow extends Notifier<OnboardingState> {
     VaultWrite step = await vault.putHealthProfile(
       gender: state.oGender?.toLowerCase(),
       activityLevel: state.oActivity?.toLowerCase(),
-      weight: _num(state.oWeight),
-      height: _num(state.oHeight),
+      // kg 20–350 / lb 44–770 ; cm 90–250 / inch 36–100
+      weight: _num(state.oWeight,
+          min: 20, max: state.oUnitW.toUpperCase() == 'LB' ? 770 : 350),
+      height: _num(state.oHeight,
+          min: state.oUnitH.toLowerCase() == 'inch' ? 36 : 90,
+          max: state.oUnitH.toLowerCase() == 'inch' ? 100 : 250),
       weightUnit: state.oUnitW.toLowerCase(),
       heightUnit: state.oUnitH,
       diet: state.oDiet,

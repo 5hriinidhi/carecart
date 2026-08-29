@@ -4,6 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'connectivity.dart';
+
 /// Base URL of the FastAPI backend.
 ///
 /// - Android emulator reaches the host machine at 10.0.2.2
@@ -28,13 +30,22 @@ class AuthToken extends Notifier<String?> {
 
 final authTokenProvider = NotifierProvider<AuthToken, String?>(AuthToken.new);
 
-/// Dio bound to the versioned API (`/api/v1/...`), with the auth token attached.
+/// Every network call in the app goes through this Dio. The timeouts here are
+/// what guarantee the UI never spins forever — a stalled request fails with a
+/// `DioException` the api helpers turn into a message (Phase 6.3).
+const kConnectTimeout = Duration(seconds: 8);
+const kReceiveTimeout = Duration(seconds: 12);
+const kSendTimeout = Duration(seconds: 20); // uploads (label-scan multipart)
+
+/// Dio bound to the versioned API (`/api/v1/...`), with the auth token attached
+/// and backend-reachability tracking.
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio(
     BaseOptions(
       baseUrl: '$apiBaseUrl/api/v1',
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 15),
+      connectTimeout: kConnectTimeout,
+      receiveTimeout: kReceiveTimeout,
+      sendTimeout: kSendTimeout,
     ),
   );
   dio.interceptors.add(
@@ -45,6 +56,20 @@ final dioProvider = Provider<Dio>((ref) {
           options.headers['Authorization'] = 'Bearer $token';
         }
         handler.next(options);
+      },
+      onResponse: (response, handler) {
+        // any HTTP response at all means we reached the backend
+        ref.read(reachabilityProvider.notifier).markOk();
+        handler.next(response);
+      },
+      onError: (e, handler) {
+        final unreachable = e.type == DioExceptionType.connectionError ||
+            e.type == DioExceptionType.connectionTimeout ||
+            e.type == DioExceptionType.receiveTimeout ||
+            e.type == DioExceptionType.sendTimeout;
+        final n = ref.read(reachabilityProvider.notifier);
+        unreachable ? n.markUnreachable() : n.markOk();
+        handler.next(e);
       },
     ),
   );
@@ -75,8 +100,10 @@ class HealthResult {
 Future<HealthResult> fetchHealth({Dio? client}) async {
   final dio = client ??
       Dio(BaseOptions(
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 10),
+        // a liveness probe should be quick — fail fast rather than hang the card
+        connectTimeout: const Duration(seconds: 5),
+        receiveTimeout: const Duration(seconds: 5),
+        sendTimeout: const Duration(seconds: 5),
         validateStatus: (_) => true, // 503 is a valid, informative response here
       ));
   try {

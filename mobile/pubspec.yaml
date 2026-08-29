@@ -46,6 +46,7 @@ dependencies:
   fl_chart: ^0.69.0                # trends line chart (Phase 5.2)
   flutter_local_notifications: ^18.0.1  # optional local push for nudges (Phase 5.3)
   flutter_timezone: ">=3.0.0 <4.0.0"   # device IANA tz name -> DST-correct weekly buckets
+  shared_preferences: ^2.3.2           # on-device cache: recent products + own scan history (Phase 6.3)
 
 dev_dependencies:
   flutter_test:

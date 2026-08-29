@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../core/severity.dart';
@@ -348,6 +349,7 @@ class _ManualBarcodeField extends StatefulWidget {
 
 class _ManualBarcodeFieldState extends State<_ManualBarcodeField> {
   final _c = TextEditingController();
+  String? _error;
 
   @override
   void dispose() {
@@ -356,56 +358,88 @@ class _ManualBarcodeFieldState extends State<_ManualBarcodeField> {
   }
 
   void _submit() {
+    // client-side gate — matches the server's `8 <= len <= 14 && digits`
     final code = _c.text.trim();
-    if (code.isEmpty) return;
+    if (code.length < 8 || code.length > 14) {
+      setState(() => _error = 'A barcode is 8–14 digits.');
+      return;
+    }
+    setState(() => _error = null);
     widget.onSubmit?.call(code);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              color: const Color(0x14F1F0E4),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: const Color(0x24F1F0E4)),
-            ),
-            child: TextField(
-              key: const Key('scan-barcode-field'),
-              controller: _c,
-              keyboardType: TextInputType.number,
-              onSubmitted: (_) => _submit(),
-              style: const TextStyle(
-                  fontFamily: 'DMMono', fontSize: 14, color: Cc.paper),
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                isCollapsed: true,
-                contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-                hintText: '8901234567890',
-                hintStyle: TextStyle(
-                    fontFamily: 'DMMono', fontSize: 14, color: Color(0x66F1F0E4)),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: const Color(0x14F1F0E4),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: _error != null
+                      ? const Color(0x66E39B74)
+                      : const Color(0x24F1F0E4)),
+                ),
+                child: TextField(
+                  key: const Key('scan-barcode-field'),
+                  controller: _c,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(14),
+                  ],
+                  onChanged: (_) {
+                    if (_error != null) setState(() => _error = null);
+                  },
+                  onSubmitted: (_) => _submit(),
+                  style: const TextStyle(
+                      fontFamily: 'DMMono', fontSize: 14, color: Cc.paper),
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    isCollapsed: true,
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                    hintText: '8901234567890',
+                    hintStyle: TextStyle(
+                        fontFamily: 'DMMono',
+                        fontSize: 14,
+                        color: Color(0x66F1F0E4)),
+                  ),
+                ),
               ),
             ),
-          ),
+            const SizedBox(width: 10),
+            GestureDetector(
+              key: const Key('scan-barcode-submit'),
+              onTap: _submit,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
+                decoration: BoxDecoration(
+                    color: Cc.accent,
+                    borderRadius: BorderRadius.circular(14)),
+                child: const Text('Look up',
+                    style: TextStyle(
+                        fontFamily: 'DMSans',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Cc.inkSoft)),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 10),
-        GestureDetector(
-          key: const Key('scan-barcode-submit'),
-          onTap: _submit,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
-            decoration: BoxDecoration(
-                color: Cc.accent, borderRadius: BorderRadius.circular(14)),
-            child: const Text('Look up',
-                style: TextStyle(
-                    fontFamily: 'DMSans',
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: Cc.inkSoft)),
+        if (_error != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 7, left: 4),
+            child: Text(_error!,
+                key: const Key('scan-barcode-error'),
+                style: const TextStyle(
+                    fontFamily: 'DMSans', fontSize: 11.5, color: Color(0xFFE39B74))),
           ),
-        ),
       ],
     );
   }

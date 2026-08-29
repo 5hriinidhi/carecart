@@ -28,6 +28,33 @@ class ScanVerdictIn(BaseModel):
     def _cap_each(cls, v: list[str]) -> list[str]:
         return [str(x)[:200] for x in v if str(x).strip()]
 
+    @field_validator("nutriments")
+    @classmethod
+    def _sane_nutriments(cls, v: dict[str, float]) -> dict[str, float]:
+        """Bound the map so a malformed / hostile client can't push an
+        unbounded blob or non-finite values into the scoring engine."""
+        import math
+
+        out: dict[str, float] = {}
+        for k, val in v.items():
+            if len(out) >= 40:
+                break
+            key = str(k).strip()[:60]
+            if not key or not math.isfinite(val):
+                continue
+            out[key] = max(-1_000.0, min(1_000_000.0, float(val)))
+        return out
+
+    @field_validator("barcode")
+    @classmethod
+    def _barcode_digits(cls, v: str | None) -> str | None:
+        if v is None:
+            return None
+        v = v.strip()
+        if v and not (v.isdigit() and 8 <= len(v) <= 14):
+            raise ValueError("barcode must be 8–14 digits")
+        return v or None
+
 
 class VerdictReasonOut(BaseModel):
     kind: str = Field(

@@ -66,7 +66,11 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
             error: (_, _) => _note("Couldn't load your history."),
             data: (r) => switch (r) {
               HistoryFailed(:final message) => _note(message),
-              HistoryLoaded(:final page) => _list(page),
+              HistoryOffline(:final items, :final cachedAt) => _list(
+                  items,
+                  banner: _OfflineBanner(cachedAt: cachedAt),
+                ),
+              HistoryLoaded(:final page) => _list(page.items),
             },
           ),
         ],
@@ -79,14 +83,14 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
         child: Text(text, style: CcText.body.copyWith(color: Cc.muted, height: 1.5)),
       );
 
-  Widget _list(HistoryPage page) {
+  Widget _list(List<ScanHistoryEntry> allItems, {Widget? banner}) {
     final want = _tierFor[_filter];
     final items = [
-      for (final e in page.items)
+      for (final e in allItems)
         if (want == null || e.tier == want) e,
     ];
 
-    if (page.items.isEmpty) {
+    if (allItems.isEmpty) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -117,6 +121,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if (banner != null) ...[const SizedBox(height: 10), banner],
         for (final entry in groups.entries) ...[
           const SizedBox(height: 18),
           Text(entry.key.toUpperCase(),
@@ -144,6 +149,47 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return '${d.day} ${months[d.month - 1]}';
+  }
+}
+
+/// "Offline — showing saved history" strip. Distinct from a hard error: the
+/// rows below it are real (last-synced) data, not a failure.
+class _OfflineBanner extends StatelessWidget {
+  const _OfflineBanner({required this.cachedAt});
+  final DateTime cachedAt;
+
+  String get _ago {
+    final d = DateTime.now().difference(cachedAt);
+    if (d.inMinutes < 1) return 'just now';
+    if (d.inMinutes < 60) return '${d.inMinutes} min ago';
+    if (d.inHours < 24) return '${d.inHours} h ago';
+    return '${d.inDays} d ago';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      key: const Key('history-offline-banner'),
+      padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 11),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF7E2D5),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.cloud_off_rounded, size: 16, color: Color(0xFF8A4526)),
+          const SizedBox(width: 9),
+          Expanded(
+            child: Text(
+              "Offline — showing your saved history (synced $_ago). "
+              "It'll refresh when you're back online.",
+              style: CcText.bodySm
+                  .copyWith(color: const Color(0xFF7A4A31), height: 1.4),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 

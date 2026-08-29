@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/analytics_api.dart';
 import '../core/auth_repository.dart';
+import '../core/connectivity.dart';
 import '../core/history_api.dart';
+import '../core/local_cache.dart';
 import '../core/nudges_api.dart';
 import '../core/theme.dart';
 import '../core/vault_api.dart';
@@ -54,6 +56,7 @@ class MainAppShell extends ConsumerWidget {
       // best-effort server delete, then forget the session and reset the app
       await ref.read(vaultApiProvider).deleteAccount();
       await ref.read(authControllerProvider).signOut();
+      await ref.read(localCacheProvider).clear(); // cached PHI must not linger
       ref.invalidate(historyPageProvider);
       ref.invalidate(trendsProvider);
       ref.invalidate(nudgesProvider);
@@ -119,11 +122,18 @@ class MainAppShell extends ConsumerWidget {
         body = NudgeScreen(onHome: app.goHome);
     }
 
+    final offline = ref.watch(isOfflineProvider);
+
     return Stack(
       children: [
         Scaffold(
           backgroundColor: bg,
-          body: body,
+          body: Column(
+            children: [
+              if (offline) const _OfflineStrip(),
+              Expanded(child: body),
+            ],
+          ),
           bottomNavigationBar: s.showNav
               ? CcBottomNav(
                   active: s.tab.name,
@@ -143,6 +153,37 @@ class MainAppShell extends ConsumerWidget {
   }
 }
 
+/// Persistent thin strip shown at the top of the app whenever the last network
+/// call to the backend failed to connect (Phase 6.3). Screens that have a
+/// local cache render it; the rest degrade to their normal error state.
+class _OfflineStrip extends StatelessWidget {
+  const _OfflineStrip();
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: const Color(0xFF8A4526),
+      child: SafeArea(
+        bottom: false,
+        child: Container(
+          key: const Key('app-offline-strip'),
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 14),
+          child: const Text(
+            "Offline — showing saved data where we have it",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontFamily: 'DMSans',
+                fontSize: 11.5,
+                fontWeight: FontWeight.w500,
+                color: Cc.paper),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// Bottom strip on the scan screen that reports barcode-lookup progress.
 class _LookupBanner extends StatelessWidget {
   const _LookupBanner({required this.state, this.onDismiss});
@@ -155,13 +196,15 @@ class _LookupBanner extends StatelessWidget {
       LookupPhase.looking => ('Looking up ${state.barcode}…', null, Cc.sage),
       LookupPhase.found => (
           state.product?.displayName ?? 'Product found',
-          <String>[
-            ?state.product?.brand,
-            '${state.product?.ingredients.length ?? 0} ingredients',
-            if (state.product?.cached ?? false) 'cached',
-            if (state.product?.stale ?? false) 'offline copy',
-          ].join(' · '),
-          Cc.sage,
+          (state.product?.fromLocalCache ?? false)
+              ? 'Offline — saved copy from this device'
+              : <String>[
+                  ?state.product?.brand,
+                  '${state.product?.ingredients.length ?? 0} ingredients',
+                  if (state.product?.cached ?? false) 'cached',
+                  if (state.product?.stale ?? false) 'offline copy',
+                ].join(' · '),
+          (state.product?.fromLocalCache ?? false) ? Cc.accent : Cc.sage,
         ),
       LookupPhase.notFound => (
           "Not in the database",

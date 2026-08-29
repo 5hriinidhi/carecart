@@ -432,6 +432,25 @@ app/
   vector/milvus_client.py   lazy MilvusClient helper
 ```
 
+## Input validation (Phase 6.3)
+
+Every write path is bounded at the schema layer so bad / hostile client input
+never reaches an (encrypted) column unvalidated — this is in addition to the
+client-side checks in the app:
+
+- **Free-text vault fields** (`condition_name`, `allergen_name`,
+  `medication.name` / `.dosage`, `health_profile.gender` / `.activity_level`) —
+  `_clean_text` in `schemas/vault.py`: strips control chars, collapses runs of
+  whitespace, trims, and rejects an all-blank string. `gender` / `activity_level`
+  are also lower-cased.
+- **`MedicationIn`** — `active_to` may not precede `active_from`.
+- **`ScanVerdictIn.nutriments`** — capped at 40 keys, key length ≤ 60, values
+  coerced finite and clamped to `[-1e3, 1e6]`. `barcode` must be 8–14 digits.
+- **`RequestOtpIn.phone`** — must match a phone shape and carry 8–15 digits
+  (the `normalize_e164` service is the second gate).
+
+Covered by `tests/test_input_validation.py`.
+
 ## Next
 
 - Phase 4.5+: persist a `ScanHistory` row per verdict; surface the reasons on the

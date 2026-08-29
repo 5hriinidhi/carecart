@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'api_client.dart';
+import 'connectivity.dart';
+import 'local_cache.dart';
 import 'product_api.dart' show networkErrorMessage;
 
 /// One row of the automatic diet log (Phase 5.1). Written server-side on every
@@ -40,6 +42,20 @@ class ScanHistoryEntry {
         scannedAt: DateTime.tryParse(j['scanned_at'] as String? ?? '') ??
             DateTime.fromMillisecondsSinceEpoch(0),
       );
+
+  /// Round-trips through [ScanHistoryEntry.fromJson] — used by the on-device cache.
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'product_name': productName,
+        'score': score,
+        'tier': tier,
+        'hard_stop': hardStop,
+        'key_reasons': [
+          for (final r in keyReasons)
+            {'kind': r.kind, 'severity': r.severity, 'title': r.title, 'factor': r.factor}
+        ],
+        'scanned_at': scannedAt.toIso8601String(),
+      };
 }
 
 class HistoryReason {
@@ -97,6 +113,14 @@ class HistoryLoaded extends HistoryResult {
   final HistoryPage page;
 }
 
+/// Backend unreachable, but an on-device snapshot exists (Phase 6.3). The screen
+/// renders [items] behind an "offline — showing saved history" banner.
+class HistoryOffline extends HistoryResult {
+  const HistoryOffline(this.items, this.cachedAt);
+  final List<ScanHistoryEntry> items;
+  final DateTime cachedAt;
+}
+
 class HistoryFailed extends HistoryResult {
   const HistoryFailed(this.message);
   final String message;
@@ -134,6 +158,24 @@ final historyProvider =
 
 /// Drives the history screen: the first page, most-recent-first. Auto-disposes
 /// so it refetches on reopen (e.g. after a scan added a row).
+///
+/// Phase 6.3: a loaded page is snapshotted to the on-device cache; if the fetch
+/// fails while the backend is unreachable, the last snapshot is returned as
+/// [HistoryOffline] instead of a bare error.
 final historyPageProvider = FutureProvider.autoDispose<HistoryResult>(
-  (ref) => ref.read(historyProvider)(limit: 50),
+  (ref) async {
+    final cache = ref.read(localCacheProvider);
+    final result = await ref.read(historyProvider)(limit: 50);
+    if (result is HistoryLoaded) {
+      await cache.putHistory(result.page.items);
+      return result;
+    }
+    if (result is HistoryFailed && ref.read(isOfflineProvider)) {
+      final snap = await cache.getHistory();
+      if (snap != null && snap.items.isNotEmpty) {
+        return HistoryOffline(snap.items, snap.cachedAt);
+      }
+    }
+    return result;
+  },
 );

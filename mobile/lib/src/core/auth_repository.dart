@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'api_client.dart';
 import 'auth_api.dart';
+import 'local_cache.dart';
 
 /// Where the JWT pair lives between launches. The access token is also mirrored
 /// into [authTokenProvider] (in memory) so [dioProvider] can attach it.
@@ -93,8 +94,10 @@ class AuthController {
   }
 
   /// Forget the session locally (after account deletion, or a manual sign-out).
+  /// Also wipes the on-device product / history cache — it holds PHI.
   Future<void> signOut() async {
     await _ref.read(tokenStoreProvider).clear();
+    await _ref.read(localCacheProvider).clear();
     _ref.read(authTokenProvider.notifier).clear();
   }
 }

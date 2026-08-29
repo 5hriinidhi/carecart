@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme.dart';
@@ -281,6 +282,10 @@ class _LoginForm extends StatelessWidget {
               Expanded(
                 child: TextField(
                   keyboardType: TextInputType.phone,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(10),
+                  ],
                   onChanged: flow.setPhone,
                   style: _sans(15),
                   decoration: InputDecoration(
@@ -1031,7 +1036,11 @@ class _BigInput extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
-              keyboardType: TextInputType.number,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                LengthLimitingTextInputFormatter(6),
+              ],
               onChanged: onChanged,
               style: _bric(22, FontWeight.w700),
               decoration: InputDecoration(
@@ -1071,10 +1080,12 @@ class _PlainInput extends StatelessWidget {
       ),
       child: TextField(
         onChanged: onChanged,
+        maxLength: 120,
         style: _sans(13.5),
         decoration: InputDecoration(
           border: InputBorder.none,
           isCollapsed: true,
+          counterText: '',
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 15, vertical: 13),
           hintText: hint,

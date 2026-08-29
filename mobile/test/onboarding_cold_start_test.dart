@@ -68,8 +68,9 @@ void main() {
     // ---- enter a phone number ----
     await tester.enterText(find.byType(TextField).first, '98765 43210');
     await tester.pump();
-    expect(onb().oPhone, '98765 43210');
-    _step('typed phone "98765 43210" → oPhone updated');
+    // the field strips non-digits (digitsOnly formatter — client-side validation)
+    expect(onb().oPhone, '9876543210');
+    _step('typed phone "98765 43210" → oPhone = "9876543210" (digits only)');
 
     // ---- Continue → request-otp → OTP screen ----
     await tester.tap(find.text('Continue'));

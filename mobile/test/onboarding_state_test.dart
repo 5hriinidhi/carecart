@@ -72,6 +72,28 @@ void main() {
     expect(st().oError, isNotNull);
   });
 
+  test('phone validation (client-side): 10 digits, starts 6-9', () async {
+    for (final bad in ['12345', '1234567890', '5876543210', '98765432101']) {
+      flow().setPhone(bad);
+      expect(st().oPhoneValid, isFalse, reason: bad);
+      await flow().submitPhone();
+      expect(st().oScreen, OnbScreen.login, reason: bad);
+    }
+    expect(auth.requestedPhones, isEmpty);
+
+    flow().setPhone('9876543210');
+    expect(st().oPhoneValid, isTrue);
+    await flow().submitPhone();
+    expect(auth.requestedPhones.single, '+919876543210');
+  });
+
+  test('setOther trims, strips control chars and caps at 120', () {
+    flow().setOther('  mustard\x00 \x07seed  ');
+    expect(st().oOther, 'mustard seed  '.trimLeft());
+    flow().setOther('x' * 200);
+    expect(st().oOther.length, 120);
+  });
+
   test('a request-otp failure surfaces on the login screen', () async {
     auth.requestFails = 'Too many code requests.';
     flow().setPhone('9876543210');
