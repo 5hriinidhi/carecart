@@ -2,11 +2,14 @@
 // SUCCESSFUL scanBarcode() emits a VerdictEvent here; a not-found or errored
 // scan does not.
 
+import 'package:carecart/src/core/notifications.dart';
 import 'package:carecart/src/core/product_api.dart';
 import 'package:carecart/src/state/main_app_state.dart';
 import 'package:carecart/src/state/verdict_events.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'support/fake_notifications.dart';
 
 const _product = ScannedProduct(
   barcode: '8901234567890',
@@ -32,6 +35,7 @@ ScanVerdict _verdict = ScanVerdict.fromJson(const {
 ProviderContainer _c({
   required ProductLookup Function(String) lookup,
   ScanVerdictOutcome Function()? verdict,
+  NotificationService? notifs,
 }) {
   final c = ProviderContainer(overrides: [
     productLookupProvider.overrideWithValue((code) async => lookup(code)),
@@ -41,6 +45,8 @@ ProviderContainer _c({
             String? barcode,
             String? productName}) async =>
         verdict?.call() ?? ScanVerdictReady(_verdict)),
+    notificationServiceProvider
+        .overrideWithValue(notifs ?? const NoopNotificationService()),
   ]);
   addTearDown(c.dispose);
   return c;
@@ -91,5 +97,38 @@ void main() {
     final second = c.read(verdictEventProvider);
     expect(second, isNotNull);
     expect(identical(first, second), isFalse);
+  });
+
+  test('a verdict carrying a nudge fires a local notification (Phase 5.3)', () async {
+    final notifs = FakeNotificationService(granted: true);
+    final withNudge = ScanVerdict.fromJson(const {
+      'score': 40,
+      'tier': 'caution',
+      'hard_stop': false,
+      'reasons': <Map<String, dynamic>>[],
+      'medications': <Map<String, dynamic>>[],
+      'risk_compounds': <String, dynamic>{},
+      'unverified': <String>[],
+      'unverified_count': 0,
+      'nudge': {'id': 'x', 'factor': 'sodium', 'message': 'cut the sodium sachets'},
+    });
+    final c = _c(
+      lookup: (_) => const ProductFound(_product),
+      verdict: () => ScanVerdictReady(withNudge),
+      notifs: notifs,
+    );
+
+    await c.read(mainAppProvider.notifier).scanBarcode('8901234567890');
+    await Future<void>.delayed(Duration.zero); // let the unawaited showNudge run
+
+    expect(notifs.shown.single.body, 'cut the sodium sachets');
+  });
+
+  test('a verdict with no nudge does not notify', () async {
+    final notifs = FakeNotificationService(granted: true);
+    final c = _c(lookup: (_) => const ProductFound(_product), notifs: notifs);
+    await c.read(mainAppProvider.notifier).scanBarcode('8901234567890');
+    await Future<void>.delayed(Duration.zero);
+    expect(notifs.shown, isEmpty);
   });
 }

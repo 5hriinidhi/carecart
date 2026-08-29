@@ -25,6 +25,8 @@ import 'package:carecart/src/features/result/result_screen.dart';
 import 'package:carecart/src/features/scan/scan_screen.dart';
 import 'package:carecart/src/features/search/search_screen.dart';
 import 'package:carecart/src/core/analytics_api.dart';
+import 'package:carecart/src/core/notifications.dart';
+import 'package:carecart/src/core/nudges_api.dart';
 import 'package:carecart/src/features/trends/trends_screen.dart';
 import 'package:carecart/src/core/widgets.dart';
 import 'package:carecart/src/state/main_app_state.dart';
@@ -49,6 +51,21 @@ void main() {
       trendsProvider.overrideWith((ref) async => const TrendsLoaded(Trends(
           timezone: 'UTC', totalScans: 0, dietHealthScore: 0,
           deltaSevenDay: 0, trend: 'steady'))),
+      nudgesProvider.overrideWith((ref) async => NudgesLoaded(NudgesPage(
+            latestSeq: 1,
+            items: [
+              Nudge(
+                  id: 'n1',
+                  seq: 1,
+                  factor: 'sodium',
+                  hitCount: 3,
+                  windowDays: 14,
+                  createdAt: DateTime(2026, 8, 20),
+                  message: 'Sodium was flagged in 3 of your last 14 days of '
+                      'scans. Try a low-sodium namkeen and rinse canned pulses.'),
+            ],
+          ))),
+      notificationServiceProvider.overrideWithValue(const NoopNotificationService()),
     ]);
     addTearDown(container.dispose);
     OnboardingState onb() => container.read(onboardingFlowProvider);
@@ -237,11 +254,13 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(NudgeScreen), findsOneWidget);
     expect(find.byType(CcBottomNav), findsNothing);
-    expect(find.text('Sodium is creeping up on your weekday lunches'), findsOneWidget);
-    expect(find.text('The three scans behind this'), findsOneWidget);
+    // wired to GET /nudges (stubbed): heading from factor + the actionable message
+    expect(tester.widget<Text>(find.byKey(const Key('nudge-heading'))).data,
+        'Sodium keeps turning up in your scans');
     expect(find.text('ONE CHANGE TO TRY'), findsOneWidget);
+    expect(find.textContaining('rinse canned pulses'), findsOneWidget);
     noException('nudge');
-    _ok('NUDGE — full check-in copy + 3 scans + "one change", no nav');
+    _ok('NUDGE — real nudge (heading + one actionable change), no nav');
 
     await tester.tap(find.byIcon(Icons.close_rounded));
     await tester.pumpAndSettle();

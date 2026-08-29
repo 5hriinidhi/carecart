@@ -229,6 +229,38 @@ Aggregates the user's `scan_history` (JWT required):
   An unknown `?tz=` is a `422`. Week / month boundaries always land on local
   midnight so buckets don't shift between requests.
 
+### Behavioural nudges — `GET /api/v1/nudges` (Phase 5.3)
+
+`services/nudges.detect_and_record` runs right after each `scan_history` row is
+written (same transaction as the verdict). If the user has **>= 3 non-safe scans
+(avoid / caution) sharing the same recurring `factor`** — a `risk_compound` such
+as `sodium`, taken from the verdict reasons' new `factor` field — inside a
+rolling **14-day window**, and there isn't already a live nudge for that factor,
+it inserts one `Nudge` row:
+
+- `factor` (plaintext — the de-dup key: one nudge per user per factor per
+  window), `message` (**Fernet-encrypted** — a specific, actionable per-factor
+  template naming the count and a concrete swap, e.g. *"Sodium was flagged in 4
+  of your last 14 days of scans. Next shop: pick a low-sodium namkeen … rinse
+  canned pulses …"* — never a generic "be careful"), `hit_count`, `window_days`,
+  `seq` (poll cursor), `created_at`, `dismissed_at`.
+- Cascade-deletes with the account.
+
+`POST /scan/verdict` includes the freshly-generated nudge in its response
+(`nudge`, else `null`) so the client can notify immediately; otherwise:
+
+- `GET /api/v1/nudges?since=<seq>&include_dismissed=false` — JWT, scoped to the
+  caller, `seq DESC`, `{ items[], latest_seq }`. Poll with `?since=latest_seq`.
+- `POST /api/v1/nudges/{id}/dismiss` — `204`, idempotent; `404` for an unknown
+  or another user's id.
+
+Mobile: `nudges_api.dart` client; `notifications.dart` wraps
+`flutter_local_notifications` behind an **explicit** `requestPermission()`
+(wired to the nudge screen's "Remind me") — `showNudge` re-checks and no-ops if
+not granted, permission is **never assumed**. `MainApp.scanBarcode` fires a
+local notification only when the verdict carries a `nudge` *and* permission is
+already granted.
+
 ## Health Identity Vault
 
 Every table is keyed to `users.id`. `users` stores only `phone_hash` — a keyed
@@ -377,11 +409,12 @@ app/
   services/ingredient_risk.py  offline ingredient → risk_compound resolver (static tables only, no LLM)
   services/verdict.py  Phase 4.4 scoring: deductions → 0-100 score + tier; allergen hard-stop
   services/trends.py   Phase 5.2 aggregates: weekly/monthly buckets + rolling Diet Health Score (EMA)
+  services/nudges.py   Phase 5.3 rule-based nudge detector (3+ non-safe scans / factor / 14 days -> actionable message)
   scripts/load_risk_tables.py     deploy step: load dataset/data_prep/*.csv → Postgres reference tables
   scripts/classify_unresolved.py  offline batch job: drain unresolved_ingredients → review CSV → merge
   api/deps.py          DbSession, get_current_user / CurrentUser
   api/v1/router.py      aggregate v1 router  (add feature routers here)
-  api/v1/routes/        endpoint modules (health.py, auth.py, products.py, scan.py, history.py, analytics.py, vault.py)
+  api/v1/routes/        endpoint modules (health.py, auth.py, products.py, scan.py, history.py, analytics.py, nudges.py, vault.py)
   vector/milvus_client.py   lazy MilvusClient helper
 ```
 

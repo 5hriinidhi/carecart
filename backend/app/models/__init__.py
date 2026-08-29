@@ -448,6 +448,33 @@ class DrugNameAlias(Base):
     notes: Mapped[str | None] = mapped_column(Text)
 
 
+class Nudge(Base):
+    """A behavioural nudge (Phase 5.3): generated server-side when a user racks
+    up 3+ non-safe scans for the same recurring ``factor`` (risk_compound) in a
+    rolling 14-day window. ``message`` is a specific, actionable suggestion.
+
+    ``message`` is Fernet-encrypted at rest (health behaviour); ``factor`` stays
+    plaintext — it's the de-dup key (one nudge per user per factor per window)
+    and Phase 5.x may group on it.
+    """
+
+    __tablename__ = "nudges"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=_uuid)
+    seq: Mapped[int] = mapped_column(BigInteger, Identity(), index=True)  # poll cursor
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), index=True
+    )
+    factor: Mapped[str] = mapped_column(String(48), index=True)
+    message: Mapped[str] = mapped_column(EncryptedString)   # encrypted at rest
+    hit_count: Mapped[int] = mapped_column(Integer)
+    window_days: Mapped[int] = mapped_column(Integer, default=14)
+    created_at: Mapped[dt.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False, index=True
+    )
+    dismissed_at: Mapped[dt.datetime | None] = mapped_column(DateTime(timezone=True))
+
+
 class AuditLog(Base):
     """Append-only record of WHO touched WHICH health resource and WHEN.
 
@@ -492,5 +519,6 @@ __all__ = [
     "ConditionDietRule",
     "AllergenAlias",
     "DrugNameAlias",
+    "Nudge",
     "AuditLog",
 ]

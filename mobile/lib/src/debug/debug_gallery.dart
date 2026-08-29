@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/analytics_api.dart';
+import '../core/nudges_api.dart';
 import '../core/text.dart';
 import '../core/theme.dart';
 import '../core/widgets.dart';
@@ -27,6 +28,26 @@ typedef DebugEntry = ({String label, WidgetBuilder build, String? navTab});
 /// The onboarding preview flips its own state machine only; keep it off the
 /// real router gate ([onboardingCompleteProvider]).
 void _onboardingPreviewNoop() {}
+
+/// Synthetic GET /nudges payload for the standalone Nudge preview.
+final _demoNudges = NudgesLoaded(NudgesPage(
+  latestSeq: 1,
+  items: [
+    Nudge(
+      id: 'demo',
+      seq: 1,
+      factor: 'sodium',
+      hitCount: 4,
+      windowDays: 14,
+      createdAt: DateTime(2026, 8, 20),
+      message:
+          'Sodium was flagged in 4 of your last 14 days of scans. Next shop: '
+          'pick a low-sodium namkeen or unsalted roasted nuts, rinse canned '
+          'pulses before cooking, and leave out the seasoning sachet in '
+          'instant noodles.',
+    ),
+  ],
+));
 
 /// Synthetic /analytics/trends payload for the standalone Trends preview.
 final _demoTrends = TrendsLoaded(Trends(
@@ -75,7 +96,13 @@ final debugScreens = <String, DebugEntry>{
   'meds': (label: 'Meds', build: (_) => const MedsScreen(), navTab: 'meds'),
   'search': (label: 'Search', build: (_) => const SearchScreen(), navTab: null),
   'search-empty': (label: 'Search — no results', build: (_) => const SearchScreen(showEmpty: true), navTab: null),
-  'nudge': (label: 'Nudge (proactive check-in)', build: (_) => const NudgeScreen(), navTab: null),
+  'nudge': (
+    label: 'Nudge (proactive check-in)',
+    build: (_) => ProviderScope(
+        overrides: [nudgesProvider.overrideWith((ref) async => _demoNudges)],
+        child: const NudgeScreen()),
+    navTab: null
+  ),
   'profile-sheet': (label: 'Profile bottom sheet', build: (_) => const ProfileSheetPreview(), navTab: null),
 };
 

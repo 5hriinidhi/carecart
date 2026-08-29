@@ -19,6 +19,7 @@ from sqlalchemy import select
 from app.api.deps import CurrentUser, DbSession
 from app.core.config import settings
 from app.models import Allergy, AuditLog, Condition, Medication, ScanHistory
+from app.schemas.nudge import NudgeOut
 from app.schemas.scan import (
     MedMatchOut,
     ScanVerdictIn,
@@ -26,6 +27,7 @@ from app.schemas.scan import (
     VerdictReasonOut,
 )
 from app.services import ingredient_risk
+from app.services import nudges as nudge_svc
 from app.services import verdict as verdict_svc
 
 router = APIRouter(prefix="/scan", tags=["scan"])
@@ -87,17 +89,25 @@ def scan_verdict(body: ScanVerdictIn, user: CurrentUser, db: DbSession):
             tier=v.tier,
             hard_stop=v.hard_stop,
             key_reasons=[
-                {"kind": r.kind, "severity": r.severity, "title": r.title}
+                {"kind": r.kind, "severity": r.severity, "title": r.title,
+                 "factor": r.factor}
                 for r in v.reasons[:4]
             ],
             scanned_at=dt.datetime.now(dt.UTC),
         )
     )
+    db.flush()  # the nudge detector's query must see the row just added
+
+    # --- behavioural nudge detection (Phase 5.3) --------------------------
+    new_nudges = nudge_svc.detect_and_record(db, user.id)
+
     # health-data access -> audit row (no content), same transaction
     db.add(
         AuditLog(user_id=user.id, action="read", resource="scan_verdict", status_code=200)
     )
     db.commit()
+
+    fresh_nudge = NudgeOut.model_validate(new_nudges[-1]) if new_nudges else None
 
     return ScanVerdictOut(
         score=v.score,
@@ -110,6 +120,7 @@ def scan_verdict(body: ScanVerdictIn, user: CurrentUser, db: DbSession):
                 points=r.points,
                 title=r.title,
                 detail=r.detail,
+                factor=r.factor,
             )
             for r in v.reasons
         ],
@@ -120,4 +131,5 @@ def scan_verdict(body: ScanVerdictIn, user: CurrentUser, db: DbSession):
         risk_compounds=v.risk_compounds,
         unverified=v.unverified,
         unverified_count=len(v.unverified),
+        nudge=fresh_nudge,
     )

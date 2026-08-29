@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'dart:async';
+
+import '../core/notifications.dart';
 import '../core/product_api.dart';
 import 'verdict_events.dart';
 
@@ -319,6 +322,16 @@ class MainApp extends Notifier<MainAppState> {
               verdict: verdict,
               at: DateTime.now(),
             ));
+        // Phase 5.3: if this scan crossed a pattern threshold, fire a local
+        // notification. The service no-ops unless the user has already granted
+        // permission (asked explicitly on the nudge screen) — never assumed.
+        final nudge = verdict.nudge;
+        if (nudge != null) {
+          unawaited(ref.read(notificationServiceProvider).showNudge(
+                title: 'A pattern worth a look',
+                body: nudge.message,
+              ));
+        }
       case ScanVerdictFailed(:final message):
         state = state.copyWith(
           lookup: LookupPhase.error,

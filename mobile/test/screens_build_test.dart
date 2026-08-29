@@ -17,7 +17,7 @@ const _signature = <String, String>{
   'meds': 'Medications',
   'search': 'RECENTLY SCANNED NEAR YOU',
   'search-empty': 'Not in the database yet',
-  'nudge': 'Sodium is creeping up on your weekday lunches',
+  'nudge': 'Sodium keeps turning up in your scans', // wired to GET /nudges (demo override)
   'profile-sheet': 'Who are we shopping for?',
 };
 

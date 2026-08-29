@@ -170,6 +170,9 @@ class VerdictReason:
     points: int      # score deducted (0 for allergen hard-stop and info lines)
     title: str
     detail: str | None = None
+    # the recurring risk_compound this reason is about (sodium, added_sugar, …);
+    # None for unverified / clear. Phase 5.3 groups repeat scans by this.
+    factor: str | None = None
 
 
 @dataclass
@@ -339,6 +342,7 @@ def score_verdict(
                         f"{user_allergens[rc]}",
                         detail=f"Ingredient flagged: “{ing.input_text}”. An allergen match "
                         "is a full stop, not a score deduction.",
+                        factor=rc,
                     )
                 )
     hard_stop = bool(allergen_seen)
@@ -370,6 +374,7 @@ def score_verdict(
                         points=pts,
                         title=f"{med.strip()} ({cls}) interacts with {disp(rule.risk_compound)}",
                         detail=detail or None,
+                        factor=rule.risk_compound,
                     )
                 )
     if any(not m.identified for m in med_matches):
@@ -426,6 +431,7 @@ def score_verdict(
                     title=f"High {label} for {cond.strip()}",
                     detail=f"{round(val, 1)} per 100 g vs a {rule.ceiling_per_100g:g} "
                     f"per-100 g limit for {ncond}. {rule.guidance or ''}".strip(),
+                    factor=_cov or None,
                 )
             )
         # pass 2: risk-compound rules (skip any a ceiling already covered)
@@ -448,6 +454,7 @@ def score_verdict(
                     points=pts,
                     title=f"{disp(rule.risk_compound)} is a poor fit for {cond.strip()}",
                     detail=rule.guidance,
+                    factor=rule.risk_compound,
                 )
             )
 
@@ -468,6 +475,7 @@ def score_verdict(
                 severity="low",
                 points=pts,
                 title=f"High {disp(rc)}",
+                factor=rc,
                 detail="A general nutrition concern — not tied to your medications or conditions.",
             )
         )

@@ -2,6 +2,9 @@
     <!-- barcode scanning (Phase 4.1, mobile_scanner) -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <!-- optional local push for nudges (Phase 5.3). Runtime-requested on
+         Android 13+, only after the user taps "Remind me". -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:label="carecart"
         android:name="${applicationName}"
