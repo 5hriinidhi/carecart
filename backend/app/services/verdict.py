@@ -362,8 +362,12 @@ def score_verdict(
                 continue
             if rule.ceiling_per_100g is None or val <= rule.ceiling_per_100g:
                 continue
-            condition_seen.add(rid)
             _cov = _CEILING_COVERS.get(rule.nutrient_key, "")
+            # two nutriment keys for the same concern (sodium_mg + salt_g) must
+            # not both deduct for one condition - first (more specific) wins
+            if _cov and _cov in covered:
+                continue
+            condition_seen.add(rid)
             covered.add(_cov)
             if _cov:
                 cited.add(_cov)  # general poor-fit shouldn't also deduct for it

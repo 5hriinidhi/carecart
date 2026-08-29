@@ -69,7 +69,7 @@ class MainAppShell extends ConsumerWidget {
             ScanScreen(
               onBack: app.back,
               onPick: app.startScan,
-              onBarcode: app.lookupBarcode,
+              onBarcode: app.scanBarcode,
             ),
             if (s.lookup != LookupPhase.idle)
               Positioned(
@@ -87,6 +87,7 @@ class MainAppShell extends ConsumerWidget {
         bg = Cc.paper;
         body = ResultScreen(
           productId: s.pid ?? 'noodles',
+          verdict: s.verdict, // live Phase 4.4 verdict; null -> demo fixture
           onHome: app.goHome,
           onScan: app.goScan,
         );

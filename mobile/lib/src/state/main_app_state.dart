@@ -10,6 +10,10 @@ enum MainScreen { home, scan, analyzing, result, trends, history, meds, search, 
 /// Barcode lookup progress on the scan screen (Phase 4.1).
 enum LookupPhase { idle, looking, found, notFound, error }
 
+/// Full scan → verdict pipeline progress (Phase 4.4): look the barcode up,
+/// then score it against the signed-in user's vault.
+enum VerdictPhase { idle, looking, scoring, done, error }
+
 /// The four bottom-nav tabs (a subset of [MainScreen], like the prototype's
 /// `state.tab`).
 const kNavTabs = [MainScreen.home, MainScreen.trends, MainScreen.history, MainScreen.meds];
@@ -43,6 +47,9 @@ class MainAppState {
     this.lookup = LookupPhase.idle,
     this.lookupError,
     this.ocrFallback = false,
+    this.verdictPhase = VerdictPhase.idle,
+    this.verdict,
+    this.verdictError,
   });
 
   final MainScreen screen;
@@ -65,6 +72,11 @@ class MainAppState {
   final LookupPhase lookup;
   final String? lookupError; // human message when lookup == error
   final bool ocrFallback; // backend said "not found, scan the ingredients"
+
+  // ---- scan → verdict pipeline (Phase 4.4) ----
+  final VerdictPhase verdictPhase;
+  final ScanVerdict? verdict; // the live verdict shown on the result screen
+  final String? verdictError;
 
   /// Bottom nav is only shown on the four tab screens (prototype `showNav`).
   bool get showNav => kNavTabs.contains(screen);
@@ -90,6 +102,9 @@ class MainAppState {
     LookupPhase? lookup,
     Object? lookupError = _sentinel,
     bool? ocrFallback,
+    VerdictPhase? verdictPhase,
+    Object? verdict = _sentinel,
+    Object? verdictError = _sentinel,
   }) {
     return MainAppState(
       screen: screen ?? this.screen,
@@ -113,6 +128,11 @@ class MainAppState {
           ? this.lookupError
           : lookupError as String?,
       ocrFallback: ocrFallback ?? this.ocrFallback,
+      verdictPhase: verdictPhase ?? this.verdictPhase,
+      verdict: identical(verdict, _sentinel) ? this.verdict : verdict as ScanVerdict?,
+      verdictError: identical(verdictError, _sentinel)
+          ? this.verdictError
+          : verdictError as String?,
     );
   }
 
@@ -135,7 +155,13 @@ class MainApp extends Notifier<MainAppState> {
 
   void goHome() => state = state.copyWith(screen: MainScreen.home, tab: MainScreen.home);
   void goScan() => state = state.copyWith(
-      screen: MainScreen.scan, lookup: LookupPhase.idle, ocrFallback: false);
+        screen: MainScreen.scan,
+        lookup: LookupPhase.idle,
+        ocrFallback: false,
+        verdictPhase: VerdictPhase.idle,
+        verdict: null,
+        verdictError: null,
+      );
   void goSearch() => state = state.copyWith(screen: MainScreen.search);
   void goNudge() => state = state.copyWith(screen: MainScreen.nudge);
 
@@ -203,6 +229,95 @@ class MainApp extends Notifier<MainAppState> {
 
   void dismissLookup() => state = state.copyWith(
       lookup: LookupPhase.idle, ocrFallback: false, lookupError: null);
+
+  /// The full Phase 4 pipeline for a scanned barcode:
+  ///   look it up (`GET /products/{barcode}`) → if found, score it against the
+  ///   signed-in user's vault (`POST /scan/verdict`) → land on the result screen.
+  ///
+  /// A "not found" still ends on the scan screen with [ocrFallback] set; a
+  /// failure at either step leaves [verdictPhase] == error with a message.
+  Future<void> scanBarcode(String rawBarcode) async {
+    final code = rawBarcode.trim();
+    if (code.isEmpty) return;
+
+    state = state.copyWith(
+      screen: MainScreen.scan,
+      barcode: code,
+      lookup: LookupPhase.looking,
+      ocrFallback: false,
+      lookupError: null,
+      product: null,
+      verdictPhase: VerdictPhase.looking,
+      verdict: null,
+      verdictError: null,
+    );
+
+    // ---- step 1: barcode → product ----
+    ProductLookup lookupResult;
+    try {
+      lookupResult = await ref.read(productLookupProvider)(code);
+    } catch (_) {
+      lookupResult = const ProductLookupError('Product lookup failed.');
+    }
+    if (state.barcode != code) return; // superseded by a newer scan
+
+    switch (lookupResult) {
+      case ProductNotFound(:final fallbackToOcr):
+        state = state.copyWith(
+          lookup: LookupPhase.notFound,
+          ocrFallback: fallbackToOcr,
+          verdictPhase: VerdictPhase.idle,
+        );
+        return;
+      case ProductLookupError(:final message):
+        state = state.copyWith(
+          lookup: LookupPhase.error,
+          lookupError: message,
+          verdictPhase: VerdictPhase.error,
+          verdictError: message,
+        );
+        return;
+      case ProductFound(:final product):
+        state = state.copyWith(
+          lookup: LookupPhase.found,
+          product: product,
+          verdictPhase: VerdictPhase.scoring,
+        );
+    }
+
+    // ---- step 2: product → verdict ----
+    final p = state.product!;
+    ScanVerdictOutcome scored;
+    try {
+      scored = await ref.read(scanVerdictProvider)(
+        ingredients: p.ingredients,
+        nutriments: p.nutriments.map(
+          (k, v) => MapEntry(k, (v is num) ? v : num.tryParse('$v') ?? 0),
+        ),
+        barcode: code,
+        productName: p.displayName,
+      );
+    } catch (_) {
+      scored = const ScanVerdictFailed("Couldn't score this product.");
+    }
+    if (state.barcode != code) return;
+
+    switch (scored) {
+      case ScanVerdictReady(:final verdict):
+        state = state.copyWith(
+          screen: MainScreen.result,
+          verdict: verdict,
+          verdictPhase: VerdictPhase.done,
+        );
+      case ScanVerdictFailed(:final message):
+        state = state.copyWith(
+          lookup: LookupPhase.error,
+          lookupError: message,
+          verdictPhase: VerdictPhase.error,
+          verdictError: message,
+        );
+    }
+  }
 
   // ---- per-screen state ----
   void setRange(String r) => state = state.copyWith(range: r);
