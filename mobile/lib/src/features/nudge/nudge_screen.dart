@@ -26,6 +26,11 @@ class _NudgeScreenState extends ConsumerState<NudgeScreen> {
 
   String? _note; // inline feedback under the action row
   bool _busy = false;
+  bool _permissionDenied = false; // asked once, said no — don't nag
+
+  static const _settingsHint =
+      'Notifications are off. Turn them on for CareCart in your phone\'s '
+      'Settings to get reminders.';
 
   static const _titles = <String, String>{
     'sodium': 'Sodium keeps turning up in your scans',
@@ -44,6 +49,12 @@ class _NudgeScreenState extends ConsumerState<NudgeScreen> {
   };
 
   Future<void> _remindMe(Nudge nudge) async {
+    // Asked once and denied -> never re-prompt. Just re-show the settings hint;
+    // the only way back is the OS settings screen.
+    if (_permissionDenied) {
+      setState(() => _note = _settingsHint);
+      return;
+    }
     setState(() => _busy = true);
     final notifs = ref.read(notificationServiceProvider);
     final granted = await notifs.requestPermission();
@@ -59,8 +70,8 @@ class _NudgeScreenState extends ConsumerState<NudgeScreen> {
     } else {
       setState(() {
         _busy = false;
-        _note = 'Notifications are off. Turn them on in system Settings to get '
-            'reminders.';
+        _permissionDenied = true;
+        _note = _settingsHint;
       });
     }
   }
@@ -179,10 +190,12 @@ class _NudgeScreenState extends ConsumerState<NudgeScreen> {
                         padding: const EdgeInsets.all(13),
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            color: Cc.sage,
+                            color: _permissionDenied
+                                ? Cc.sage.withValues(alpha: 0.45)
+                                : Cc.sage,
                             borderRadius: BorderRadius.circular(999)),
-                        child: const Text('Remind me',
-                            style: TextStyle(
+                        child: Text(_permissionDenied ? 'Notifications off' : 'Remind me',
+                            style: const TextStyle(
                                 fontFamily: 'DMSans',
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500,

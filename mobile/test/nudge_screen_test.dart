@@ -74,8 +74,9 @@ void main() {
         contains("we'll nudge you"));
   });
 
-  testWidgets('Remind me: on denial, nothing is shown and a settings hint appears',
-      (tester) async {
+  testWidgets(
+      'Remind me: on denial nothing is shown, a settings hint appears, and it '
+      'does NOT re-prompt on repeated taps', (tester) async {
     final notifs = FakeNotificationService(granted: false);
     await tester.pumpWidget(
         _app(NudgesLoaded(NudgesPage(items: [_n()], latestSeq: 1)), notifs: notifs));
@@ -84,10 +85,23 @@ void main() {
     await tester.tap(find.text('Remind me'));
     await tester.pumpAndSettle();
 
-    expect(notifs.permissionRequests, 1);
-    expect(notifs.shown, isEmpty);
+    expect(notifs.permissionRequests, 1); // asked exactly once
+    expect(notifs.shown, isEmpty);        // nothing shown without a grant
     expect(tester.widget<Text>(find.byKey(const Key('nudge-note'))).data,
         contains('Notifications are off'));
+    // the button relabels so it no longer reads as a prompt
+    expect(find.text('Remind me'), findsNothing);
+    expect(find.text('Notifications off'), findsOneWidget);
+
+    // hammer it — no crash, no fresh OS prompts
+    for (var i = 0; i < 5; i++) {
+      await tester.tap(find.text('Notifications off'));
+      await tester.pumpAndSettle();
+    }
+    expect(notifs.permissionRequests, 1); // STILL one — never re-prompts
+    expect(tester.takeException(), isNull);
+    expect(tester.widget<Text>(find.byKey(const Key('nudge-note'))).data,
+        contains('Settings'));
   });
 
   testWidgets('Not now -> returns home', (tester) async {
