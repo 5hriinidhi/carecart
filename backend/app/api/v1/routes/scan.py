@@ -18,7 +18,7 @@ from sqlalchemy import select
 
 from app.api.deps import CurrentUser, DbSession
 from app.core.config import settings
-from app.models import Allergy, AuditLog, Condition, Medication
+from app.models import Allergy, AuditLog, Condition, Medication, ScanHistory
 from app.schemas.scan import (
     MedMatchOut,
     ScanVerdictIn,
@@ -73,7 +73,27 @@ def scan_verdict(body: ScanVerdictIn, user: CurrentUser, db: DbSession):
         nutriments=body.nutriments,
     )
 
-    # health-data access -> audit row (no content), same transaction as the queue writes
+    # --- automatic diet logging (Phase 5.1) ---------------------------------
+    # every completed verdict is written to scan_history here, in the same
+    # transaction as the verdict itself. The client does NOT call a separate
+    # "log this" endpoint - a scan that produced a verdict is, by definition,
+    # something the user consumed / considered, so it is logged unconditionally.
+    db.add(
+        ScanHistory(
+            user_id=user.id,
+            product_name=(body.product_name or body.barcode or "Scanned product")[:200],
+            barcode=body.barcode,
+            score=v.score,
+            tier=v.tier,
+            hard_stop=v.hard_stop,
+            key_reasons=[
+                {"kind": r.kind, "severity": r.severity, "title": r.title}
+                for r in v.reasons[:4]
+            ],
+            scanned_at=dt.datetime.now(dt.UTC),
+        )
+    )
+    # health-data access -> audit row (no content), same transaction
     db.add(
         AuditLog(user_id=user.id, action="read", resource="scan_verdict", status_code=200)
     )

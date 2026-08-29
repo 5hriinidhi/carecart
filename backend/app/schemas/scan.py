@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from pydantic import BaseModel, Field, field_validator
+import datetime as dt
+
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class ScanVerdictIn(BaseModel):
@@ -58,3 +60,37 @@ class ScanVerdictOut(BaseModel):
     risk_compounds: dict[str, float] = Field(default_factory=dict)
     unverified: list[str] = Field(default_factory=list)
     unverified_count: int = 0
+
+
+# --------------------------------------------------------------------------- #
+# diet log (Phase 5.1) — GET /history
+# --------------------------------------------------------------------------- #
+class HistoryReason(BaseModel):
+    kind: str
+    severity: str
+    title: str
+
+
+class ScanHistoryItem(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: str
+    product_name: str
+    score: int
+    tier: str
+    hard_stop: bool = False
+    key_reasons: list[HistoryReason] = Field(default_factory=list)
+    scanned_at: dt.datetime
+
+    @field_validator("id", mode="before")
+    @classmethod
+    def _stringify_id(cls, v: object) -> str:
+        return str(v)
+
+
+class ScanHistoryPage(BaseModel):
+    items: list[ScanHistoryItem]
+    total: int = Field(description="Total rows for this user.")
+    limit: int
+    offset: int
+    has_more: bool

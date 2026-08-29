@@ -16,10 +16,12 @@ import datetime as dt
 import uuid
 
 from sqlalchemy import (
+    BigInteger,
     Date,
     DateTime,
     Float,
     ForeignKey,
+    Identity,
     Integer,
     String,
     Text,
@@ -162,25 +164,38 @@ class Medication(Base, TimestampMixin):
     user: Mapped[User] = relationship(back_populates="medications")
 
 
-class ScanHistory(Base, TimestampMixin):
-    """Kept for later phases; repointed from profile_id -> user_id in 3.2."""
+class ScanHistory(Base):
+    """Automatic diet log — one row per completed ``POST /scan/verdict``
+    (Phase 5.1). Written server-side on every verdict; the client never has to
+    call a separate "log this" endpoint. Cascade-deletes with the user.
+
+    ``score`` / ``tier`` / ``scanned_at`` stay plaintext — they are structural
+    and Phase 5.2 trends aggregate on them (``AVG(score) GROUP BY week``). The
+    identifying bits — what the user actually scanned — are Fernet-encrypted at
+    rest like the rest of the vault: ``product_name``, ``barcode``,
+    ``key_reasons``. Encrypted columns are only ever filtered by ``user_id``.
+    """
 
     __tablename__ = "scan_history"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=_uuid)
+    # monotonic insertion order — the authoritative "most recent first" key, so
+    # pagination is stable even when two scans share a scanned_at timestamp.
+    seq: Mapped[int] = mapped_column(BigInteger, Identity(), index=True)
     user_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE"), index=True
     )
-    product_name: Mapped[str] = mapped_column(String(200))
-    brand: Mapped[str | None] = mapped_column(String(160))
-    barcode: Mapped[str | None] = mapped_column(String(64), index=True)
-    raw_ingredients: Mapped[str | None] = mapped_column(Text)
-
-    verdict: Mapped[str | None] = mapped_column(String(20))  # avoid | caution | safe
-    score: Mapped[int | None]
-    flags: Mapped[list[dict]] = mapped_column(JSONB, default=list, server_default=text("'[]'"))
-    nutrients: Mapped[list[dict]] = mapped_column(JSONB, default=list, server_default=text("'[]'"))
-    logged: Mapped[bool] = mapped_column(default=False)
+    product_name: Mapped[str] = mapped_column(EncryptedString)          # encrypted at rest
+    barcode: Mapped[str | None] = mapped_column(EncryptedString)        # encrypted at rest
+    score: Mapped[int] = mapped_column(Integer)
+    tier: Mapped[str] = mapped_column(String(12))                      # safe | caution | avoid
+    hard_stop: Mapped[bool] = mapped_column(default=False, server_default=text("false"))
+    # top few reasons behind the verdict: [{"kind","severity","title"}, ...]
+    key_reasons: Mapped[list[dict]] = mapped_column(EncryptedJSON, default=list)
+    # wall-clock time the verdict was produced (set by the route, not the DB txn)
+    scanned_at: Mapped[dt.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False, index=True
+    )
 
 
 class Product(Base, TimestampMixin):

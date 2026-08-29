@@ -193,6 +193,24 @@ is a clinician-review DRAFT, so wording stays "keep intake consistent" /
   computed off the stale copy; backend down → a clear error on the scan screen,
   no partial/false verdict.
 
+### Automatic diet log — `scan_history` + `GET /api/v1/history` (Phase 5.1)
+
+**Every** completed `POST /scan/verdict` writes one `scan_history` row in the
+same transaction as the verdict — no separate "log this" call, ever. A scan that
+produced a verdict is by definition something the user considered, so it is
+logged unconditionally (hard-stop verdicts included).
+
+| column | notes |
+|---|---|
+| `user_id`, `score`, `tier`, `hard_stop`, `scanned_at` | plaintext — structural; Phase 5.2 trends aggregate on `score`/`tier`/`scanned_at` |
+| `product_name`, `barcode`, `key_reasons` (`[{kind,severity,title}]`, top 4) | **Fernet-encrypted at rest**, like the rest of the vault — a scan history reveals health behaviour |
+| `seq` (`BIGINT IDENTITY`) | monotonic insertion order — the authoritative "most recent first" key, so pagination is stable even when two scans share a `scanned_at` |
+
+`GET /api/v1/history?limit=&offset=` (JWT required) → `{ items[], total, limit,
+offset, has_more }`, ordered `seq DESC`, **scoped to the caller only**
+(`WHERE user_id = current_user.id`). `limit` 1–100 (default 20), `offset` ≥ 0.
+Rows cascade-delete with the account.
+
 ## Health Identity Vault
 
 Every table is keyed to `users.id`. `users` stores only `phone_hash` — a keyed
@@ -332,7 +350,7 @@ app/
   db/base.py           DeclarativeBase + TimestampMixin
   db/types.py          EncryptedString column type (transparent at-rest encryption)
   db/session.py        engine + SessionLocal + get_db dependency
-  models/__init__.py   auth + vault + Product + 4.3 risk tables + 4.4 InteractionRule / DrugClassLookup / DrugClassStemRule / ConditionDietRule / AllergenAlias + AuditLog
+  models/__init__.py   auth + vault + Product + 4.3 risk tables + 4.4 InteractionRule / DrugClassLookup / DrugClassStemRule / ConditionDietRule / AllergenAlias / DrugNameAlias + ScanHistory (5.1 diet log) + AuditLog
   schemas/auth.py, schemas/vault.py   request/response models
   services/phone.py    E.164 normalisation
   services/otp.py      challenge lifecycle: rate-limit / issue / verify
@@ -344,7 +362,7 @@ app/
   scripts/classify_unresolved.py  offline batch job: drain unresolved_ingredients → review CSV → merge
   api/deps.py          DbSession, get_current_user / CurrentUser
   api/v1/router.py      aggregate v1 router  (add feature routers here)
-  api/v1/routes/        endpoint modules (health.py, auth.py, products.py, scan.py, vault.py)
+  api/v1/routes/        endpoint modules (health.py, auth.py, products.py, scan.py, history.py, vault.py)
   vector/milvus_client.py   lazy MilvusClient helper
 ```
 
