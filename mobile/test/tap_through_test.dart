@@ -86,12 +86,13 @@ void main() {
     // ---- 6. RESULT ----
     expect(find.byType(ResultScreen), findsOneWidget);
     expect(find.byType(CcBottomNav), findsNothing, reason: 'nav hidden on result');
-    expect(find.text('Not for you'), findsOneWidget);
-    expect(find.text('24'), findsWidgets); // the big score
+    // fixture rendered through the real POST /scan/verdict shape; tier from chipFor
+    expect(tester.widget<Text>(find.byKey(const Key('verdict-tier'))).data, 'Avoid');
+    expect(tester.widget<Text>(find.byKey(const Key('verdict-score'))).data, '24');
     expect(st().screen, MainScreen.result);
     expect(st().pid, 'noodles');
     expect(st().step, 3, reason: 'analyze completed');
-    _step('RESULT: verdict "Not for you", score 24, pid=noodles, step=3');
+    _step('RESULT: tier "Avoid" (chipFor(24)), score 24, pid=noodles, step=3');
 
     // ---- 7. result close (X) -> HOME ----
     await tester.tap(find.byIcon(Icons.close_rounded));

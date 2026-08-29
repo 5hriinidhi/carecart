@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/product_api.dart';
+import 'verdict_events.dart';
 
 /// The 9 main-app screens, mirroring the prototype's `state.screen` string
 /// values in `CareCart App.dc.html` ('home', 'scan', 'analyzing', ...).
@@ -309,6 +310,15 @@ class MainApp extends Notifier<MainAppState> {
           verdict: verdict,
           verdictPhase: VerdictPhase.done,
         );
+        // Phase 5 diet-logging hooks in here: every successful verdict is an
+        // event on verdictEventProvider.
+        ref.read(verdictEventProvider.notifier).emit(VerdictEvent(
+              barcode: code,
+              productName: p.displayName,
+              product: p,
+              verdict: verdict,
+              at: DateTime.now(),
+            ));
       case ScanVerdictFailed(:final message):
         state = state.copyWith(
           lookup: LookupPhase.error,

@@ -156,16 +156,16 @@ void main() {
     }
     expect(find.byType(ResultScreen), findsOneWidget);
     expect(app().screen, MainScreen.result);
-    expect(find.text('Not for you'), findsOneWidget);
+    // the fixture is now adapted into the real POST /scan/verdict shape:
+    // score + tier (from chipFor) + reasons.
+    expect(tester.widget<Text>(find.byKey(const Key('verdict-score'))).data, '24');
+    expect(tester.widget<Text>(find.byKey(const Key('verdict-tier'))).data, 'Avoid');
     expect(find.textContaining('CARECART SCORE'), findsOneWidget);
-    expect(find.text('Why we flagged it'), findsOneWidget);
-    expect(find.text('Maltodextrin'), findsOneWidget); // real fixture flag
-    expect(find.text('Per serving, against your ceilings'), findsOneWidget);
-    expect(find.text('Safer swaps, same shelf'), findsOneWidget);
-    expect(find.text('Millet Atta Noodles'), findsOneWidget); // real fixture swap
+    expect(find.text('Why this verdict'), findsOneWidget);
+    expect(find.text('Maltodextrin'), findsOneWidget); // fixture flag -> reason title
     expect(find.byType(CcBottomNav), findsNothing, reason: 'nav hidden on result');
     noException('result');
-    _ok('RESULT — score 24 "Not for you", real flags/nutrients/swaps, no nav');
+    _ok('RESULT — score 24 -> tier "Avoid" via chipFor(), fixture flags as reasons, no nav');
 
     await tester.tap(find.byIcon(Icons.close_rounded));
     await tester.pumpAndSettle();

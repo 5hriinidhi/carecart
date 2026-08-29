@@ -9,9 +9,9 @@ const _signature = <String, String>{
   'home': 'Good evening',
   'scan': 'Hold the barcode in the frame',
   'analyzing': 'Setting up your verdict',
-  'result': 'Not for you',
-  'result-caution': 'Worth a pause',
-  'result-safe': 'Good for you',
+  'result': 'Avoid', // tier label from chipFor(score) — was the fixture's 'Not for you'
+  'result-caution': 'Caution',
+  'result-safe': 'Safe for you',
   'trends': 'Your trend',
   'history': 'Food history',
   'meds': 'Medications',

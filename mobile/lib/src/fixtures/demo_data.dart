@@ -144,7 +144,7 @@ const kProducts = <String, DemoProduct>{
     brand: 'Realis',
     serving: '200 ml',
     barcode: '8901• 7735',
-    score: 41,
+    score: 52, // caution band — chipFor(52) == Severity.caution
     verdict: Severity.caution,
     summary:
         'Worth a second thought. The label is honest about added sugar but says '
@@ -195,12 +195,12 @@ class DemoHistoryDay {
 const kHistory = <DemoHistoryDay>[
   DemoHistoryDay('Today · 24 Aug', 71, [
     DemoScan('chana', 'Roasted Chana, Lightly Salted', 'Clean · high fibre', '18:40', 86),
-    DemoScan('juice', 'Mixed Fruit Juice', 'Free sugars 88% of ceiling', '13:05', 41),
+    DemoScan('juice', 'Mixed Fruit Juice', 'Free sugars 88% of ceiling', '13:05', 52),
   ]),
   DemoHistoryDay('Yesterday · 23 Aug', 58, [
     DemoScan('noodles', 'Instant Masala Noodles', 'Sodium + maltodextrin', '20:15', 24),
     DemoScan('chana', 'Roasted Chana', 'Clean', '16:20', 86),
-    DemoScan('juice', 'Mixed Fruit Juice', 'Free sugars high', '09:10', 41),
+    DemoScan('juice', 'Mixed Fruit Juice', 'Free sugars high', '09:10', 52),
   ]),
   DemoHistoryDay('Fri · 21 Aug', 64, [
     DemoScan('noodles', 'Instant Masala Noodles', 'Third time this week', '13:30', 24),
@@ -293,7 +293,7 @@ class DemoSearchHit {
 const kSearchRecent = <DemoSearchHit>[
   DemoSearchHit('Instant Masala Noodles', 'Maggo Foods', 24, pid: 'noodles'),
   DemoSearchHit('Roasted Chana, Lightly Salted', 'Farmveda', 86, pid: 'chana'),
-  DemoSearchHit('Mixed Fruit Juice, No Added Sugar', 'Realis', 41, pid: 'juice'),
+  DemoSearchHit('Mixed Fruit Juice, No Added Sugar', 'Realis', 52, pid: 'juice'),
   DemoSearchHit('Multigrain Khakhra', 'Induben', 74),
   DemoSearchHit('Salted Butter Biscuits', 'Britain Foods', 38),
 ];
