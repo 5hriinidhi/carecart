@@ -118,3 +118,44 @@ def test_request_otp_accepts_national_and_e164(client):
     for p in ("9876500011", "+91 98765 00011"):
         r = client.post(f"{BASE}/auth/request-otp", json={"phone": p})
         assert r.status_code == 200, p
+
+
+# --------------------------------------------- the onboarding submission sequence
+def test_invalid_onboarding_submission_is_rejected_field_by_field(client, db):
+    """Mirrors what the Flutter `startBuilding` step POSTs: every bad field is a
+    422 server-side (defence in depth behind the client-side checks), while a
+    clean submission of the same shape succeeds."""
+    h = _auth(db, "+919611000020")
+
+    bad_cases = [
+        # (endpoint, payload, what's wrong)
+        (f"{BASE}/me/health-profile", "put",
+         {"gender": "   ", "body_metrics": {"weight": 5_000}}),          # blank + out of range
+        (f"{BASE}/me/health-profile", "put",
+         {"body_metrics": {"height": -10}}),                             # negative
+        (f"{BASE}/me/allergies", "post", {"allergen_name": ""}),         # empty required
+        (f"{BASE}/me/allergies", "post", {"allergen_name": "x" * 300}),  # absurdly long
+        (f"{BASE}/me/conditions", "post", {"condition_name": "\t\n "}),   # whitespace only
+        (f"{BASE}/me/conditions", "post", {"condition_name": "y" * 500}), # over 200
+        (f"{BASE}/me/medications", "post", {"name": ""}),                 # empty required
+        (f"{BASE}/me/medications", "post",
+         {"name": "Warfarin", "active_from": "2026-06-01", "active_to": "2026-01-01"}),
+    ]
+    for url, method, payload in bad_cases:
+        r = client.request(method.upper(), url, headers=h, json=payload)
+        assert r.status_code == 422, f"{method} {url} {payload} -> {r.status_code}"
+
+    # the same forms, filled sanely -> accepted
+    assert client.put(f"{BASE}/me/health-profile", headers=h, json={
+        "gender": "  Female ", "activity_level": "MODERATE",
+        "body_metrics": {"weight": 61.5, "height": 165,
+                         "weight_unit": "kg", "height_unit": "cm"},
+        "diet_type": ["low sodium"],
+    }).status_code == 200
+    assert client.post(f"{BASE}/me/allergies", headers=h,
+                       json={"allergen_name": "  tree  nuts "}).status_code == 201
+    assert client.post(f"{BASE}/me/conditions", headers=h,
+                       json={"condition_name": "Hypertension"}).status_code == 201
+    assert client.post(f"{BASE}/me/medications", headers=h, json={
+        "name": "Warfarin 5mg", "active_from": "2026-01-01", "active_to": "2026-12-31",
+    }).status_code == 201

@@ -164,8 +164,14 @@ final historyProvider =
 /// [HistoryOffline] instead of a bare error.
 final historyPageProvider = FutureProvider.autoDispose<HistoryResult>(
   (ref) async {
+    // capture the sync deps up front — the user can leave the tab mid-fetch and
+    // this provider auto-disposes; `ref.read` after that throws.
     final cache = ref.read(localCacheProvider);
-    final result = await ref.read(historyProvider)(limit: 50);
+    final fetch = ref.read(historyProvider);
+
+    final result = await fetch(limit: 50);
+    if (!ref.mounted) return result; // tab closed while the request was in flight
+
     if (result is HistoryLoaded) {
       await cache.putHistory(result.page.items);
       return result;

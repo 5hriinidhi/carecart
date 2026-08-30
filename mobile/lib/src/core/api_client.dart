@@ -37,9 +37,10 @@ const kConnectTimeout = Duration(seconds: 8);
 const kReceiveTimeout = Duration(seconds: 12);
 const kSendTimeout = Duration(seconds: 20); // uploads (label-scan multipart)
 
-/// Dio bound to the versioned API (`/api/v1/...`), with the auth token attached
-/// and backend-reachability tracking.
-final dioProvider = Provider<Dio>((ref) {
+/// Builds the app's Dio: versioned base URL, the three timeouts, the Bearer
+/// token, and backend-reachability tracking. Exposed so tests can build an
+/// identically-behaving client with a swappable adapter.
+Dio buildApiDio(Ref ref) {
   final dio = Dio(
     BaseOptions(
       baseUrl: '$apiBaseUrl/api/v1',
@@ -74,7 +75,11 @@ final dioProvider = Provider<Dio>((ref) {
     ),
   );
   return dio;
-});
+}
+
+/// Dio bound to the versioned API (`/api/v1/...`), with the auth token attached
+/// and backend-reachability tracking.
+final dioProvider = Provider<Dio>(buildApiDio);
 
 /// Result of a `GET /health` call against the backend.
 class HealthResult {
