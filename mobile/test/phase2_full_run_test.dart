@@ -261,15 +261,15 @@ void main() {
     expect(find.byType(HomeScreen), findsOneWidget);
     _ok('tabs — Home/Trend/History/Meds all reachable both ways');
 
-    // ===================== SEARCH =====================
+    // ===================== SEARCH (food lookup) =====================
     await tester.tap(find.text('Look it up'));
     await tester.pumpAndSettle();
     expect(find.byType(SearchScreen), findsOneWidget);
     expect(find.byType(CcBottomNav), findsNothing);
-    expect(find.text('RECENTLY SCANNED NEAR YOU'), findsOneWidget);
-    expect(find.text('Roasted Chana, Lightly Salted'), findsOneWidget); // fixture
+    expect(find.byKey(const Key('food-search-field')), findsOneWidget);
+    expect(find.textContaining('Type a dish or product name'), findsOneWidget);
     noException('search');
-    _ok('SEARCH — recent list from fixtures, no nav');
+    _ok('SEARCH — food-search field + idle hint, no nav');
 
     await tester.tap(find.byIcon(Icons.arrow_back_ios_new_rounded));
     await tester.pumpAndSettle();

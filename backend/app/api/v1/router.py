@@ -8,6 +8,7 @@ from app.api.v1.routes import (
     analytics,
     auth,
     drugs,
+    foods,
     health,
     history,
     nudges,
@@ -21,6 +22,7 @@ api_router.include_router(health.router)
 api_router.include_router(auth.router, prefix="/auth", tags=["auth"])
 api_router.include_router(products.router)
 api_router.include_router(drugs.router)
+api_router.include_router(foods.router)
 api_router.include_router(scan.router)
 api_router.include_router(history.router)
 api_router.include_router(analytics.router)

@@ -1,6 +1,7 @@
 import 'package:carecart/src/core/analytics_api.dart';
 import 'package:carecart/src/core/auth_api.dart';
 import 'package:carecart/src/core/drugs_api.dart';
+import 'package:carecart/src/core/foods_api.dart';
 import 'package:carecart/src/core/history_api.dart';
 import 'package:carecart/src/core/me_api.dart';
 import 'package:carecart/src/core/nudges_api.dart';
@@ -171,12 +172,38 @@ class FakeMeApi implements MeApi {
   }
 }
 
+class FakeFoodsApi implements FoodsApi {
+  FakeFoodsApi({this.hits = const [], this.error});
+
+  List<FoodHit> hits;
+  String? error;
+  final List<String> queries = [];
+
+  @override
+  Future<FoodSearchResult> search(String query, {int limit = 20}) async {
+    final q = query.trim();
+    queries.add(q);
+    if (q.replaceAll(RegExp(r'\s'), '').length < 2) {
+      return const FoodSearchHits([]);
+    }
+    if (error != null) return FoodSearchError(error!);
+    final lc = q.toLowerCase();
+    return FoodSearchHits(hits
+        .where((f) =>
+            f.name.toLowerCase().contains(lc) ||
+            (f.brand ?? '').toLowerCase().contains(lc))
+        .take(limit)
+        .toList());
+  }
+}
+
 /// Overrides that give a test the whole wired app with no network.
 List<Override> fakeBackendOverrides({
   FakeAuthApi? auth,
   FakeVaultApi? vault,
   FakeMeApi? me,
   FakeDrugsApi? drugs,
+  FakeFoodsApi? foods,
   TrendsResult? trends,
   NudgesResult? nudges,
   HistoryResult? history,
@@ -188,6 +215,7 @@ List<Override> fakeBackendOverrides({
     vaultApiProvider.overrideWithValue(v),
     meApiProvider.overrideWithValue(m),
     drugsApiProvider.overrideWithValue(drugs ?? FakeDrugsApi()),
+    foodsApiProvider.overrideWithValue(foods ?? FakeFoodsApi()),
     trendsProvider.overrideWith(
         (ref) async => trends ?? const TrendsFailed('offline in test')),
     nudgesProvider.overrideWith(

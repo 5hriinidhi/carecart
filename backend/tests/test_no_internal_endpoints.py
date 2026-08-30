@@ -25,6 +25,7 @@ _ALLOWED = {
     "/api/v1/products/scan-label",
     "/api/v1/products/resolve-risks",
     "/api/v1/drugs/search",
+    "/api/v1/foods/search",
     "/api/v1/scan/verdict",
     "/api/v1/history",
     "/api/v1/analytics/trends",

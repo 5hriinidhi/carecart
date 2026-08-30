@@ -448,6 +448,34 @@ class DrugNameAlias(Base):
     notes: Mapped[str | None] = mapped_column(Text)
 
 
+class FoodCatalog(Base):
+    """Searchable everyday-food dataset (from ``dataset/indian_food.csv`` — home
+    dishes — and ``dataset/packaged_foods_india.csv`` — branded packaged
+    products). Backs ``GET /foods/search`` so a user can look a food up by name
+    instead of scanning a barcode. Static reference data — no user data, loaded
+    by ``scripts.load_food_catalog``.
+
+    ``nutriments`` uses the same per-100 g keys as the Open Food Facts product
+    cache (``energy_kcal_100g`` etc.) so the app renders both through one widget;
+    it is ``{}`` for dishes, which carry no nutrition in the source."""
+
+    __tablename__ = "food_catalog"
+
+    id: Mapped[int] = mapped_column(Integer, Identity(), primary_key=True)
+    name: Mapped[str] = mapped_column(String(300), index=True)
+    kind: Mapped[str] = mapped_column(String(12))  # dish | packaged
+    brand: Mapped[str | None] = mapped_column(String(200))
+    category: Mapped[str | None] = mapped_column(String(200))
+    ingredients_text: Mapped[str | None] = mapped_column(Text)
+    diet: Mapped[str | None] = mapped_column(String(40))       # vegetarian | non vegetarian
+    course: Mapped[str | None] = mapped_column(String(60))     # dishes only
+    region: Mapped[str | None] = mapped_column(String(60))     # dishes only
+    serving_size: Mapped[str | None] = mapped_column(String(80))
+    nutriments: Mapped[dict] = mapped_column(
+        JSONB, default=dict, server_default=text("'{}'"), nullable=False
+    )
+
+
 class DrugCatalog(Base):
     """Searchable catalogue of Indian medicine brand names (from
     ``dataset/data_prep/drug_classes.csv``, deduped to one row per
@@ -535,6 +563,7 @@ __all__ = [
     "DrugClassLookup",
     "DrugClassStemRule",
     "DrugCatalog",
+    "FoodCatalog",
     "ConditionDietRule",
     "AllergenAlias",
     "DrugNameAlias",

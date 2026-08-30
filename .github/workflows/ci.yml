@@ -127,6 +127,7 @@ jobs:
           alembic upgrade head
           python -m scripts.load_risk_tables
           python -m scripts.load_drug_catalog
+          python -m scripts.load_food_catalog
           python -m scripts.seed_demo_products
 
       - name: Start backend (0.0.0.0:8000, reachable from the emulator at 10.0.2.2)

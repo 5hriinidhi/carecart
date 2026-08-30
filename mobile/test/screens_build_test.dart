@@ -19,8 +19,8 @@ const _signature = <String, String>{
   'trends': 'Your trend',
   'history': 'Food history',
   'meds': 'Medications',
-  'search': 'RECENTLY SCANNED NEAR YOU',
-  'search-empty': 'Not in the database yet',
+  'search': 'Type a dish or product name',
+  'search-empty': 'No food matched',
   'nudge': 'Sodium keeps turning up in your scans', // wired to GET /nudges (demo override)
   'profile-sheet': 'Who are we shopping for?',
 };

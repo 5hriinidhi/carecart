@@ -278,24 +278,6 @@ const kTrajectories = <DemoTrajectory>[
       'Six days above target. Worth watching before it becomes a habit.'),
 ];
 
-// --- search -------------------------------------------------------------------
-
-class DemoSearchHit {
-  const DemoSearchHit(this.name, this.brand, this.score, {this.pid});
-  final String name;
-  final String brand;
-  final int score;
-  final String? pid;
-}
-
-const kSearchRecent = <DemoSearchHit>[
-  DemoSearchHit('Instant Masala Noodles', 'Maggo Foods', 24, pid: 'noodles'),
-  DemoSearchHit('Roasted Chana, Lightly Salted', 'Farmveda', 86, pid: 'chana'),
-  DemoSearchHit('Mixed Fruit Juice, No Added Sugar', 'Realis', 52, pid: 'juice'),
-  DemoSearchHit('Multigrain Khakhra', 'Induben', 74),
-  DemoSearchHit('Salted Butter Biscuits', 'Britain Foods', 38),
-];
-
 // --- nudge -------------------------------------------------------------------
 
 const kNudgeScans = <DemoScan>[
