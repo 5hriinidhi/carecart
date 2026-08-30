@@ -63,6 +63,11 @@ app = FastAPI(
     version="0.1.0",
     debug=settings.debug and not settings.is_production,  # never leak tracebacks in prod
     lifespan=lifespan,
+    # the interactive API explorer + schema are a dev convenience; off in prod so
+    # the deployed surface is exactly the endpoints the app calls.
+    docs_url=None if settings.is_production else "/docs",
+    redoc_url=None if settings.is_production else "/redoc",
+    openapi_url=None if settings.is_production else "/openapi.json",
 )
 
 app.add_middleware(
