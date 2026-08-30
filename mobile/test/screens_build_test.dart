@@ -11,6 +11,7 @@ import 'support/fake_backend.dart';
 const _signature = <String, String>{
   'home': 'Good evening',
   'scan': 'Hold the barcode in the frame',
+  'product': 'Nutrition',
   'analyzing': 'Setting up your verdict',
   'result': 'Avoid', // tier label from chipFor(score) — was the fixture's 'Not for you'
   'result-caution': 'Caution',

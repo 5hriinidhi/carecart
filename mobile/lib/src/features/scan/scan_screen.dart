@@ -16,7 +16,7 @@ bool get _inFlutterTest =>
     !kIsWeb && Platform.environment.containsKey('FLUTTER_TEST');
 
 /// Scan screen — `state.screen == 'scan'`. Live camera barcode reader
-/// ([onBarcode]) + a manual-entry field + the demo product picker.
+/// ([onBarcode]) + a manual-entry field, plus a dev-only demo product picker.
 class ScanScreen extends StatelessWidget {
   const ScanScreen({
     super.key,
@@ -24,6 +24,7 @@ class ScanScreen extends StatelessWidget {
     this.onPick,
     this.onBarcode,
     this.cameraEnabled = true,
+    this.showDemoPicker = true,
   });
   final VoidCallback? onBack;
   final void Function(String pid)? onPick;
@@ -33,6 +34,11 @@ class ScanScreen extends StatelessWidget {
 
   /// Off in the debug gallery / tests, where there's no camera plugin.
   final bool cameraEnabled;
+
+  /// The "pick a demo product" shortcut list. Dev / debug builds only — a real
+  /// build shows just the camera + manual entry so a tap can never stand in for
+  /// a scan and return the wrong product. Wired from `debugGalleryEnabledProvider`.
+  final bool showDemoPicker;
 
   bool get _showCamera => cameraEnabled && !_inFlutterTest;
 
@@ -117,18 +123,20 @@ class ScanScreen extends StatelessWidget {
                                       fontSize: 10.5)),
                               const SizedBox(height: 9),
                               _ManualBarcodeField(onSubmit: onBarcode),
-                              const SizedBox(height: 18),
-                              Text('DEMO — PICK A PRODUCT TO SCAN',
-                                  style: CcText.mono.copyWith(
-                                      color: const Color(0x73F1F0E4),
-                                      letterSpacing: 1.05,
-                                      fontSize: 10.5)),
-                              const SizedBox(height: 9),
-                              for (final pid in kDemoPickOrder) ...[
-                                _DemoRow(
-                                    product: kProducts[pid]!,
-                                    onTap: () => onPick?.call(pid)),
-                                const SizedBox(height: 8),
+                              if (showDemoPicker) ...[
+                                const SizedBox(height: 18),
+                                Text('DEMO — PICK A PRODUCT TO SCAN',
+                                    style: CcText.mono.copyWith(
+                                        color: const Color(0x73F1F0E4),
+                                        letterSpacing: 1.05,
+                                        fontSize: 10.5)),
+                                const SizedBox(height: 9),
+                                for (final pid in kDemoPickOrder) ...[
+                                  _DemoRow(
+                                      product: kProducts[pid]!,
+                                      onTap: () => onPick?.call(pid)),
+                                  const SizedBox(height: 8),
+                                ],
                               ],
                             ],
                           ),

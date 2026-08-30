@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/analytics_api.dart';
 import '../core/history_api.dart';
 import '../core/nudges_api.dart';
+import '../core/product_api.dart';
 import '../core/text.dart';
 import '../core/vault_api.dart';
 import '../core/theme.dart';
@@ -14,6 +15,7 @@ import '../features/home/home_screen.dart';
 import '../features/meds/meds_screen.dart';
 import '../features/nudge/nudge_screen.dart';
 import '../features/onboarding/onboarding_screen.dart';
+import '../features/product/product_screen.dart';
 import '../features/profile/profile_sheet.dart';
 import '../features/result/result_screen.dart';
 import '../features/scan/scan_screen.dart';
@@ -130,6 +132,26 @@ final _demoMeds = MedicationsLoaded(const [
   Medication(id: '3', name: 'Warfarin', dosage: '5 mg'),
 ]);
 
+/// A stand-in Open Food Facts result for the standalone Product-facts preview.
+const _demoScannedProduct = ScannedProduct(
+  barcode: '8901058000108',
+  name: 'Poha (Flattened Rice)',
+  brand: 'Local Mills',
+  ingredients: ['Flattened rice (poha)'],
+  ingredientsText: 'Flattened rice (poha)',
+  nutriments: {
+    'energy_kcal_100g': 346,
+    'carbohydrates_g_100g': 77.3,
+    'sugars_g_100g': 0.9,
+    'protein_g_100g': 6.6,
+    'fat_g_100g': 1.2,
+    'fiber_g_100g': 2.4,
+    'sodium_mg_100g': 6,
+  },
+  servingSize: '40 g',
+  cached: true,
+);
+
 final debugScreens = <String, DebugEntry>{
   'onboarding': (
     label: 'Onboarding flow (sign-in → 6 steps → done)',
@@ -139,6 +161,11 @@ final debugScreens = <String, DebugEntry>{
   ),
   'home': (label: 'Home', build: (_) => const HomeScreen(), navTab: 'home'),
   'scan': (label: 'Scan', build: (_) => const ScanScreen(cameraEnabled: false), navTab: null),
+  'product': (
+    label: 'Product facts (real barcode scan)',
+    build: (_) => const ProductScreen(product: _demoScannedProduct),
+    navTab: null
+  ),
   'analyzing': (label: 'Analyzing', build: (_) => const AnalyzingScreen(), navTab: null),
   'result': (label: 'Result — Avoid (noodles)', build: (_) => const ResultScreen(productId: 'noodles'), navTab: null),
   'result-caution': (label: 'Result — Caution (juice)', build: (_) => const ResultScreen(productId: 'juice'), navTab: null),

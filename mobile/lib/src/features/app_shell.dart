@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/analytics_api.dart';
 import '../core/auth_repository.dart';
+import '../core/build_config.dart';
 import '../core/connectivity.dart';
 import '../core/history_api.dart';
 import '../core/local_cache.dart';
@@ -18,6 +19,7 @@ import 'history/history_screen.dart';
 import 'home/home_screen.dart';
 import 'meds/meds_screen.dart';
 import 'nudge/nudge_screen.dart';
+import 'product/product_screen.dart';
 import 'profile/profile_sheet.dart';
 import 'result/result_screen.dart';
 import 'scan/scan_screen.dart';
@@ -92,7 +94,8 @@ class MainAppShell extends ConsumerWidget {
             ScanScreen(
               onBack: app.back,
               onPick: app.startScan,
-              onBarcode: app.scanBarcode,
+              onBarcode: app.scanProduct,
+              showDemoPicker: ref.watch(debugGalleryEnabledProvider),
             ),
             if (s.lookup != LookupPhase.idle)
               Positioned(
@@ -106,6 +109,15 @@ class MainAppShell extends ConsumerWidget {
       case MainScreen.analyzing:
         bg = Cc.paper;
         body = AnalyzingScreen(activeStep: s.step);
+      case MainScreen.product:
+        bg = Cc.paper;
+        body = s.product == null
+            ? const SizedBox.shrink()
+            : ProductScreen(
+                product: s.product!,
+                onClose: app.goHome,
+                onScanNext: app.goScan,
+              );
       case MainScreen.result:
         bg = Cc.paper;
         body = ResultScreen(

@@ -9,7 +9,18 @@ import 'verdict_events.dart';
 
 /// The 9 main-app screens, mirroring the prototype's `state.screen` string
 /// values in `CareCart App.dc.html` ('home', 'scan', 'analyzing', ...).
-enum MainScreen { home, scan, analyzing, result, trends, history, meds, search, nudge }
+enum MainScreen {
+  home,
+  scan,
+  analyzing,
+  result,
+  product, // real barcode scan -> product facts (no personal verdict yet)
+  trends,
+  history,
+  meds,
+  search,
+  nudge
+}
 
 /// Barcode lookup progress on the scan screen (Phase 4.1).
 enum LookupPhase { idle, looking, found, notFound, error }
@@ -192,12 +203,19 @@ class MainApp extends Notifier<MainAppState> {
     }
   }
 
-  // ---- barcode scan (Phase 4.1) ----
-  /// Look a scanned barcode up via `GET /products/{barcode}`.
-  ///   found    -> state.product is set, lookup == found
-  ///   notFound -> ocrFallback == true (client should offer OCR)
-  ///   error    -> lookupError has a message
-  Future<void> lookupBarcode(String rawBarcode) async {
+  // ---- barcode scan ----
+  void dismissLookup() => state = state.copyWith(
+      lookup: LookupPhase.idle, ocrFallback: false, lookupError: null);
+
+  /// What a real barcode scan does today: look the code up via
+  /// `GET /products/{barcode}` and — if it's in the database — show the product's
+  /// facts (name, brand, nutrition per 100 g, ingredients).
+  ///
+  /// It deliberately stops there. The personalised "how good is this for you"
+  /// verdict ([scanBarcode]) is gated on the medicines + lifestyle correlation
+  /// score and stays dormant until that lands. A miss keeps the user on the scan
+  /// screen with a clear "not in the database" banner — never a wrong product.
+  Future<void> scanProduct(String rawBarcode) async {
     final code = rawBarcode.trim();
     if (code.isEmpty) return;
 
@@ -208,12 +226,15 @@ class MainApp extends Notifier<MainAppState> {
       ocrFallback: false,
       lookupError: null,
       product: null,
+      // keep the verdict machine idle — we are not scoring in this build
+      verdictPhase: VerdictPhase.idle,
+      verdict: null,
+      verdictError: null,
     );
 
-    final lookup = ref.read(productLookupProvider);
     ProductLookup result;
     try {
-      result = await lookup(code);
+      result = await ref.read(productLookupProvider)(code);
     } catch (_) {
       result = const ProductLookupError('Product lookup failed.');
     }
@@ -222,7 +243,11 @@ class MainApp extends Notifier<MainAppState> {
 
     switch (result) {
       case ProductFound(:final product):
-        state = state.copyWith(lookup: LookupPhase.found, product: product);
+        state = state.copyWith(
+          screen: MainScreen.product,
+          lookup: LookupPhase.found,
+          product: product,
+        );
       case ProductNotFound(:final fallbackToOcr):
         state = state.copyWith(
             lookup: LookupPhase.notFound, ocrFallback: fallbackToOcr);
@@ -231,12 +256,13 @@ class MainApp extends Notifier<MainAppState> {
     }
   }
 
-  void dismissLookup() => state = state.copyWith(
-      lookup: LookupPhase.idle, ocrFallback: false, lookupError: null);
-
-  /// The full Phase 4 pipeline for a scanned barcode:
+  /// The full scan → verdict pipeline:
   ///   look it up (`GET /products/{barcode}`) → if found, score it against the
   ///   signed-in user's vault (`POST /scan/verdict`) → land on the result screen.
+  ///
+  /// NOT wired to the UI in this build — [scanProduct] (lookup only) is what a
+  /// scan runs today. This comes back on when the medicines + lifestyle
+  /// correlation score lands and the result screen shows a personal verdict.
   ///
   /// A "not found" still ends on the scan screen with [ocrFallback] set; a
   /// failure at either step leaves [verdictPhase] == error with a message.
