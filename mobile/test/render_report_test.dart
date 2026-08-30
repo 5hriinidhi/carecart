@@ -11,7 +11,10 @@ import 'package:carecart/src/core/severity.dart';
 import 'package:carecart/src/core/widgets.dart';
 import 'package:carecart/src/debug/debug_gallery.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'support/fake_backend.dart';
 
 String _hex(Color c) {
   final v = c.toARGB32();
@@ -45,8 +48,11 @@ void main() {
         tester.view.devicePixelRatio = 1.0;
         addTearDown(tester.view.reset);
 
-        await tester.pumpWidget(
-            MaterialApp(home: Scaffold(body: Builder(builder: entry.value.build))));
+        await tester.pumpWidget(ProviderScope(
+          overrides: fakeBackendOverrides(),
+          child: MaterialApp(
+              home: Scaffold(body: Builder(builder: entry.value.build))),
+        ));
         await tester.pump(const Duration(milliseconds: 300));
 
         final err = await _scrollThrough(tester);

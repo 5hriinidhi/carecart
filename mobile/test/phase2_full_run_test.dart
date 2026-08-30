@@ -136,6 +136,11 @@ void main() {
       expect(onb().oStep, i);
       expect(find.text(stepTitles[i]), findsOneWidget, reason: 'step ${i + 1} copy');
       noException('onboarding step ${i + 1}');
+      if (i == 0) {
+        await tester.enterText(find.byType(TextField), 'Devi');
+        await tester.pump();
+        expect(onb().oName, 'Devi');
+      }
       if (stepPick[i] != null) {
         await tester.tap(find.text(stepPick[i]!));
         await tester.pump();
@@ -147,7 +152,7 @@ void main() {
 
     // building writes the profile to the vault (fakes here), then -> done
     expect(onb().oScreen, OnbScreen.done);
-    expect(find.text("You're set up, Aarav"), findsOneWidget);
+    expect(find.text("You're set up, Devi"), findsOneWidget);
     _ok('onboarding: profile written → done');
 
     await tester.pump(const Duration(milliseconds: 1600)); // auto-handoff
@@ -157,11 +162,11 @@ void main() {
     expect(find.byType(MainAppShell), findsOneWidget);
     expect(find.byType(HomeScreen), findsOneWidget);
     expect(find.byType(CcBottomNav), findsOneWidget, reason: 'nav on tab screen');
-    expect(find.text('Good evening, Aarav'), findsOneWidget);
+    expect(find.text('Good evening, Devi'), findsOneWidget);
     expect(find.text('Diet Health Score'), findsWidgets);
     expect(app().screen, MainScreen.home);
     noException('home');
-    _ok('HOME — "Good evening, Aarav", diet score card, nav visible');
+    _ok('HOME — "Good evening, Devi", diet score card, nav visible');
 
     // ===================== SCAN (via FAB) =====================
     await tester.tap(find.descendant(
@@ -290,20 +295,18 @@ void main() {
     _ok('NUDGE — close (X) returns to home (no dead-end)');
 
     // ===================== PROFILE SHEET =====================
-    await tester.tap(find.descendant(
-      of: find.byType(HomeScreen),
-      matching: find.text('A'),
-    ));
+    await tester.tap(find.byKey(const Key('home-profile-button')));
     await tester.pumpAndSettle();
     expect(find.text('Who are we shopping for?'), findsOneWidget);
     expect(find.text('Each profile has its own medications and ceilings.'),
         findsOneWidget);
-    expect(find.text('Aarav Deshmukh'), findsOneWidget);
+    // the "You" row now carries the name entered during onboarding
+    expect(find.text('Devi'), findsOneWidget);
     expect(find.text('Sunita Deshmukh'), findsOneWidget);
     expect(find.text('Ira Deshmukh'), findsOneWidget);
     expect(app().showProfiles, isTrue);
     noException('profile sheet');
-    _ok('PROFILE SHEET — 3 profiles from fixtures');
+    _ok('PROFILE SHEET — self (named) + 2 family fixtures');
 
     await tester.tapAt(const Offset(10, 10)); // tap the scrim
     await tester.pumpAndSettle();

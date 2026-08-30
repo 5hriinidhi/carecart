@@ -1,6 +1,7 @@
 import 'package:carecart/src/core/analytics_api.dart';
 import 'package:carecart/src/core/auth_api.dart';
 import 'package:carecart/src/core/history_api.dart';
+import 'package:carecart/src/core/me_api.dart';
 import 'package:carecart/src/core/nudges_api.dart';
 import 'package:carecart/src/core/vault_api.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
@@ -114,18 +115,42 @@ class FakeVaultApi implements VaultApi {
   }
 }
 
+class FakeMeApi implements MeApi {
+  FakeMeApi({String? displayName = 'Aarav'}) : _name = displayName;
+
+  String? _name;
+  final List<String> nameWrites = [];
+
+  MeInfo get info => MeInfo(displayName: _name);
+
+  @override
+  Future<MeInfo> fetch() async => info;
+
+  @override
+  Future<String?> updateName(String name) async {
+    final trimmed = name.trim();
+    if (trimmed.isEmpty) return null;
+    nameWrites.add(trimmed);
+    _name = trimmed;
+    return null;
+  }
+}
+
 /// Overrides that give a test the whole wired app with no network.
 List<Override> fakeBackendOverrides({
   FakeAuthApi? auth,
   FakeVaultApi? vault,
+  FakeMeApi? me,
   TrendsResult? trends,
   NudgesResult? nudges,
   HistoryResult? history,
 }) {
   final v = vault ?? FakeVaultApi();
+  final m = me ?? FakeMeApi();
   return [
     authApiProvider.overrideWithValue(auth ?? FakeAuthApi()),
     vaultApiProvider.overrideWithValue(v),
+    meApiProvider.overrideWithValue(m),
     trendsProvider.overrideWith(
         (ref) async => trends ?? const TrendsFailed('offline in test')),
     nudgesProvider.overrideWith(

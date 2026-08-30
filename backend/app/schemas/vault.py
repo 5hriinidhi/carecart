@@ -40,6 +40,17 @@ class _Orm(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+# --------------------------------------------------------------------- account
+class MeOut(_Orm):
+    display_name: str | None
+
+
+class MePatch(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    display_name: str | None = Field(default=None, min_length=1, max_length=60)
+    _clean = field_validator("display_name")(_clean_text)
+
+
 class BodyMetrics(BaseModel):
     """Onboarding step 3. Fixed shape - no arbitrary keys, bounded numbers."""
 

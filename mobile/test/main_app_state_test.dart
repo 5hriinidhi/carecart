@@ -24,7 +24,7 @@ void main() {
     expect(s.query, '');
     expect(s.showNudge, isTrue);
     expect(s.showProfiles, isFalse);
-    expect(s.profile, 'Aarav');
+    expect(s.profile, '');
     expect(s.showNav, isTrue);
   });
 

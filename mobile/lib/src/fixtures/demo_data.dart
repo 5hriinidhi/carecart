@@ -7,8 +7,6 @@
 
 import '../core/severity.dart';
 
-const kProfileFirst = 'Aarav';
-const kProfileInitial = 'A';
 const kDietScore = 68;
 const kTodayLabel = 'Tuesday, 24 Aug';
 

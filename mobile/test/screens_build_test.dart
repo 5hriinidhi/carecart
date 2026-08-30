@@ -3,7 +3,10 @@
 
 import 'package:carecart/src/debug/debug_gallery.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'support/fake_backend.dart';
 
 const _signature = <String, String>{
   'home': 'Good evening',
@@ -29,7 +32,11 @@ void main() {
       addTearDown(tester.view.reset);
 
       await tester.pumpWidget(
-        MaterialApp(home: Scaffold(body: Builder(builder: entry.value.build))),
+        ProviderScope(
+          overrides: fakeBackendOverrides(),
+          child: MaterialApp(
+              home: Scaffold(body: Builder(builder: entry.value.build))),
+        ),
       );
       await tester.pump(const Duration(milliseconds: 300));
 

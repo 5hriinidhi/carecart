@@ -1,22 +1,29 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/build_config.dart';
+import '../../core/me_api.dart';
 import '../../core/text.dart';
 import '../../core/theme.dart';
 import '../../core/widgets.dart';
 import '../../fixtures/demo_data.dart';
 
 /// Static home screen — turn `1a` / `state.screen == 'home'` in CareCart App.dc.html.
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key, this.onNav, this.onScan, this.onOpenProfiles});
   final void Function(String route)? onNav;
   final VoidCallback? onScan;
   final VoidCallback? onOpenProfiles;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // The signed-in user's name drives the greeting + avatar; until it loads (or
+    // if it never set) we fall back to the generic copy.
+    final me = ref.watch(meProvider).asData?.value ?? const MeInfo();
+    final firstName = me.firstName;
+    final initial = me.initial;
     return CcScreen(
       background: Cc.paper,
       child: ListView(
@@ -52,7 +59,7 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ]),
                       const SizedBox(height: 5),
-                      const Text('Good evening, $kProfileFirst', style: CcText.h1),
+                      Text('Good evening, $firstName', style: CcText.h1),
                     ],
                   ),
                 ),
@@ -64,8 +71,8 @@ class HomeScreen extends StatelessWidget {
                     height: 44,
                     alignment: Alignment.center,
                     decoration: const BoxDecoration(color: Cc.olive, shape: BoxShape.circle),
-                    child: const Text(kProfileInitial,
-                        style: TextStyle(
+                    child: Text(initial,
+                        style: const TextStyle(
                             fontFamily: 'Bricolage',
                             fontSize: 16,
                             fontWeight: FontWeight.w700,

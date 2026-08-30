@@ -117,6 +117,12 @@ void main() {
       expect(find.text(titles[i]!), findsOneWidget, reason: 'step $i title');
       assertMainUntouched('steps/$i');
 
+      if (i == 0) {
+        await tester.enterText(find.byType(TextField), 'Nadia');
+        await tester.pump();
+        expect(onb().oName, 'Nadia');
+      }
+
       final pick = pickPerStep[i];
       if (pick != null) {
         await tester.tap(find.text(pick));
@@ -132,7 +138,7 @@ void main() {
 
     // ---- building writes the profile to the vault, then -> done ----
     expect(onb().oScreen, OnbScreen.done);
-    expect(find.text("You're set up, Aarav"), findsOneWidget);
+    expect(find.text("You're set up, Nadia"), findsOneWidget);
     assertMainUntouched('done (pre-handoff)');
     _step('profile written to the vault → oScreen=done; main app STILL untouched');
 

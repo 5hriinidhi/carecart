@@ -60,6 +60,11 @@ void main() {
     expect(find.text('A few things about you'), findsOneWidget);
     _step('signed in -> STEP 1 gender');
 
+    await tester.enterText(find.byType(TextField), 'Kiran');
+    await tester.pump();
+    expect(st().oName, 'Kiran');
+    _step('STEP 1 name = Kiran');
+
     await tester.tap(find.text('Female'));
     await tester.pump();
     expect(st().oGender, 'Female');
@@ -101,9 +106,9 @@ void main() {
     await tester.tap(find.text('Complete'));
     await tester.pumpAndSettle(); // building -> real vault writes -> done
     expect(st().oScreen, OnbScreen.done);
-    expect(find.text("You're set up, Aarav"), findsOneWidget);
+    expect(find.text("You're set up, Kiran"), findsOneWidget);
     expect(find.text('Female'), findsWidgets); // in the profile summary
-    _step('DONE — summary rendered');
+    _step('DONE — summary rendered, greets by the name entered');
 
     // onComplete fires ~1500ms after reaching done (hand-off to /app)
     expect(completeCalls, 0);

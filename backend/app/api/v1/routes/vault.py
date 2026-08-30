@@ -35,6 +35,8 @@ from app.schemas.vault import (
     MedicationOut,
     MedicationPatch,
     MedicationScanOut,
+    MeOut,
+    MePatch,
 )
 from app.services import ocr
 
@@ -264,6 +266,30 @@ async def scan_medication_label(
     )
 
 
+# ---------------------------------------------------------------- account name
+me_router = APIRouter(prefix="/me", tags=["me"])
+
+
+@me_router.get("", response_model=MeOut)
+def get_me(user: CurrentUser, db: DbSession):
+    _audit(db, user.id, "read", "me")
+    db.commit()
+    return user
+
+
+@me_router.patch("", response_model=MeOut)
+def patch_me(body: MePatch, user: CurrentUser, db: DbSession):
+    data = body.model_dump(exclude_unset=True)
+    if not data:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "No fields to update.")
+    for field, value in data.items():
+        setattr(user, field, value)
+    _audit(db, user.id, "write", "me")
+    db.commit()
+    db.refresh(user)
+    return user
+
+
 # ------------------------------------------------------------ delete account
 account_router = APIRouter(prefix="/me/account", tags=["account"])
 
@@ -284,6 +310,7 @@ def delete_my_account(user: CurrentUser, db: DbSession) -> Response:
 
 
 ROUTERS = [
+    me_router,
     health_profile_router,
     conditions_router,
     allergies_router,

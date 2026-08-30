@@ -18,6 +18,7 @@ void main() {
   late ProviderContainer c;
   late FakeAuthApi auth;
   late FakeVaultApi vault;
+  late FakeMeApi me;
 
   OnboardingFlow flow() => c.read(onboardingFlowProvider.notifier);
   OnboardingState st() => c.read(onboardingFlowProvider);
@@ -25,7 +26,9 @@ void main() {
   setUp(() {
     auth = FakeAuthApi(devCode: '123456');
     vault = FakeVaultApi();
-    c = ProviderContainer(overrides: fakeBackendOverrides(auth: auth, vault: vault));
+    me = FakeMeApi(displayName: null);
+    c = ProviderContainer(
+        overrides: fakeBackendOverrides(auth: auth, vault: vault, me: me));
   });
   tearDown(() => c.dispose());
 
@@ -92,6 +95,14 @@ void main() {
     expect(st().oOther, 'mustard seed  '.trimLeft());
     flow().setOther('x' * 200);
     expect(st().oOther.length, 120);
+  });
+
+  test('setName strips control chars, left-trims and caps at 60', () {
+    expect(st().oName, '');
+    flow().setName('  Ka\x00ir\x1f a  ');
+    expect(st().oName, 'Kair a  '); // controls gone, leading ws trimmed
+    flow().setName('n' * 90);
+    expect(st().oName.length, 60);
   });
 
   test('a request-otp failure surfaces on the login screen', () async {
@@ -210,6 +221,7 @@ void main() {
   test('startBuilding writes the whole profile to the vault, then -> done',
       () async {
     await signIn();
+    flow().setName('Kiran');
     flow().setGender('Female');
     flow().next();
     flow().setActivity('Moderate');
@@ -226,6 +238,7 @@ void main() {
     await flow().next(); // last step -> startBuilding()
 
     expect(st().oScreen, OnbScreen.done);
+    expect(me.nameWrites, const ['Kiran']); // PATCH /me happened during building
     expect(vault.profile!['gender'], 'female');
     expect(vault.profile!['activity_level'], 'moderate');
     expect(vault.profile!['diet'], const ['Low sodium']);

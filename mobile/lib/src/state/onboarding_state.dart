@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/auth_api.dart';
 import '../core/auth_repository.dart';
+import '../core/me_api.dart';
 import '../core/vault_api.dart';
 
 /// SECOND, independent state machine — the sign-in + 6-step profile wizard
@@ -50,6 +51,7 @@ class OnboardingState {
   const OnboardingState({
     this.oScreen = OnbScreen.login,
     this.oStep = 0,
+    this.oName = '',
     this.oPhone = '',
     this.oOtp = '',
     this.oGender,
@@ -70,6 +72,7 @@ class OnboardingState {
 
   final OnbScreen oScreen;
   final int oStep; // 0..5
+  final String oName; // what the user wants to be called (PATCH /me)
   final String oPhone;
   final String oOtp; // up to kOtpLength digits
   final String? oGender; // Male | Female | Prefer not to say
@@ -133,6 +136,7 @@ class OnboardingState {
   OnboardingState copyWith({
     OnbScreen? oScreen,
     int? oStep,
+    String? oName,
     String? oPhone,
     String? oOtp,
     Object? oGender = _sentinel,
@@ -153,6 +157,7 @@ class OnboardingState {
     return OnboardingState(
       oScreen: oScreen ?? this.oScreen,
       oStep: oStep ?? this.oStep,
+      oName: oName ?? this.oName,
       oPhone: oPhone ?? this.oPhone,
       oOtp: oOtp ?? this.oOtp,
       oGender: identical(oGender, _sentinel) ? this.oGender : oGender as String?,
@@ -196,6 +201,20 @@ class OnboardingFlow extends Notifier<OnboardingState> {
   }
 
   // ---- login ----
+
+  /// "What should we call you?" — drop control characters, keep the leading
+  /// edge trimmed while the user is still typing, and cap at the server's
+  /// 60-char `display_name` limit.
+  void setName(String v) {
+    final buf = StringBuffer();
+    for (final rune in v.runes) {
+      if (rune >= 0x20 && rune != 0x7f) buf.writeCharCode(rune);
+    }
+    var cleaned = buf.toString().trimLeft();
+    if (cleaned.length > 60) cleaned = cleaned.substring(0, 60);
+    state = state.copyWith(oName: cleaned);
+  }
+
   void setPhone(String v) => state = state.copyWith(oPhone: v);
 
   /// `POST /auth/request-otp` → move to the OTP screen. A dev / test backend
@@ -350,6 +369,14 @@ class OnboardingFlow extends Notifier<OnboardingState> {
   Future<void> startBuilding() async {
     state = state.copyWith(oScreen: OnbScreen.building, oBuild: 0, oError: null);
     final vault = ref.read(vaultApiProvider);
+
+    // The name they gave on the first step → PATCH /me. Best-effort: a failure
+    // here just means the app greets them generically, so don't block the
+    // profile write or surface a retry for it.
+    if (state.oName.trim().isNotEmpty) {
+      await ref.read(meApiProvider).updateName(state.oName);
+      ref.invalidate(meProvider);
+    }
 
     VaultWrite step = await vault.putHealthProfile(
       gender: state.oGender?.toLowerCase(),

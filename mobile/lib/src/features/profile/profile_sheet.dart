@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/me_api.dart';
 import '../../core/text.dart';
 import '../../core/theme.dart';
 import '../../fixtures/demo_data.dart';
@@ -8,7 +10,7 @@ import '../../fixtures/demo_data.dart';
 ///
 /// Use [ProfileSheet.show] in the real flow; [ProfileSheetPreview] renders it
 /// full-screen (scrim + panel) for the debug gallery.
-class ProfileSheet extends StatelessWidget {
+class ProfileSheet extends ConsumerWidget {
   const ProfileSheet({super.key, this.onPick, this.onDeleteAccount});
   final void Function(DemoProfile profile)? onPick;
 
@@ -24,7 +26,18 @@ class ProfileSheet extends StatelessWidget {
       );
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Swap the hardcoded "You" persona for the signed-in user's real name.
+    final me = ref.watch(meProvider).asData?.value ?? const MeInfo();
+    final myName = (me.displayName ?? '').trim();
+    final profiles = [
+      for (var i = 0; i < kProfiles.length; i++)
+        if (i == 0 && myName.isNotEmpty)
+          DemoProfile(myName, kProfiles[i].detail, me.initial,
+              active: kProfiles[i].active)
+        else
+          kProfiles[i],
+    ];
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(18, 20, 18, 26),
@@ -56,9 +69,9 @@ class ProfileSheet extends StatelessWidget {
           Text('Each profile has its own medications and ceilings.',
               style: CcText.body.copyWith(color: Cc.muted)),
           const SizedBox(height: 16),
-          for (var i = 0; i < kProfiles.length; i++) ...[
-            _ProfileRow(profile: kProfiles[i], onTap: () => onPick?.call(kProfiles[i])),
-            if (i != kProfiles.length - 1) const SizedBox(height: 9),
+          for (var i = 0; i < profiles.length; i++) ...[
+            _ProfileRow(profile: profiles[i], onTap: () => onPick?.call(profiles[i])),
+            if (i != profiles.length - 1) const SizedBox(height: 9),
           ],
           if (onDeleteAccount != null) ...[
             const SizedBox(height: 18),

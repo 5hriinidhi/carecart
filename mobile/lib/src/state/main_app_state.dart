@@ -42,7 +42,7 @@ class MainAppState {
     this.query = '',
     this.showNudge = true,
     this.showProfiles = false,
-    this.profile = 'Aarav',
+    this.profile = '',
     this.logged = false,
     this.accepted = false,
     this.medOff = const {},
@@ -65,7 +65,7 @@ class MainAppState {
   final String query; // search box
   final bool showNudge; // home nudge card
   final bool showProfiles; // profile bottom sheet
-  final String profile; // active profile first name
+  final String profile; // demo family-switcher: picked persona's first name ('' = self)
   final bool logged; // result -> "saved to history"
   final bool accepted; // nudge -> "reminder set"
   final Map<String, bool> medOff; // med name -> toggled off?

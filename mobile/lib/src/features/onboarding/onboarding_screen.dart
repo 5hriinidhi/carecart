@@ -618,6 +618,11 @@ List<Widget> _stepBody(OnboardingState s, OnboardingFlow flow) {
   switch (s.oStepKind) {
     case OnbStep.gender:
       return [
+        Text('What should we call you?',
+            style: _sans(13, w: FontWeight.w600, color: Cc.ink)),
+        const SizedBox(height: 8),
+        _PlainInput(hint: 'Your name', onChanged: flow.setName),
+        const SizedBox(height: 24),
         for (final (label, note) in _genderOpts)
           Padding(
             padding: const EdgeInsets.only(bottom: 11),
@@ -1400,7 +1405,10 @@ class _DoneView extends ConsumerWidget {
             child: const Icon(Icons.check_rounded, size: 26, color: Cc.inkSoft),
           ),
           const SizedBox(height: 20),
-          Text("You're set up, Aarav",
+          Text(
+              s.oName.trim().isEmpty
+                  ? "You're set up"
+                  : "You're set up, ${s.oName.trim().split(RegExp(r'\s+')).first}",
               style: _bric(27, FontWeight.w700, height: 1.16)),
           const SizedBox(height: 10),
           Text(
