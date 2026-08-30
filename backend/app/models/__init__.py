@@ -448,6 +448,24 @@ class DrugNameAlias(Base):
     notes: Mapped[str | None] = mapped_column(Text)
 
 
+class DrugCatalog(Base):
+    """Searchable catalogue of Indian medicine brand names (from
+    ``dataset/data_prep/drug_classes.csv``, deduped to one row per
+    ``product_name``). Backs ``GET /drugs/search`` so a user picks their
+    medication from a list instead of typing a free-text name (or OCR-ing a
+    strip). Static reference data — no user data, loaded by
+    ``scripts.load_drug_catalog``."""
+
+    __tablename__ = "drug_catalog"
+
+    id: Mapped[int] = mapped_column(Integer, Identity(), primary_key=True)
+    product_name: Mapped[str] = mapped_column(String(300), unique=True, index=True)
+    salt_composition: Mapped[str | None] = mapped_column(String(500))
+    # comma-joined distinct values across the source rows for this product_name
+    active_ingredients: Mapped[str | None] = mapped_column(String(500))
+    drug_classes: Mapped[str | None] = mapped_column(String(300))
+
+
 class Nudge(Base):
     """A behavioural nudge (Phase 5.3): generated server-side when a user racks
     up 3+ non-safe scans for the same recurring ``factor`` (risk_compound) in a
@@ -516,6 +534,7 @@ __all__ = [
     "InteractionRule",
     "DrugClassLookup",
     "DrugClassStemRule",
+    "DrugCatalog",
     "ConditionDietRule",
     "AllergenAlias",
     "DrugNameAlias",

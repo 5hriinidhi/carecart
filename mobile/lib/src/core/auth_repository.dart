@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'api_client.dart';
 import 'auth_api.dart';
 import 'local_cache.dart';
+import 'pin_lock.dart';
 
 /// Where the JWT pair lives between launches. The access token is also mirrored
 /// into [authTokenProvider] (in memory) so [dioProvider] can attach it.
@@ -98,6 +99,7 @@ class AuthController {
   Future<void> signOut() async {
     await _ref.read(tokenStoreProvider).clear();
     await _ref.read(localCacheProvider).clear();
+    await _ref.read(pinLockProvider).clear(); // next account sets its own PIN
     _ref.read(authTokenProvider.notifier).clear();
   }
 }

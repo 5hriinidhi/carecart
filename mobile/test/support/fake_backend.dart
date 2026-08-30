@@ -1,5 +1,6 @@
 import 'package:carecart/src/core/analytics_api.dart';
 import 'package:carecart/src/core/auth_api.dart';
+import 'package:carecart/src/core/drugs_api.dart';
 import 'package:carecart/src/core/history_api.dart';
 import 'package:carecart/src/core/me_api.dart';
 import 'package:carecart/src/core/nudges_api.dart';
@@ -103,6 +104,12 @@ class FakeVaultApi implements VaultApi {
   }
 
   @override
+  Future<VaultWrite> deleteMedication(String id) async {
+    medications.removeWhere((m) => m.name == id);
+    return _r('medications');
+  }
+
+  @override
   Future<MedicationsResult> fetchMedications() async => MedicationsLoaded([
         for (final m in medications)
           Medication(id: m.name, name: m.name, dosage: m.dosage),
@@ -112,6 +119,34 @@ class FakeVaultApi implements VaultApi {
   Future<VaultWrite> deleteAccount() async {
     deleteCalls++;
     return _r('account');
+  }
+}
+
+class FakeDrugsApi implements DrugsApi {
+  FakeDrugsApi({this.hits = const [], this.error});
+
+  /// Returned (filtered by a naive contains match) for any query ≥ 2 chars.
+  List<DrugHit> hits;
+  String? error;
+  final List<String> queries = [];
+
+  @override
+  Future<DrugSearchResult> search(String query, {int limit = 20}) async {
+    final q = query.trim();
+    queries.add(q);
+    if (q.replaceAll(RegExp(r'\s'), '').length < 2) {
+      return const DrugSearchHits([]);
+    }
+    if (error != null) return DrugSearchError(error!);
+    final lc = q.toLowerCase();
+    final matched = hits
+        .where((d) =>
+            d.name.toLowerCase().contains(lc) ||
+            (d.activeIngredients ?? '').toLowerCase().contains(lc) ||
+            (d.saltComposition ?? '').toLowerCase().contains(lc))
+        .take(limit)
+        .toList();
+    return DrugSearchHits(matched);
   }
 }
 
@@ -141,6 +176,7 @@ List<Override> fakeBackendOverrides({
   FakeAuthApi? auth,
   FakeVaultApi? vault,
   FakeMeApi? me,
+  FakeDrugsApi? drugs,
   TrendsResult? trends,
   NudgesResult? nudges,
   HistoryResult? history,
@@ -151,6 +187,7 @@ List<Override> fakeBackendOverrides({
     authApiProvider.overrideWithValue(auth ?? FakeAuthApi()),
     vaultApiProvider.overrideWithValue(v),
     meApiProvider.overrideWithValue(m),
+    drugsApiProvider.overrideWithValue(drugs ?? FakeDrugsApi()),
     trendsProvider.overrideWith(
         (ref) async => trends ?? const TrendsFailed('offline in test')),
     nudgesProvider.overrideWith(

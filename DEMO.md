@@ -14,6 +14,7 @@ cp .env.example .env                 # dev placeholders are fine for a demo
 # schema + reference data + demo fixtures
 alembic upgrade head
 python -m scripts.load_risk_tables
+python -m scripts.load_drug_catalog          # searchable medicine list (add-a-med picker)
 python -m scripts.seed_demo_products          # so live re-scans work
 python -m scripts.seed_demo_users --reset     # the 4 personas + 4 weeks of history
 
@@ -121,6 +122,7 @@ $env:POSTGRES_PORT = "5433"                  # docker-compose publishes 5433
 
 alembic upgrade head
 python -m scripts.load_risk_tables
+python -m scripts.load_drug_catalog          # searchable medicine list (add-a-med picker)
 python -m scripts.seed_demo_products
 python -m scripts.seed_demo_users --reset    # prints the 4 persona phones
 

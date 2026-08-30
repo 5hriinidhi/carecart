@@ -130,6 +130,10 @@ class VaultApi {
           'active_from': activeFrom.toIso8601String().split('T').first,
       });
 
+  /// `DELETE /me/medications/{id}` — remove one saved medication.
+  Future<VaultWrite> deleteMedication(String id) =>
+      _send('DELETE', '/me/medications/$id', ok: const {204});
+
   /// `GET /me/medications`.
   Future<MedicationsResult> fetchMedications() async {
     try {
