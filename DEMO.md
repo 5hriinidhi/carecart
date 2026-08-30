@@ -87,5 +87,103 @@ Confirmed by `mobile/test/release_config_test.dart` and existing tests:
 
 The backend running `ENVIRONMENT=development` (so the OTP is echoed) is a
 **demo-only** choice — a real deployment sets `ENVIRONMENT=production`, which
-refuses to boot on the placeholder secrets and stops echoing the OTP
-(see `docs/security-audit-2026-08.md`).
+refuses to boot on the placeholder secrets, stops echoing the OTP, and disables
+`/docs` `/redoc` `/openapi.json` (see `docs/security-audit-2026-08.md`,
+`test_no_internal_endpoints.py`).
+
+---
+
+## Getting it onto a physical Android phone
+
+### 0. One-time: a build-compatible JDK
+
+`flutter build apk` needs **JDK 17 or 21** (Gradle 8.14 rejects JDK 24+). Install
+Temurin 21, then:
+
+```powershell
+flutter config --jdk-dir="C:\Program Files\Eclipse Adoptium\jdk-21.x.x-hotspot"
+flutter doctor              # Android toolchain should be a clean check now
+```
+
+Enable **Developer options → USB debugging** on the phone, plug it in, accept the
+RSA prompt, and confirm `flutter devices` lists it.
+
+### 1. Run the demo backend on your laptop (phone reaches it over Wi-Fi)
+
+```powershell
+# from repo root
+docker compose up -d postgres
+
+cd backend
+.\.venv\Scripts\Activate.ps1
+copy .env.example .env                       # dev placeholders are fine
+$env:POSTGRES_PORT = "5433"                  # docker-compose publishes 5433
+
+alembic upgrade head
+python -m scripts.load_risk_tables
+python -m scripts.seed_demo_products
+python -m scripts.seed_demo_users --reset    # prints the 4 persona phones
+
+# bind to 0.0.0.0 so the phone can reach it, and open the port
+netsh advfirewall firewall add rule name="carecart-demo" dir=in action=allow protocol=TCP localport=8000
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+Find the laptop's Wi-Fi IPv4 (`ipconfig` → "Wireless LAN adapter Wi-Fi"), e.g.
+`192.168.1.23`. From the **phone's browser** open
+`http://192.168.1.23:8000/health` — you should get `{"status":"ok","db":"connected"}`.
+(If it fails: same Wi-Fi? firewall? Corporate/hostel Wi-Fi often blocks
+device-to-device — use a phone hotspot the laptop joins, or `ngrok http 8000` and
+use the https URL below.)
+
+### 2. Build & install the release APK
+
+```powershell
+cd ..\mobile
+.\tool\build_demo.ps1 -ApiBaseUrl http://192.168.1.23:8000
+#   == flutter build apk --release
+#        --dart-define=API_BASE_URL=http://192.168.1.23:8000
+#        --dart-define=DEBUG_GALLERY=false
+#        --dart-define=DEMO_MODE=true
+
+flutter install --release      # pushes app-release.apk to the connected phone
+# or:  adb install -r build\app\outputs\flutter-apk\app-release.apk
+# or:  copy the .apk to the phone and tap it (allow "install unknown apps")
+```
+
+### 3. Demo the personas on the phone
+
+The app stores a session after first sign-in, so between personas **clear the
+app's storage** (Settings → Apps → CareCart → Storage → *Clear storage*) — this
+forgets the local session but keeps all four personas intact on the server. (The
+in-app "Delete account" also works but removes that persona server-side; re-run
+`seed_demo_users --reset` to bring them all back.)
+
+For each persona:
+
+1. Open the app → enter the phone (`9000000001` … `9000000004`).
+2. The demo backend echoes the code; it auto-fills. Tap **Verified — continue**.
+3. Onboarding is skipped (these accounts already have a profile) — you land on
+   **Home** with data:
+   - **History** tab — ~4 weeks of scans, grouped by day.
+   - **Trends** tab — a Diet Health Score + the weekly line + safe/caution/avoid chips.
+   - **Nudge** (home card → "What's driving it") — Priya: added sugar · Ravi:
+     vitamin K · Aarav: tree nuts · **Meera: "Nothing to flag"** (by design).
+   - A small **"DEMO DATA"** chip on the Home header.
+
+### 4. Confirm the build is clean (do these yourself)
+
+| Check | How | Expected |
+|---|---|---|
+| No debug banner | look at the top-right of any screen | nothing there |
+| No debug menu / gallery | tap around the whole app | there is no `/debug` entry point — the route isn't in this build |
+| No console logging of data | `adb logcat -s flutter` while using the app | no request/response bodies, no PII, no `print` spam |
+| No internal endpoints | `curl http://192.168.1.23:8000/api/v1/admin` (and `/debug`, `/metrics`, `/internal`) | `404` every time — only the app's 24 endpoints respond |
+
+### Wi-Fi-free alternative
+
+```powershell
+ngrok http 8000                                  # -> https://abcd-1234.ngrok-free.app
+.\tool\build_demo.ps1 -ApiBaseUrl https://abcd-1234.ngrok-free.app
+```
+Works from any network; no firewall/LAN setup.
