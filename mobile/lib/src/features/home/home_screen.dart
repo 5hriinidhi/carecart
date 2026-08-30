@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../core/build_config.dart';
 import '../../core/text.dart';
 import '../../core/theme.dart';
 import '../../core/widgets.dart';
@@ -30,8 +31,26 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(kTodayLabel.toUpperCase(),
-                          style: CcText.label.copyWith(fontSize: 12, letterSpacing: 0.96)),
+                      Row(children: [
+                        Text(kTodayLabel.toUpperCase(),
+                            style: CcText.label
+                                .copyWith(fontSize: 12, letterSpacing: 0.96)),
+                        if (kDemoMode) ...[
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 7, vertical: 2),
+                            decoration: BoxDecoration(
+                                color: Cc.accent.withValues(alpha: 0.25),
+                                borderRadius: BorderRadius.circular(6)),
+                            child: Text('DEMO DATA',
+                                style: CcText.label.copyWith(
+                                    fontSize: 9,
+                                    letterSpacing: 0.8,
+                                    color: Cc.oliveDark)),
+                          ),
+                        ],
+                      ]),
                       const SizedBox(height: 5),
                       const Text('Good evening, $kProfileFirst', style: CcText.h1),
                     ],

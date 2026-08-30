@@ -426,6 +426,8 @@ app/
   scripts/load_risk_tables.py     deploy step: load dataset/data_prep/*.csv → Postgres reference tables
   scripts/classify_unresolved.py  offline batch job: drain unresolved_ingredients → review CSV → merge
   scripts/seed_demo_products.py   CI/demo: seed a few products into the OFF cache so GET /products/{barcode} is deterministic
+  scripts/seed_demo_users.py      demo/judging: 4 personas + ~4 weeks of scan history so trends/nudges have data on open (see DEMO.md)
+  scripts/create_app_role.sql     least-privilege carecart_app DB role (Phase 6.2 F1)
   api/deps.py          DbSession, get_current_user / CurrentUser
   api/v1/router.py      aggregate v1 router  (add feature routers here)
   api/v1/routes/        endpoint modules (health.py, auth.py, products.py, scan.py, history.py, analytics.py, nudges.py, vault.py)

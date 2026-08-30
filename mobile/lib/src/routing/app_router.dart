@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../core/build_config.dart';
 import '../debug/debug_gallery.dart';
 import '../features/app_shell.dart';
 import '../features/onboarding/onboarding_screen.dart';
@@ -20,21 +21,24 @@ final onboardingCompleteProvider =
     NotifierProvider<OnboardingComplete, bool>(OnboardingComplete.new);
 
 final routerProvider = Provider<GoRouter>((ref) {
+  // The /debug screen gallery is a dev-only surface — not registered at all in a
+  // release / judge build (see build_config.dart).
+  final debugGallery = ref.watch(debugGalleryEnabledProvider);
+
   return GoRouter(
     initialLocation: '/',
     refreshListenable: _RouterRefresh(ref),
     redirect: (context, state) {
       final loc = state.matchedLocation;
 
-      // /debug/* is a standalone screen-preview area, exempt from the gate.
-      if (loc.startsWith('/debug')) return null;
+      if (debugGallery && loc.startsWith('/debug')) return null; // exempt
 
       final done = ref.read(onboardingCompleteProvider);
       final atOnboarding = loc.startsWith('/onboarding');
 
       if (!done) return atOnboarding ? null : '/onboarding';
       // onboarding complete -> land in the app
-      if (atOnboarding || loc == '/') return '/app';
+      if (atOnboarding || loc == '/' || loc.startsWith('/debug')) return '/app';
       return null;
     },
     routes: [
@@ -47,21 +51,22 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/app',
         builder: (context, state) => const MainAppShell(),
       ),
-      GoRoute(
-        path: '/debug',
-        builder: (context, state) => DebugGalleryScreen(
-          onOpen: (name) => context.go('/debug/$name'),
-        ),
-        routes: [
-          GoRoute(
-            path: ':name',
-            builder: (context, state) => DebugScreenHost(
-              name: state.pathParameters['name']!,
-              onBack: () => context.go('/debug'),
-            ),
+      if (debugGallery)
+        GoRoute(
+          path: '/debug',
+          builder: (context, state) => DebugGalleryScreen(
+            onOpen: (name) => context.go('/debug/$name'),
           ),
-        ],
-      ),
+          routes: [
+            GoRoute(
+              path: ':name',
+              builder: (context, state) => DebugScreenHost(
+                name: state.pathParameters['name']!,
+                onBack: () => context.go('/debug'),
+              ),
+            ),
+          ],
+        ),
     ],
   );
 });
