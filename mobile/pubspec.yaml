@@ -61,6 +61,22 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4   # generates the app icon from assets/icon/ (Step 4)
+
+# App icon — the user's logo (the two-tone capsule + resize arrows). Regenerate
+# platform icons with:  dart run flutter_launcher_icons
+flutter_launcher_icons:
+  image_path: "assets/icon/app_icon.png"            # iOS + legacy Android + web
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  background_color_ios: "#F1F0E4"
+  adaptive_icon_background: "#F1F0E4"
+  adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
+  web:
+    generate: true
+    background_color: "#F1F0E4"
+    theme_color: "#63753F"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
