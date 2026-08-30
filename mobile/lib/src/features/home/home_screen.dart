@@ -147,6 +147,43 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 10),
+
+            // CareCart Fit — lifestyle + medicines correlation
+            GestureDetector(
+              onTap: () => onNav?.call('fit'),
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(16, 13, 12, 13),
+                decoration: BoxDecoration(
+                    color: Cc.sageSoft, borderRadius: BorderRadius.circular(20)),
+                child: Row(
+                  children: [
+                    const Icon(Icons.insights_rounded,
+                        size: 22, color: Cc.oliveDark),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('CareCart Fit',
+                              style: TextStyle(
+                                  fontFamily: 'Bricolage',
+                                  fontSize: 14.5,
+                                  fontWeight: FontWeight.w700,
+                                  color: Cc.ink)),
+                          const SizedBox(height: 2),
+                          Text('How your lifestyle + meds line up',
+                              style: CcText.bodySm
+                                  .copyWith(color: Cc.oliveDark, fontSize: 12)),
+                        ],
+                      ),
+                    ),
+                    const Icon(Icons.chevron_right_rounded,
+                        color: Cc.oliveDark),
+                  ],
+                ),
+              ),
+            ),
             const SizedBox(height: 14),
 
             // proactive nudge

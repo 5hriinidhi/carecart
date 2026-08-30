@@ -193,7 +193,7 @@ void main() {
 
       flow().setWeight('99999999');
       flow().setHeight('0');
-      for (var i = 0; i < 5; i++) {
+      for (var i = 0; i < kOnbSteps.length - 1; i++) {
         flow().next();
       }
       await flow().next(); // -> startBuilding -> putHealthProfile

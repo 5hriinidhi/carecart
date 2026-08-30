@@ -13,6 +13,7 @@ import '../features/analyzing/analyzing_screen.dart';
 import '../features/history/history_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/meds/meds_screen.dart';
+import '../features/fit/fit_screen.dart';
 import '../features/nudge/nudge_screen.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import '../features/product/product_screen.dart';
@@ -201,6 +202,7 @@ final debugScreens = <String, DebugEntry>{
     navTab: null
   ),
   'profile-sheet': (label: 'Profile bottom sheet', build: (_) => const ProfileSheetPreview(), navTab: null),
+  'fit': (label: 'CareCart Fit', build: (_) => const FitScreen(), navTab: null),
 };
 
 /// Index screen: a list of every previewable screen.

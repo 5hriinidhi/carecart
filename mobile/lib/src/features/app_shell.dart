@@ -18,8 +18,10 @@ import 'analyzing/analyzing_screen.dart';
 import 'history/history_screen.dart';
 import 'home/home_screen.dart';
 import 'meds/meds_screen.dart';
+import 'fit/fit_screen.dart';
 import 'nudge/nudge_screen.dart';
 import 'product/product_screen.dart';
+import 'profile/profile_page.dart';
 import 'profile/profile_sheet.dart';
 import 'result/result_screen.dart';
 import 'scan/scan_screen.dart';
@@ -49,6 +51,10 @@ class MainAppShell extends ConsumerWidget {
           app.goSearch();
         case 'nudge':
           app.goNudge();
+        case 'fit':
+          app.goFit();
+        case 'profile':
+          app.goProfile();
         case 'scan':
           app.goScan();
       }
@@ -81,7 +87,7 @@ class MainAppShell extends ConsumerWidget {
         body = IndexedStack(
           index: tabIndex,
           children: [
-            HomeScreen(onNav: nav, onScan: app.goScan, onOpenProfiles: app.openProfiles),
+            HomeScreen(onNav: nav, onScan: app.goScan, onOpenProfiles: app.goProfile),
             TrendsScreen(range: s.range, onNav: nav, onScan: app.goScan),
             HistoryScreen(onNav: nav, onScan: app.goScan),
             MedsScreen(onNav: nav, onScan: app.goScan),
@@ -132,6 +138,20 @@ class MainAppShell extends ConsumerWidget {
       case MainScreen.nudge:
         bg = const Color(0xFFF7E2D5);
         body = NudgeScreen(onHome: app.goHome);
+      case MainScreen.fit:
+        bg = Cc.paper;
+        body = FitScreen(
+          onClose: app.goHome,
+          onEditLifestyle: app.goProfile,
+        );
+      case MainScreen.profile:
+        bg = Cc.paper;
+        body = ProfilePage(
+          onClose: app.back,
+          onOpenFit: app.goFit,
+          onOpenMeds: () => app.goTab(MainScreen.meds),
+          onDeleteAccount: deleteAccount,
+        );
     }
 
     final offline = ref.watch(isOfflineProvider);

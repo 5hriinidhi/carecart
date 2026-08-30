@@ -35,6 +35,61 @@ class Medication {
       );
 }
 
+/// `GET /me/health-profile` payload — gender, activity, body metrics, diet.
+class HealthProfileData {
+  const HealthProfileData({
+    this.gender,
+    this.activityLevel,
+    this.weight,
+    this.height,
+    this.weightUnit,
+    this.heightUnit,
+    this.diet = const [],
+  });
+
+  final String? gender;
+  final String? activityLevel;
+  final double? weight;
+  final double? height;
+  final String? weightUnit;
+  final String? heightUnit;
+  final List<String> diet;
+
+  factory HealthProfileData.fromJson(Map<String, dynamic> j) {
+    final bm = (j['body_metrics'] as Map?)?.cast<String, dynamic>() ?? const {};
+    return HealthProfileData(
+      gender: j['gender'] as String?,
+      activityLevel: j['activity_level'] as String?,
+      weight: (bm['weight'] as num?)?.toDouble(),
+      height: (bm['height'] as num?)?.toDouble(),
+      weightUnit: bm['weight_unit'] as String?,
+      heightUnit: bm['height_unit'] as String?,
+      diet: ((j['diet_type'] as List?) ?? const [])
+          .map((e) => e.toString())
+          .toList(),
+    );
+  }
+
+  HealthProfileData copyWith({
+    String? gender,
+    String? activityLevel,
+    double? weight,
+    double? height,
+    String? weightUnit,
+    String? heightUnit,
+    List<String>? diet,
+  }) =>
+      HealthProfileData(
+        gender: gender ?? this.gender,
+        activityLevel: activityLevel ?? this.activityLevel,
+        weight: weight ?? this.weight,
+        height: height ?? this.height,
+        weightUnit: weightUnit ?? this.weightUnit,
+        heightUnit: heightUnit ?? this.heightUnit,
+        diet: diet ?? this.diet,
+      );
+}
+
 sealed class VaultWrite {
   const VaultWrite();
 }
@@ -86,6 +141,20 @@ class VaultApi {
       return VaultError("That didn't save ($status).");
     } on DioException catch (e) {
       return VaultError(networkErrorMessage(e, fallback: "That didn't save."));
+    }
+  }
+
+  /// `GET /me/health-profile` — null when the user has none yet (404).
+  Future<HealthProfileData?> fetchHealthProfile() async {
+    try {
+      final res = await _dio.get<Map<String, dynamic>>(
+          '/me/health-profile', options: _opts);
+      if (res.statusCode == 200) {
+        return HealthProfileData.fromJson(res.data ?? const {});
+      }
+      return null;
+    } on DioException {
+      return null;
     }
   }
 
@@ -163,4 +232,9 @@ final vaultApiProvider = Provider<VaultApi>((ref) => VaultApi(ref.read(dioProvid
 /// Drives the meds screen. Auto-disposes so it refetches on reopen.
 final medicationsProvider = FutureProvider.autoDispose<MedicationsResult>(
   (ref) => ref.read(vaultApiProvider).fetchMedications(),
+);
+
+/// Drives the profile page's health section.
+final healthProfileProvider = FutureProvider.autoDispose<HealthProfileData?>(
+  (ref) => ref.read(vaultApiProvider).fetchHealthProfile(),
 );

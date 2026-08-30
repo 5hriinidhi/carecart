@@ -20,7 +20,18 @@ from app.api.deps import CurrentUser, DbSession
 from app.api.uploads import read_image_upload
 from app.core.config import settings
 from app.db.base import Base
-from app.models import Allergy, AuditLog, Condition, HealthProfile, Medication, User
+from app.models import (
+    Allergy,
+    AuditLog,
+    Condition,
+    HealthProfile,
+    LifestyleProfile,
+    Medication,
+    User,
+)
+from app.schemas.fit import FitOut
+from app.schemas.lifestyle import LifestyleIn, LifestyleOut, LifestylePatch
+from app.services.fit import compute_fit
 from app.schemas.vault import (
     AllergyIn,
     AllergyOut,
@@ -197,6 +208,83 @@ def delete_health_profile(user: CurrentUser, db: DbSession) -> Response:
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
+# ----------------------------------------------------- lifestyle profile (1:1)
+lifestyle_router = APIRouter(prefix="/me/lifestyle-profile", tags=["lifestyle-profile"])
+
+
+def _my_lifestyle(db, user_id: uuid.UUID) -> LifestyleProfile | None:
+    return db.scalar(select(LifestyleProfile).where(LifestyleProfile.user_id == user_id))
+
+
+@lifestyle_router.get("", response_model=LifestyleOut)
+def get_lifestyle(user: CurrentUser, db: DbSession):
+    row = _my_lifestyle(db, user.id)
+    if row is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No lifestyle profile yet.")
+    _audit(db, user.id, "read", "lifestyle_profile", resource_id=row.id)
+    db.commit()
+    return LifestyleOut.from_data(row.data)
+
+
+@lifestyle_router.put("", response_model=LifestyleOut)
+def put_lifestyle(body: LifestyleIn, user: CurrentUser, db: DbSession):
+    row = _my_lifestyle(db, user.id)
+    data = body.as_data()  # only the keys the caller set
+    if row is None:
+        row = LifestyleProfile(user_id=user.id, data=data)
+        db.add(row)
+    else:
+        row.data = data  # PUT replaces
+    _audit(db, user.id, "write", "lifestyle_profile")
+    db.commit()
+    db.refresh(row)
+    return LifestyleOut.from_data(row.data)
+
+
+@lifestyle_router.patch("", response_model=LifestyleOut)
+def patch_lifestyle(body: LifestylePatch, user: CurrentUser, db: DbSession):
+    patch = body.as_data()
+    if not patch:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "No fields to update.")
+    row = _my_lifestyle(db, user.id)
+    if row is None:
+        row = LifestyleProfile(user_id=user.id, data=patch)
+        db.add(row)
+    else:
+        row.data = {**(row.data or {}), **patch}
+    _audit(db, user.id, "write", "lifestyle_profile")
+    db.commit()
+    db.refresh(row)
+    return LifestyleOut.from_data(row.data)
+
+
+@lifestyle_router.delete("", status_code=status.HTTP_204_NO_CONTENT)
+def delete_lifestyle(user: CurrentUser, db: DbSession) -> Response:
+    row = _my_lifestyle(db, user.id)
+    if row is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "No lifestyle profile yet.")
+    _audit(db, user.id, "delete", "lifestyle_profile", resource_id=row.id, status_code=204)
+    db.delete(row)
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+# ------------------------------------------------------------- CareCart Fit
+fit_router = APIRouter(prefix="/me/fit", tags=["fit"])
+
+
+@fit_router.get("", response_model=FitOut, operation_id="me_fit")
+def get_fit(user: CurrentUser, db: DbSession):
+    """Lifestyle + medicines correlation score. Read-only, computed on the fly
+    from the stored lifestyle profile + recent scan history. No content is
+    written; the audit row records only that Fit was read."""
+    row = _my_lifestyle(db, user.id)
+    result = compute_fit(db, user.id, lifestyle_data=row.data if row else None)
+    _audit(db, user.id, "read", "fit")
+    db.commit()
+    return FitOut.from_result(result)
+
+
 # ---------------------------------------------------------------- collections
 conditions_router = _collection_router(
     model=Condition,
@@ -312,6 +400,8 @@ def delete_my_account(user: CurrentUser, db: DbSession) -> Response:
 ROUTERS = [
     me_router,
     health_profile_router,
+    lifestyle_router,
+    fit_router,
     conditions_router,
     allergies_router,
     medications_router,

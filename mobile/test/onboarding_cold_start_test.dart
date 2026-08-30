@@ -93,24 +93,27 @@ void main() {
     assertMainUntouched('steps/0');
     _step('code accepted → token stored → oScreen=steps, oStep=0');
 
-    // ---- walk all 6 profile steps ----
+    // ---- walk all 7 profile steps ----
     const titles = <int, String>{
       0: 'A few things about you',
-      1: 'How active is a normal week?',
+      1: 'How many days a week are you active?',
       2: 'Your measurements',
       3: 'Any dietary preferences?',
       4: 'Anything you must avoid?',
       5: 'What are you taking?',
+      6: 'A little about your lifestyle',
     };
     const pickPerStep = <int, String>{
       0: 'Male',
-      1: 'Sedentary',
+      1: '3 days',
       3: 'Low sugar',
       4: 'Dairy',
       5: 'Type it in',
+      6: 'Non-smoker',
     };
+    const last = 6;
 
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i <= last; i++) {
       expect(onb().oScreen, OnbScreen.steps, reason: 'step $i screen');
       expect(onb().oStep, i, reason: 'step $i index');
       expect(onb().oStepKind, kOnbSteps[i], reason: 'step $i kind');
@@ -129,11 +132,11 @@ void main() {
         await tester.pump();
       }
 
-      await tester.tap(find.text(i == 5 ? 'Complete' : 'Next'));
+      await tester.tap(find.text(i == last ? 'Complete' : 'Next'));
       await tester.pumpAndSettle();
-      _step('STEP ${i + 1}/6 "${titles[i]}"'
+      _step('STEP ${i + 1}/${last + 1} "${titles[i]}"'
           '${pick != null ? '  (picked "$pick")' : ''} → '
-          '${i == 5 ? 'Complete' : 'Next'}');
+          '${i == last ? 'Complete' : 'Next'}');
     }
 
     // ---- building writes the profile to the vault, then -> done ----

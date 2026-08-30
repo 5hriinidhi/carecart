@@ -1,8 +1,10 @@
 import 'package:carecart/src/core/analytics_api.dart';
 import 'package:carecart/src/core/auth_api.dart';
 import 'package:carecart/src/core/drugs_api.dart';
+import 'package:carecart/src/core/fit_api.dart';
 import 'package:carecart/src/core/foods_api.dart';
 import 'package:carecart/src/core/history_api.dart';
+import 'package:carecart/src/core/lifestyle_api.dart';
 import 'package:carecart/src/core/me_api.dart';
 import 'package:carecart/src/core/nudges_api.dart';
 import 'package:carecart/src/core/vault_api.dart';
@@ -111,6 +113,19 @@ class FakeVaultApi implements VaultApi {
   }
 
   @override
+  Future<HealthProfileData?> fetchHealthProfile() async => profile == null
+      ? null
+      : HealthProfileData(
+          gender: profile!['gender'] as String?,
+          activityLevel: profile!['activity_level'] as String?,
+          weight: (profile!['weight'] as num?)?.toDouble(),
+          height: (profile!['height'] as num?)?.toDouble(),
+          diet: ((profile!['diet'] as List?) ?? const [])
+              .map((e) => e.toString())
+              .toList(),
+        );
+
+  @override
   Future<MedicationsResult> fetchMedications() async => MedicationsLoaded([
         for (final m in medications)
           Medication(id: m.name, name: m.name, dosage: m.dosage),
@@ -197,6 +212,29 @@ class FakeFoodsApi implements FoodsApi {
   }
 }
 
+class FakeLifestyleApi implements LifestyleApi {
+  FakeLifestyleApi([this.profile]);
+  LifestyleProfile? profile;
+  final List<LifestyleProfile> writes = [];
+
+  @override
+  Future<LifestyleProfile?> fetch() async => profile;
+
+  @override
+  Future<String?> put(LifestyleProfile p) async {
+    writes.add(p);
+    profile = p;
+    return null;
+  }
+}
+
+class FakeFitApi implements FitApi {
+  FakeFitApi([this.result = const FitFailed('no fit in test')]);
+  FitResult result;
+  @override
+  Future<FitResult> fetch() async => result;
+}
+
 /// Overrides that give a test the whole wired app with no network.
 List<Override> fakeBackendOverrides({
   FakeAuthApi? auth,
@@ -204,6 +242,8 @@ List<Override> fakeBackendOverrides({
   FakeMeApi? me,
   FakeDrugsApi? drugs,
   FakeFoodsApi? foods,
+  FakeLifestyleApi? lifestyle,
+  FakeFitApi? fit,
   TrendsResult? trends,
   NudgesResult? nudges,
   HistoryResult? history,
@@ -216,6 +256,8 @@ List<Override> fakeBackendOverrides({
     meApiProvider.overrideWithValue(m),
     drugsApiProvider.overrideWithValue(drugs ?? FakeDrugsApi()),
     foodsApiProvider.overrideWithValue(foods ?? FakeFoodsApi()),
+    lifestyleApiProvider.overrideWithValue(lifestyle ?? FakeLifestyleApi()),
+    fitApiProvider.overrideWithValue(fit ?? FakeFitApi()),
     trendsProvider.overrideWith(
         (ref) async => trends ?? const TrendsFailed('offline in test')),
     nudgesProvider.overrideWith(

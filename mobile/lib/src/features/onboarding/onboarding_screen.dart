@@ -85,9 +85,9 @@ const _stepCopy = <OnbStep, (String, String)>{
     'Sex changes the nutrient ceilings we hold you to — sodium, iron, protein.'
   ),
   OnbStep.activity: (
-    'How active is a normal week?',
-    "Activity sets your energy budget, so a 'high calorie' warning only fires "
-        "when it's actually high for you."
+    'How many days a week are you active?',
+    'A day counts if you moved for ~30 minutes. This sets your energy budget '
+        'and feeds your CareCart Fit score.'
   ),
   OnbStep.body: (
     'Your measurements',
@@ -107,19 +107,30 @@ const _stepCopy = <OnbStep, (String, String)>{
     'This is the part no other food app does. Every label gets cross-checked '
         'against these.'
   ),
+  OnbStep.lifestyle: (
+    'A little about your lifestyle',
+    'These drive the lifestyle half of your CareCart Fit score. Skip anything '
+        'you would rather not answer.'
+  ),
 };
+
+const _smokingOpts = <(String, String)>[
+  ('none', 'Non-smoker'),
+  ('occasional', 'Occasionally'),
+  ('daily', 'Daily'),
+];
+
+const _alcoholOpts = <(String, String)>[
+  ('none', 'None'),
+  ('occasional', 'Occasionally'),
+  ('weekly', 'Weekly'),
+  ('daily', 'Most days'),
+];
 
 const _genderOpts = <(String, String)>[
   ('Male', 'Sodium ceiling 2,000 mg baseline'),
   ('Female', 'Iron and calcium ceilings adjusted'),
   ('Prefer not to say', 'We use population averages instead'),
-];
-
-// label, note, glyph width, glyph height, glyph radius
-const _activityOpts = <(String, String, double, double, double)>[
-  ('Sedentary', 'Desk work, little walking', 18, 13, 3),
-  ('Moderate', 'On your feet, walks most days', 16, 16, 50),
-  ('Heavy', 'Physical work or daily training', 20, 8, 99),
 ];
 
 const _dietOpts = [
@@ -637,18 +648,26 @@ List<Widget> _stepBody(OnboardingState s, OnboardingFlow flow) {
       ];
     case OnbStep.activity:
       return [
-        for (final (label, note, w, h, r) in _activityOpts)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 11),
-            child: _SelectCard(
-              label: label,
-              note: note,
-              selected: s.oActivity == label,
-              leading: _ActivityGlyph(
-                  w: w, h: h, r: r, active: s.oActivity == label),
-              onTap: () => flow.setActivity(label),
-            ),
-          ),
+        Wrap(
+          spacing: 9,
+          runSpacing: 9,
+          children: [
+            for (var d = 0; d <= 7; d++)
+              _ChoiceChip(
+                label: d == 0 ? 'None' : '$d ${d == 1 ? "day" : "days"}',
+                selected: s.oExerciseDays == d,
+                onTap: () => flow.setExerciseDays(d),
+              ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        const _InfoBox(
+          bg: Cc.sageSoft,
+          fg: Cc.oliveDark,
+          text:
+              'Also sets your energy budget, so a "high calorie" warning only '
+              'fires when it is actually high for you.',
+        ),
       ];
     case OnbStep.body:
       return [
@@ -763,6 +782,101 @@ List<Widget> _stepBody(OnboardingState s, OnboardingFlow flow) {
               child: _RxCard(rx: s.oRx[i], onRemove: () => flow.removeRx(i)),
             ),
       ];
+    case OnbStep.lifestyle:
+      return [
+        _LifeLabel('Sleep — hours a night'),
+        const SizedBox(height: 8),
+        _SleepStepper(
+            value: s.oSleep ?? 7.0, onChanged: flow.setSleep),
+        const SizedBox(height: 20),
+        _LifeLabel('Smoking'),
+        const SizedBox(height: 8),
+        Wrap(spacing: 9, runSpacing: 9, children: [
+          for (final (val, label) in _smokingOpts)
+            _ChoiceChip(
+                label: label,
+                selected: s.oSmoking == val,
+                onTap: () => flow.setSmoking(val)),
+        ]),
+        const SizedBox(height: 20),
+        _LifeLabel('Alcohol'),
+        const SizedBox(height: 8),
+        Wrap(spacing: 9, runSpacing: 9, children: [
+          for (final (val, label) in _alcoholOpts)
+            _ChoiceChip(
+                label: label,
+                selected: s.oAlcohol == val,
+                onTap: () => flow.setAlcohol(val)),
+        ]),
+        const SizedBox(height: 20),
+        _LifeLabel('Typical stress'),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            for (var i = 1; i <= 5; i++) ...[
+              Expanded(
+                child: _ChoiceChip(
+                  label: '$i',
+                  selected: s.oStress == i,
+                  onTap: () => flow.setStress(i),
+                ),
+              ),
+              if (i < 5) const SizedBox(width: 8),
+            ],
+          ],
+        ),
+        const SizedBox(height: 6),
+        Text('1 = very low · 5 = very high',
+            style: _sans(11.5, color: _faint)),
+      ];
+  }
+}
+
+class _LifeLabel extends StatelessWidget {
+  const _LifeLabel(this.text);
+  final String text;
+  @override
+  Widget build(BuildContext context) => Text(text.toUpperCase(),
+      style: const TextStyle(
+          fontFamily: 'DMMono',
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          letterSpacing: 0.7,
+          color: Cc.muted));
+}
+
+class _SleepStepper extends StatelessWidget {
+  const _SleepStepper({required this.value, required this.onChanged});
+  final double value;
+  final void Function(double) onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget btn(IconData ic, VoidCallback onTap) => GestureDetector(
+          onTap: onTap,
+          child: Container(
+            width: 44,
+            height: 44,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: Cc.paperRaised,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: const Color(0x1F151510))),
+            child: Icon(ic, size: 20, color: Cc.ink),
+          ),
+        );
+    return Row(
+      children: [
+        btn(Icons.remove_rounded, () => onChanged(value - 0.5)),
+        Expanded(
+          child: Center(
+            child: Text('${value.toStringAsFixed(1)} h',
+                style: _bric(22, FontWeight.w700)),
+          ),
+        ),
+        btn(Icons.add_rounded, () => onChanged(value + 0.5)),
+      ],
+    );
   }
 }
 
@@ -790,14 +904,12 @@ class _SelectCard extends StatelessWidget {
     required this.note,
     required this.selected,
     required this.onTap,
-    this.leading,
     this.big = false,
   });
   final String label;
   final String note;
   final bool selected;
   final VoidCallback onTap;
-  final Widget? leading;
   final bool big;
 
   @override
@@ -815,7 +927,6 @@ class _SelectCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            if (leading != null) ...[leading!, const SizedBox(width: 14)],
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -860,34 +971,6 @@ class _CheckDot extends StatelessWidget {
               decoration: const BoxDecoration(
                   shape: BoxShape.circle, color: Cc.sage))
           : null,
-    );
-  }
-}
-
-class _ActivityGlyph extends StatelessWidget {
-  const _ActivityGlyph(
-      {required this.w, required this.h, required this.r, required this.active});
-  final double w;
-  final double h;
-  final double r;
-  final bool active;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 42,
-      height: 42,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: active ? const Color(0x8CFFFFFF) : _dim,
-        borderRadius: BorderRadius.circular(13),
-      ),
-      child: Container(
-        width: w,
-        height: h,
-        decoration: BoxDecoration(
-            color: Cc.oliveDark, borderRadius: BorderRadius.circular(r)),
-      ),
     );
   }
 }

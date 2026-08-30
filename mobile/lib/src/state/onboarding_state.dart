@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/auth_api.dart';
 import '../core/auth_repository.dart';
+import '../core/fit_api.dart';
+import '../core/lifestyle_api.dart';
 import '../core/me_api.dart';
 import '../core/vault_api.dart';
 
@@ -24,7 +26,7 @@ import '../core/vault_api.dart';
 
 enum OnbScreen { login, otp, steps, building, done }
 
-enum OnbStep { gender, activity, body, diet, allergies, meds }
+enum OnbStep { gender, activity, body, diet, allergies, meds, lifestyle }
 
 const kOnbSteps = [
   OnbStep.gender,
@@ -33,6 +35,7 @@ const kOnbSteps = [
   OnbStep.diet,
   OnbStep.allergies,
   OnbStep.meds,
+  OnbStep.lifestyle,
 ];
 
 /// Digits in the SMS code (`settings.otp_length` on the backend).
@@ -64,6 +67,11 @@ class OnboardingState {
     this.oAllergy = const [],
     this.oOther = '',
     this.oRx = const [],
+    this.oExerciseDays,
+    this.oSleep,
+    this.oSmoking,
+    this.oAlcohol,
+    this.oStress,
     this.oBuild = 0,
     this.oBusy = false,
     this.oError,
@@ -85,6 +93,14 @@ class OnboardingState {
   final List<String> oAllergy;
   final String oOther;
   final List<RxEntry> oRx;
+
+  // ---- lifestyle (CareCart Fit inputs) ----
+  final int? oExerciseDays; // 0..7 — also derives oActivity for ceilings
+  final double? oSleep; // hours/night
+  final String? oSmoking; // none | occasional | daily
+  final String? oAlcohol; // none | occasional | weekly | daily
+  final int? oStress; // 1..5
+
   final int oBuild; // 0..4 build-step progress
 
   /// A network call is in flight (disables the primary button).
@@ -130,7 +146,19 @@ class OnboardingState {
       ('Avoiding', avoiding.isEmpty ? 'Nothing flagged' : avoiding.join(', ')),
       ('Medications',
           oRx.isEmpty ? 'None added' : oRx.map((r) => r.name).join(', ')),
+      ('Lifestyle', _lifestyleSummary),
     ];
+  }
+
+  String get _lifestyleSummary {
+    final bits = <String>[
+      if (oSleep != null) '${oSleep!.toStringAsFixed(1)} h sleep',
+      if (oExerciseDays != null) '$oExerciseDays d/wk active',
+      if (oSmoking != null && oSmoking != 'none') 'smokes $oSmoking',
+      if (oAlcohol != null && oAlcohol != 'none') 'alcohol $oAlcohol',
+      if (oStress != null) 'stress $oStress/5',
+    ];
+    return bits.isEmpty ? 'Not given' : bits.join(' · ');
   }
 
   OnboardingState copyWith({
@@ -149,6 +177,11 @@ class OnboardingState {
     List<String>? oAllergy,
     String? oOther,
     List<RxEntry>? oRx,
+    Object? oExerciseDays = _sentinel,
+    Object? oSleep = _sentinel,
+    Object? oSmoking = _sentinel,
+    Object? oAlcohol = _sentinel,
+    Object? oStress = _sentinel,
     int? oBuild,
     bool? oBusy,
     Object? oError = _sentinel,
@@ -171,6 +204,15 @@ class OnboardingState {
       oAllergy: oAllergy ?? this.oAllergy,
       oOther: oOther ?? this.oOther,
       oRx: oRx ?? this.oRx,
+      oExerciseDays: identical(oExerciseDays, _sentinel)
+          ? this.oExerciseDays
+          : oExerciseDays as int?,
+      oSleep: identical(oSleep, _sentinel) ? this.oSleep : oSleep as double?,
+      oSmoking:
+          identical(oSmoking, _sentinel) ? this.oSmoking : oSmoking as String?,
+      oAlcohol:
+          identical(oAlcohol, _sentinel) ? this.oAlcohol : oAlcohol as String?,
+      oStress: identical(oStress, _sentinel) ? this.oStress : oStress as int?,
       oBuild: oBuild ?? this.oBuild,
       oBusy: oBusy ?? this.oBusy,
       oError: identical(oError, _sentinel) ? this.oError : oError as String?,
@@ -318,6 +360,22 @@ class OnboardingFlow extends Notifier<OnboardingState> {
 
   void setGender(String g) => state = state.copyWith(oGender: g);
   void setActivity(String a) => state = state.copyWith(oActivity: a);
+
+  /// The activity step now asks days/week of activity; we keep the coarse
+  /// `oActivity` too because the verdict engine derives nutrient ceilings from
+  /// it (0–1 → sedentary, 2–4 → moderate, 5–7 → heavy).
+  void setExerciseDays(int n) {
+    final d = n.clamp(0, 7);
+    final level = d <= 1 ? 'Sedentary' : (d <= 4 ? 'Moderate' : 'Heavy');
+    state = state.copyWith(oExerciseDays: d, oActivity: level);
+  }
+
+  void setSleep(double h) =>
+      state = state.copyWith(oSleep: double.parse(h.clamp(3, 12).toStringAsFixed(1)));
+  void setSmoking(String v) => state = state.copyWith(oSmoking: v);
+  void setAlcohol(String v) => state = state.copyWith(oAlcohol: v);
+  void setStress(int v) => state = state.copyWith(oStress: v.clamp(1, 5));
+
   void setUnitW(String u) => state = state.copyWith(oUnitW: u);
   void setUnitH(String u) => state = state.copyWith(oUnitH: u);
   void setWeight(String v) => state = state.copyWith(oWeight: v);
@@ -415,6 +473,22 @@ class OnboardingFlow extends Notifier<OnboardingState> {
       }
     }
     state = state.copyWith(oBuild: 3);
+
+    // Lifestyle answers → PUT /me/lifestyle-profile. Best-effort: a failure just
+    // means the Fit score starts without them; the user can add them later from
+    // the profile page. Don't block the hand-off or surface a retry.
+    final life = LifestyleProfile(
+      sleepHours: state.oSleep,
+      exerciseDays: state.oExerciseDays,
+      smoking: state.oSmoking,
+      alcohol: state.oAlcohol,
+      stress: state.oStress,
+    );
+    if (!life.isEmpty) {
+      await ref.read(lifestyleApiProvider).put(life);
+      ref.invalidate(lifestyleProfileProvider);
+      ref.invalidate(fitProvider);
+    }
 
     // (nothing more to persist; step 4 is "encrypting on device" flavour)
     state = state.copyWith(oBuild: 4, oScreen: OnbScreen.done);

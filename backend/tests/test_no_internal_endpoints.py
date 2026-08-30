@@ -33,6 +33,8 @@ _ALLOWED = {
     "/api/v1/nudges/{nudge_id}/dismiss",
     "/api/v1/me",
     "/api/v1/me/health-profile",
+    "/api/v1/me/lifestyle-profile",
+    "/api/v1/me/fit",
     "/api/v1/me/conditions",
     "/api/v1/me/conditions/{item_id}",
     "/api/v1/me/allergies",

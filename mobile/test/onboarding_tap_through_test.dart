@@ -71,10 +71,11 @@ void main() {
 
     await tester.tap(find.text('Next'));
     await tester.pumpAndSettle();
-    expect(find.text('How active is a normal week?'), findsOneWidget);
-    await tester.tap(find.text('Moderate'));
+    expect(find.text('How many days a week are you active?'), findsOneWidget);
+    await tester.tap(find.text('4 days'));
     await tester.pump();
-    _step('STEP 2 activity = Moderate');
+    expect(st().oExerciseDays, 4);
+    _step('STEP 2 exercise = 4 days');
 
     await tester.tap(find.text('Next'));
     await tester.pumpAndSettle();
@@ -102,6 +103,15 @@ void main() {
     expect(find.text('Telmisartan'), findsOneWidget);
     expect(st().oRx, hasLength(2));
     _step('STEP 6 meds: scanned 2 prescriptions');
+
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+    expect(find.text('A little about your lifestyle'), findsOneWidget);
+    await tester.tap(find.text('Daily')); // smoking
+    await tester.pump();
+    await tester.tap(find.text('3')); // stress
+    await tester.pump();
+    _step('STEP 7 lifestyle');
 
     await tester.tap(find.text('Complete'));
     await tester.pumpAndSettle(); // building -> real vault writes -> done
@@ -139,7 +149,7 @@ void main() {
     ));
 
     await _signIn(tester);
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < kOnbSteps.length; i++) {
       await flow.next();
     }
     await tester.pumpAndSettle();

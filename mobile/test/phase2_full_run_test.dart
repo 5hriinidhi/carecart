@@ -21,6 +21,7 @@ import 'package:carecart/src/features/history/history_screen.dart';
 import 'package:carecart/src/features/home/home_screen.dart';
 import 'package:carecart/src/features/meds/meds_screen.dart';
 import 'package:carecart/src/features/nudge/nudge_screen.dart';
+import 'package:carecart/src/features/profile/profile_page.dart';
 import 'package:carecart/src/features/result/result_screen.dart';
 import 'package:carecart/src/features/scan/scan_screen.dart';
 import 'package:carecart/src/features/search/search_screen.dart';
@@ -124,14 +125,19 @@ void main() {
 
     const stepTitles = [
       'A few things about you',
-      'How active is a normal week?',
+      'How many days a week are you active?',
       'Your measurements',
       'Any dietary preferences?',
       'Anything you must avoid?',
       'What are you taking?',
+      'A little about your lifestyle',
     ];
-    const stepPick = {0: 'Male', 1: 'Sedentary', 3: 'Low sugar', 4: 'Dairy', 5: 'Type it in'};
-    for (var i = 0; i < 6; i++) {
+    const stepPick = {
+      0: 'Male', 1: '2 days', 3: 'Low sugar', 4: 'Dairy', 5: 'Type it in',
+      6: 'Non-smoker',
+    };
+    const lastStep = 6;
+    for (var i = 0; i <= lastStep; i++) {
       expect(onb().oScreen, OnbScreen.steps);
       expect(onb().oStep, i);
       expect(find.text(stepTitles[i]), findsOneWidget, reason: 'step ${i + 1} copy');
@@ -145,10 +151,10 @@ void main() {
         await tester.tap(find.text(stepPick[i]!));
         await tester.pump();
       }
-      await tester.tap(find.text(i == 5 ? 'Complete' : 'Next'));
+      await tester.tap(find.text(i == lastStep ? 'Complete' : 'Next'));
       await tester.pumpAndSettle();
     }
-    _ok('onboarding: walked all 6 profile steps');
+    _ok('onboarding: walked all 7 profile steps');
 
     // building writes the profile to the vault (fakes here), then -> done
     expect(onb().oScreen, OnbScreen.done);
@@ -294,26 +300,22 @@ void main() {
     expect(find.byType(HomeScreen), findsOneWidget);
     _ok('NUDGE — close (X) returns to home (no dead-end)');
 
-    // ===================== PROFILE SHEET =====================
+    // ===================== PROFILE PAGE =====================
     await tester.tap(find.byKey(const Key('home-profile-button')));
     await tester.pumpAndSettle();
-    expect(find.text('Who are we shopping for?'), findsOneWidget);
-    expect(find.text('Each profile has its own medications and ceilings.'),
-        findsOneWidget);
-    // the "You" row now carries the name entered during onboarding
-    expect(find.text('Devi'), findsOneWidget);
-    expect(find.text('Sunita Deshmukh'), findsOneWidget);
-    expect(find.text('Ira Deshmukh'), findsOneWidget);
-    expect(app().showProfiles, isTrue);
-    noException('profile sheet');
-    _ok('PROFILE SHEET — self (named) + 2 family fixtures');
+    expect(find.byType(ProfilePage), findsOneWidget);
+    expect(find.text('Profile'), findsOneWidget);
+    expect(find.text('CareCart Fit'), findsWidgets);
+    // the name entered during onboarding
+    expect(find.text('Devi'), findsWidgets);
+    expect(app().screen, MainScreen.profile);
+    noException('profile page');
+    _ok('PROFILE PAGE — full editable page (name, lifestyle, health, account)');
 
-    await tester.tapAt(const Offset(10, 10)); // tap the scrim
+    await tester.tap(find.byIcon(Icons.arrow_back_ios_new_rounded));
     await tester.pumpAndSettle();
-    expect(find.text('Who are we shopping for?'), findsNothing);
     expect(find.byType(HomeScreen), findsOneWidget);
-    expect(app().showProfiles, isFalse);
-    _ok('PROFILE SHEET — scrim tap dismisses back to home (no dead-end)');
+    _ok('PROFILE PAGE — back returns to home (no dead-end)');
 
     // ===================== END =====================
     expect(app().screen, MainScreen.home);

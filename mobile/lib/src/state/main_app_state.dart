@@ -19,7 +19,9 @@ enum MainScreen {
   history,
   meds,
   search,
-  nudge
+  nudge,
+  fit, // lifestyle + medicines correlation (CareCart Fit)
+  profile // full editable profile page
 }
 
 /// Barcode lookup progress on the scan screen (Phase 4.1).
@@ -179,6 +181,8 @@ class MainApp extends Notifier<MainAppState> {
       );
   void goSearch() => state = state.copyWith(screen: MainScreen.search);
   void goNudge() => state = state.copyWith(screen: MainScreen.nudge);
+  void goFit() => state = state.copyWith(screen: MainScreen.fit);
+  void goProfile() => state = state.copyWith(screen: MainScreen.profile);
 
   /// Prototype `back`: return to the current tab's screen.
   void back() => state = state.copyWith(

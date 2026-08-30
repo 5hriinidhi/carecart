@@ -55,6 +55,9 @@ class User(Base, TimestampMixin):
     health_profile: Mapped[HealthProfile | None] = relationship(
         back_populates="user", cascade="all, delete-orphan", uselist=False
     )
+    lifestyle_profile: Mapped[LifestyleProfile | None] = relationship(
+        back_populates="user", cascade="all, delete-orphan", uselist=False
+    )
     conditions: Mapped[list[Condition]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )
@@ -126,6 +129,27 @@ class HealthProfile(Base, TimestampMixin):
     diet_type: Mapped[list[str]] = mapped_column(EncryptedJSON, default=list)
 
     user: Mapped[User] = relationship(back_populates="health_profile")
+
+
+class LifestyleProfile(Base, TimestampMixin):
+    """The lifestyle inputs to the CareCart Fit score (Step 7): sleep, exercise,
+    smoking, alcohol, stress. One row per user. The whole payload is one
+    Fernet-encrypted JSON blob (same pattern as HealthProfile.body_metrics);
+    the schema layer enforces the field shape / ranges.
+
+    ``data`` keys: sleep_hours (float), exercise_days (int 0-7),
+    smoking (none|occasional|daily), alcohol (none|occasional|weekly|daily),
+    stress (int 1-5). Any key may be absent."""
+
+    __tablename__ = "lifestyle_profiles"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=_uuid)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), unique=True, index=True
+    )
+    data: Mapped[dict] = mapped_column(EncryptedJSON, default=dict)
+
+    user: Mapped[User] = relationship(back_populates="lifestyle_profile")
 
 
 class Condition(Base, TimestampMixin):
@@ -549,6 +573,7 @@ __all__ = [
     "OtpChallenge",
     "RefreshToken",
     "HealthProfile",
+    "LifestyleProfile",
     "Condition",
     "Allergy",
     "Medication",

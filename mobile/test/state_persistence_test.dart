@@ -124,7 +124,7 @@ void main() {
 
     // fast-forward the wizard to done, then hand off to /app
     final onb = container.read(onboardingFlowProvider.notifier);
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < kOnbSteps.length; i++) {
       await onb.next();
     }
     await tester.pumpAndSettle();

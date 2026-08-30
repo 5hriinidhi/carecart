@@ -19,6 +19,7 @@ void main() {
   late FakeAuthApi auth;
   late FakeVaultApi vault;
   late FakeMeApi me;
+  late FakeLifestyleApi lifestyle;
 
   OnboardingFlow flow() => c.read(onboardingFlowProvider.notifier);
   OnboardingState st() => c.read(onboardingFlowProvider);
@@ -27,8 +28,10 @@ void main() {
     auth = FakeAuthApi(devCode: '123456');
     vault = FakeVaultApi();
     me = FakeMeApi(displayName: null);
+    lifestyle = FakeLifestyleApi();
     c = ProviderContainer(
-        overrides: fakeBackendOverrides(auth: auth, vault: vault, me: me));
+        overrides: fakeBackendOverrides(
+            auth: auth, vault: vault, me: me, lifestyle: lifestyle));
   });
   tearDown(() => c.dispose());
 
@@ -142,10 +145,10 @@ void main() {
     expect(st().oError, 'That code is wrong or has expired.');
   });
 
-  test('next walks the 6 steps in order, then enters building', () async {
+  test('next walks the 7 steps in order, then enters building', () async {
     await signIn();
     final seen = <OnbStep>[st().oStepKind];
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 6; i++) {
       flow().next();
       seen.add(st().oStepKind);
     }
@@ -156,6 +159,7 @@ void main() {
       OnbStep.diet,
       OnbStep.allergies,
       OnbStep.meds,
+      OnbStep.lifestyle,
     ]);
     expect(st().oScreen, OnbScreen.steps);
     flow().next();
@@ -235,6 +239,10 @@ void main() {
     flow().setOther('mustard');
     flow().next();
     flow().scanRx(); // Telmisartan + Metformin
+    flow().next(); // meds -> lifestyle
+    flow().setSleep(7.5);
+    flow().setExerciseDays(4);
+    flow().setStress(3);
     await flow().next(); // last step -> startBuilding()
 
     expect(st().oScreen, OnbScreen.done);
@@ -244,6 +252,8 @@ void main() {
     expect(vault.profile!['diet'], const ['Low sodium']);
     expect(vault.allergies, const ['Tree nuts', 'mustard']);
     expect(vault.medications.map((m) => m.name), const ['Telmisartan', 'Metformin']);
+    expect(lifestyle.writes.single.sleepHours, 7.5);
+    expect(lifestyle.writes.single.exerciseDays, 4);
 
     // reaching done does NOT itself flip the router gate — that's the widget's job
     expect(c.read(onboardingCompleteProvider), isFalse);
@@ -253,7 +263,7 @@ void main() {
       () async {
     vault.failOn = {'health-profile'};
     await signIn();
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 6; i++) {
       flow().next();
     }
     await flow().next(); // -> startBuilding, which fails on the first write
