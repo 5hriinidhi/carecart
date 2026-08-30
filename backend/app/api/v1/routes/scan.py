@@ -18,7 +18,14 @@ from sqlalchemy import select
 
 from app.api.deps import CurrentUser, DbSession
 from app.core.config import settings
-from app.models import Allergy, AuditLog, Condition, Medication, ScanHistory
+from app.models import (
+    Allergy,
+    AuditLog,
+    Condition,
+    LifestyleProfile,
+    Medication,
+    ScanHistory,
+)
 from app.schemas.nudge import NudgeOut
 from app.schemas.scan import (
     MedMatchOut,
@@ -26,6 +33,7 @@ from app.schemas.scan import (
     ScanVerdictOut,
     VerdictReasonOut,
 )
+from app.services import fit as fit_svc
 from app.services import ingredient_risk
 from app.services import nudges as nudge_svc
 from app.services import verdict as verdict_svc
@@ -59,6 +67,15 @@ def scan_verdict(body: ScanVerdictIn, user: CurrentUser, db: DbSession):
     )
     medications = _active_medications(db, user.id, today)
 
+    # 7b: the lifestyle half of CareCart Fit amplifies nutrition deductions.
+    lp = db.scalar(
+        select(LifestyleProfile).where(LifestyleProfile.user_id == user.id)
+    )
+    lifestyle_scores = {
+        d.key: d.score
+        for d in fit_svc.compute_lifestyle(lp.data if lp else None).dims
+    }
+
     resolution = ingredient_risk.resolve_ingredients(
         db,
         body.ingredients,
@@ -73,6 +90,7 @@ def scan_verdict(body: ScanVerdictIn, user: CurrentUser, db: DbSession):
         allergies=allergies,
         medications=medications,
         nutriments=body.nutriments,
+        lifestyle_scores=lifestyle_scores,
     )
 
     # --- automatic diet logging (Phase 5.1) ---------------------------------
@@ -131,5 +149,6 @@ def scan_verdict(body: ScanVerdictIn, user: CurrentUser, db: DbSession):
         risk_compounds=v.risk_compounds,
         unverified=v.unverified,
         unverified_count=len(v.unverified),
+        lifestyle_applied=v.lifestyle_applied,
         nudge=fresh_nudge,
     )

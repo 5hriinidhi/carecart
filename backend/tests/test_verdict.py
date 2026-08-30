@@ -15,7 +15,14 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.core.security import create_access_token, hash_phone
-from app.models import Allergy, AuditLog, Condition, Medication, User
+from app.models import (
+    Allergy,
+    AuditLog,
+    Condition,
+    LifestyleProfile,
+    Medication,
+    User,
+)
 from app.services import verdict as V
 from app.services.ingredient_risk import resolve_ingredients
 from scripts.load_risk_tables import load_all
@@ -44,12 +51,14 @@ def auth(user) -> dict:
     return {"Authorization": f"Bearer {create_access_token(user.id)}"}
 
 
-def _score(db, ingredients, *, conditions=(), allergies=(), medications=(), nutriments=None):
+def _score(db, ingredients, *, conditions=(), allergies=(), medications=(),
+           nutriments=None, lifestyle_scores=None):
     res = resolve_ingredients(db, list(ingredients), nutriments=nutriments or {},
                               queue_unresolved=False)
     return V.score_verdict(
         db, resolution=res, conditions=list(conditions), allergies=list(allergies),
         medications=list(medications), nutriments=nutriments or {},
+        lifestyle_scores=lifestyle_scores,
     )
 
 
@@ -180,6 +189,59 @@ def test_single_moderate_interaction_stays_safe(db):
     r = next(r for r in v.reasons if r.kind == "drug_interaction")
     assert r.points == 20
     assert v.score == 80 and v.tier == "safe"
+
+
+# ---------------------------------------------------- 7b: lifestyle multipliers
+def test_poor_stress_amplifies_an_added_sugar_deduction(db):
+    base = _score(db, ["Sugar", "Water"])
+    poor = next(r for r in base.reasons if r.kind == "poor_fit")
+    assert poor.factor == "added_sugar" and poor.points == 6
+    assert base.lifestyle_applied == []
+
+    # stress 22/100 (< 35) -> x1.25 -> 6 -> 8
+    hi = _score(db, ["Sugar", "Water"], lifestyle_scores={"stress": 22})
+    poor2 = next(r for r in hi.reasons if r.kind == "poor_fit")
+    assert poor2.points == 8
+    assert hi.score == base.score - 2
+    assert hi.lifestyle_applied == ["stress 22/100 ×1.25 on added_sugar"]
+
+    # a moderate stress score (>= 50) changes nothing
+    ok = _score(db, ["Sugar", "Water"], lifestyle_scores={"stress": 80})
+    assert next(r for r in ok.reasons if r.kind == "poor_fit").points == 6
+    assert ok.lifestyle_applied == []
+
+
+def test_lifestyle_never_touches_allergens_or_drug_interactions(db):
+    # allergen hard stop: score 0 regardless
+    v = _score(db, ["Peanuts", "Sugar"], allergies=["Peanut"],
+               lifestyle_scores={"stress": 10, "exercise": 10})
+    assert v.hard_stop and v.score == 0
+
+    # a drug-interaction deduction is not scaled (no amplifier maps to it)
+    v2 = _score(db, ["Iodised salt", "Wheat flour"], medications=["Ramipril 5mg"],
+                lifestyle_scores={"exercise": 10, "stress": 10})
+    assert next(r for r in v2.reasons if r.kind == "drug_interaction").points == 20
+    assert v2.lifestyle_applied == []
+
+
+def test_unanswered_lifestyle_dimension_is_a_no_op(db):
+    # stress not in the map -> no multiplier even though exercise is terrible
+    v = _score(db, ["Sugar", "Water"], lifestyle_scores={"exercise": 10})
+    assert next(r for r in v.reasons if r.kind == "poor_fit").points == 6
+    assert v.lifestyle_applied == []
+
+
+def test_endpoint_returns_lifestyle_applied(client, db, user, auth):
+    db.add(LifestyleProfile(user_id=user.id, data={"stress": 5}))  # -> score 22
+    db.flush()
+    r = client.post(
+        "/api/v1/scan/verdict",
+        headers=auth,
+        json={"ingredients": ["Sugar", "Water"], "nutriments": {}},
+    )
+    assert r.status_code == 200
+    body = r.json()
+    assert body["lifestyle_applied"] == ["stress 22/100 ×1.25 on added_sugar"]
 
 
 # ------------------------------------------------------------------- endpoint

@@ -83,6 +83,28 @@ void main() {
       expect(find.text('Safer swaps, same shelf'), findsNothing);
     });
 
+    testWidgets('lifestyle multipliers are shown, and only when present',
+        (tester) async {
+      const plain = ScanVerdict(
+        score: 60, tier: 'ignored', hardStop: false,
+        reasons: [VerdictReason(kind: 'poor_fit', severity: 'low', points: 6,
+            title: 'High added sugar')],
+      );
+      await tester.pumpWidget(_host(const ResultScreen(verdict: plain)));
+      expect(find.byKey(const Key('verdict-lifestyle-applied')), findsNothing);
+
+      const adjusted = ScanVerdict(
+        score: 58, tier: 'ignored', hardStop: false,
+        reasons: [VerdictReason(kind: 'poor_fit', severity: 'low', points: 8,
+            title: 'High added sugar')],
+        lifestyleApplied: ['stress 22/100 ×1.25 on added_sugar'],
+      );
+      await tester.pumpWidget(_host(const ResultScreen(verdict: adjusted)));
+      expect(find.byKey(const Key('verdict-lifestyle-applied')), findsOneWidget);
+      expect(find.textContaining('high stress raised the added sugar penalty'),
+          findsOneWidget);
+    });
+
     testWidgets('hard_stop verdict shows the allergen badge', (tester) async {
       final v = ScanVerdict(
         score: 0,

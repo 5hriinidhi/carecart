@@ -81,6 +81,35 @@ _CEILING_MAX = 40
 _CONDITION_COMPOUND_POINTS = {"HIGH": 28, "MODERATE": 14, "LOW": 7}
 _POOR_FIT_COMPOUNDS = {"added_sugar", "sodium", "saturated_fat", "trans_fat", "rapid_carb"}
 _POOR_FIT_CAP = 18
+
+# Step 7b tie-in: a poor lifestyle dimension amplifies the deduction for the
+# nutrition concern it compounds. Applied ONLY to condition-ceiling and general
+# poor-fit deductions — never to allergens or the drug-interaction deduction.
+# risk_compound -> lifestyle dimension key (see app/services/fit.py).
+_LIFESTYLE_AMPLIFIERS = {
+    "added_sugar": "stress",
+    "rapid_carb": "exercise",
+    "saturated_fat": "exercise",
+}
+_LIFE_MULT_HARD = (35, 1.25)   # dim sub-score < 35 -> x1.25
+_LIFE_MULT_SOFT = (50, 1.15)   # dim sub-score < 50 -> x1.15
+_CEILING_MAX_WITH_LIFESTYLE = 50
+
+
+def _life_mult(
+    factor: str | None, lifestyle_scores: dict[str, int] | None
+) -> tuple[float, str | None]:
+    """(multiplier, one-line note) for a deduction on ``factor``. 1.0 / None
+    unless the mapped lifestyle dimension was answered AND is poor."""
+    dim = _LIFESTYLE_AMPLIFIERS.get(factor or "")
+    if not dim or not lifestyle_scores or dim not in lifestyle_scores:
+        return 1.0, None
+    s = lifestyle_scores[dim]
+    if s < _LIFE_MULT_HARD[0]:
+        return _LIFE_MULT_HARD[1], f"{dim} {s}/100 ×{_LIFE_MULT_HARD[1]:g} on {factor}"
+    if s < _LIFE_MULT_SOFT[0]:
+        return _LIFE_MULT_SOFT[1], f"{dim} {s}/100 ×{_LIFE_MULT_SOFT[1]:g} on {factor}"
+    return 1.0, None
 _UNVERIFIED_PER = 4
 _UNVERIFIED_CAP = 12
 
@@ -191,6 +220,9 @@ class Verdict:
     medications: list[MedMatch] = field(default_factory=list)
     risk_compounds: dict[str, float] = field(default_factory=dict)
     unverified: list[str] = field(default_factory=list)
+    # 7b: human-readable list of the lifestyle multipliers that were applied,
+    # e.g. ["stress 22/100 ×1.25 on added_sugar"]. Empty when none.
+    lifestyle_applied: list[str] = field(default_factory=list)
 
 
 # ----------------------------------------------------------------- reference load
@@ -315,9 +347,11 @@ def score_verdict(
     allergies: list[str],
     medications: list[str],
     nutriments: dict | None = None,
+    lifestyle_scores: dict[str, int] | None = None,
 ) -> Verdict:
     rules = _load_rules(db)
     nutriments = nutriments or {}
+    lifestyle_applied: list[str] = []
 
     def disp(rc: str) -> str:
         return rules.display.get(rc, rc.replace("_", " "))
@@ -421,6 +455,10 @@ def score_verdict(
             pts = _CEILING_POINTS.get(rule.severity, 16)
             if val >= 2 * rule.ceiling_per_100g:
                 pts = min(pts + _CEILING_OVERSHOOT_BONUS, _CEILING_MAX)
+            _mult, _note = _life_mult(_cov or None, lifestyle_scores)
+            if _note:
+                pts = min(round(pts * _mult), _CEILING_MAX_WITH_LIFESTYLE)
+                lifestyle_applied.append(_note)
             deduction += pts
             label = _NUTRIENT_LABEL.get(rule.nutrient_key, rule.nutrient_key)
             reasons.append(
@@ -464,6 +502,10 @@ def score_verdict(
         if rc in cited or rc in user_allergens or rc not in _POOR_FIT_COMPOUNDS:
             continue
         pts = 6 if (conf or 0) >= 0.6 else 3
+        _mult, _note = _life_mult(rc, lifestyle_scores)
+        if _note:
+            pts = round(pts * _mult)
+            lifestyle_applied.append(_note)
         pts = min(pts, _POOR_FIT_CAP - poor_fit_total)
         if pts <= 0:
             break
@@ -548,4 +590,5 @@ def score_verdict(
         medications=med_matches,
         risk_compounds=resolution.risk_compounds,
         unverified=resolution.unverified,
+        lifestyle_applied=lifestyle_applied,
     )

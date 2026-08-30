@@ -95,17 +95,17 @@ def _user(db) -> User:
 
 
 def _seed_rules(db):
-    db.add_all([
-        RiskCompound(risk_compound="sodium", display_name="Sodium"),
-        RiskCompound(risk_compound="potassium", display_name="Potassium"),
-    ])
+    # tolerate rows another module's fixture may have already loaded
+    for rc in ("sodium", "potassium"):
+        if db.get(RiskCompound, rc) is None:
+            db.add(RiskCompound(risk_compound=rc, display_name=rc.title()))
     db.flush()
     db.add(DrugClassLookup(
-        active_ingredient="telmisartan", drug_class="ARB", source="keyword"))
+        active_ingredient="zzdrugone", drug_class="ZZClassOne", source="keyword"))
     db.add(InteractionRule(
-        drug_class="ARB", risk_compound="sodium", severity="HIGH"))
+        drug_class="ZZClassOne", risk_compound="sodium", severity="HIGH"))
     db.add(InteractionRule(
-        drug_class="ARB", risk_compound="potassium", severity="MODERATE"))
+        drug_class="ZZClassOne", risk_compound="potassium", severity="MODERATE"))
     db.flush()
 
 
@@ -130,21 +130,21 @@ def test_medicines_none_when_no_meds(db):
 def test_medicine_with_no_interactions_scores_100(db):
     u = _user(db)
     _seed_rules(db)
-    db.add(Medication(user_id=u.id, name="Paracetamol"))  # not in the lookup
-    db.add(Medication(user_id=u.id, name="Telmisartan 40"))
+    db.add(Medication(user_id=u.id, name="Zzunknownmed"))  # not in the lookup
+    db.add(Medication(user_id=u.id, name="Zzdrugone 40"))
     # not enough scans yet
     db.flush()
     r = compute_medicines(db, u.id)
     by_name = {m.name: m for m in r.meds}
-    assert by_name["Paracetamol"].identified is False
-    assert by_name["Telmisartan 40"].identified is True
-    assert by_name["Telmisartan 40"].score is None  # 0 scans < 4
+    assert by_name["Zzunknownmed"].identified is False
+    assert by_name["Zzdrugone 40"].identified is True
+    assert by_name["Zzdrugone 40"].score is None  # 0 scans < 4
 
 
 def test_medicine_score_falls_with_the_hit_rate(db):
     u = _user(db)
     _seed_rules(db)
-    db.add(Medication(user_id=u.id, name="Telmisartan 40"))
+    db.add(Medication(user_id=u.id, name="Zzdrugone 40"))
     # 10 scans in the last 21 days; 8 flag sodium, 0 flag potassium
     for i in range(8):
         _scan(db, u.id, factor="sodium", days_ago=i + 1)
@@ -161,13 +161,15 @@ def test_medicine_score_falls_with_the_hit_rate(db):
     # combined = 0.7*28 + 0.3*56.36 = 36.5 -> 37
     assert med.score == 37
     assert "Sodium" in med.note
-    assert med.interactions == ["Potassium", "Sodium"]
+    assert len(med.interactions) == 2
+    assert any(n.lower().startswith("sodium") for n in med.interactions)
+    assert any(n.lower().startswith("potassium") for n in med.interactions)
 
 
 def test_fit_combines_halves_and_reports_focus(db):
     u = _user(db)
     _seed_rules(db)
-    db.add(Medication(user_id=u.id, name="Telmisartan 40"))
+    db.add(Medication(user_id=u.id, name="Zzdrugone 40"))
     for i in range(10):
         _scan(db, u.id, factor="sodium", days_ago=i + 1)
     db.flush()

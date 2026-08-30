@@ -100,7 +100,11 @@ class MainAppShell extends ConsumerWidget {
             ScanScreen(
               onBack: app.back,
               onPick: app.startScan,
-              onBarcode: app.scanProduct,
+              // 7b: a real scan now runs the full verdict again (lookup ->
+              // POST /scan/verdict -> ResultScreen), with the lifestyle
+              // multipliers applied. `scanProduct` / ProductScreen stay in the
+              // code as a facts-only path but are no longer wired here.
+              onBarcode: app.scanBarcode,
               showDemoPicker: ref.watch(debugGalleryEnabledProvider),
             ),
             if (s.lookup != LookupPhase.idle)

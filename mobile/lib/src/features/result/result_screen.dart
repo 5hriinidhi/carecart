@@ -224,6 +224,22 @@ class _LiveVerdictView extends StatelessWidget {
                           '$activeMeds active medication${activeMeds == 1 ? '' : 's'}.',
                   style: CcText.bodySm.copyWith(color: Cc.muted, fontSize: 12),
                 ),
+                if (verdict.lifestyleApplied.isNotEmpty) ...[
+                  const SizedBox(height: 10),
+                  Container(
+                    key: const Key('verdict-lifestyle-applied'),
+                    padding: const EdgeInsets.all(11),
+                    decoration: BoxDecoration(
+                        color: Cc.sageSoft,
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Text(
+                      'Adjusted for your lifestyle — '
+                      '${verdict.lifestyleApplied.map(_prettyMultiplier).join('; ')}.',
+                      style: CcText.bodySm
+                          .copyWith(color: Cc.oliveDark, height: 1.45),
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 14),
                 for (final r in verdict.reasons) ...[
                   _ReasonCard(reason: r),
@@ -295,6 +311,16 @@ class _LiveVerdictView extends StatelessWidget {
       ),
     );
   }
+}
+
+/// "stress 22/100 ×1.25 on added_sugar" -> "high stress raised the added sugar
+/// penalty (×1.25)".
+String _prettyMultiplier(String raw) {
+  final m = RegExp(r'^(\w+) (\d+)/100 ×([\d.]+) on (\w+)$').firstMatch(raw);
+  if (m == null) return raw;
+  final dim = m.group(1)!;
+  final factor = m.group(4)!.replaceAll('_', ' ');
+  return 'high $dim raised the $factor penalty (×${m.group(3)})';
 }
 
 class _ReasonCard extends StatelessWidget {

@@ -570,6 +570,7 @@ class ScanVerdict {
     this.riskCompounds = const {},
     this.unverified = const [],
     this.unverifiedCount = 0,
+    this.lifestyleApplied = const [],
     this.nudge,
   });
 
@@ -585,6 +586,10 @@ class ScanVerdict {
   final Map<String, double> riskCompounds;
   final List<String> unverified;
   final int unverifiedCount;
+
+  /// 7b: lifestyle multipliers applied to nutrition deductions, e.g.
+  /// "stress 22/100 ×1.25 on added_sugar". Empty when none.
+  final List<String> lifestyleApplied;
 
   /// Set only when THIS scan crossed a 14-day pattern threshold.
   final ScanNudge? nudge;
@@ -609,6 +614,9 @@ class ScanVerdict {
             (j['unverified'] as List?)?.map((e) => e.toString()).toList() ??
                 const [],
         unverifiedCount: (j['unverified_count'] as num?)?.toInt() ?? 0,
+        lifestyleApplied:
+            (j['lifestyle_applied'] as List?)?.map((e) => e.toString()).toList() ??
+                const [],
         nudge: j['nudge'] is Map<String, dynamic>
             ? ScanNudge.fromJson(j['nudge'] as Map<String, dynamic>)
             : null,
