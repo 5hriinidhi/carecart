@@ -1,119 +1,120 @@
 # CareCart
 
-Scan a food label, get a verdict that's checked against **your** medications,
-conditions, allergies, and profile-derived nutrient ceilings — not a generic score.
+Scan a food label — get a verdict scored 0–100 and checked against **your**
+medications, conditions, allergies, profile-derived nutrient ceilings, **and**
+your lifestyle. Not a generic score.
+
+Everything runs on-device / table-lookup: no live LLM on the scan path, no
+analytics or crash SDK, health data is encrypted at rest and deletable in one
+tap.
 
 Monorepo:
 
 | Path | What |
 |---|---|
-| `mobile/` | Flutter app (Riverpod + go_router), targets Android & iOS (web enabled for fast local iteration) |
-| `backend/` | FastAPI service (Python 3.11, SQLAlchemy 2 + Alembic, PostgreSQL, Milvus) + `Dockerfile` |
-| `docker-compose.yml` | Postgres 15 + backend (this is the one you run) |
-| `infra/docker-compose.yml` | vector stack — Milvus + deps + Attu UI (needed from Phase 3) |
-| `gradient-ascend-mobile-app/` | The approved UI design (`CareCart App.dc.html`) — reference, the app must match it |
-| `SETUP.md` | One-time toolchain setup + what's already installed on this machine |
+| `mobile/` | Flutter app (Riverpod + go_router), Android & iOS |
+| `backend/` | FastAPI (Python 3.11, SQLAlchemy 2 + Alembic, PostgreSQL 15) + `Dockerfile` |
+| `docker-compose.yml` | Postgres + backend, auto-migrated on start |
+| `gradient-ascend-mobile-app/` | the approved UI design + the raw reference datasets |
+| `DEMO.md` | full runbook: seeded personas, release build, phone install |
+| `SETUP.md` | one-time toolchain setup |
 
 ---
 
-## Requirements (pinned — match these)
+## What's in the app
 
-| Tool | Version | Notes |
-|---|---|---|
-| Docker Engine | ≥ 20.10 | |
-| Docker Compose | **v2** (`docker compose`) | the old hyphenated `docker-compose` v1 will **not** parse this repo's compose file |
-| Flutter | **3.38.5** (stable) | pinned in `/.tool-versions` and `/mobile/.fvmrc`; hard floor `>=3.24.0` in `pubspec.yaml` |
-| Dart | 3.10.4 | bundled with Flutter |
-| Python | **3.11.4** | only needed to run the backend *outside* Docker |
+- **Sign in** with a phone number + OTP. In dev the backend echoes the code, so
+  no SMS provider is needed. *(Google sign-in is scaffolded but not wired yet.)*
+- **Onboarding** — name, then 7 steps: sex, activity (days/week), body, diet,
+  allergies, medications, and a lifestyle step (sleep / smoking / alcohol / stress).
+- **Barcode scan** → live Open Food Facts lookup → a personalised verdict.
+  Unknown barcodes say so; they never return a wrong product.
+- **CareCart Fit** — a lifestyle + medicines correlation score (`GET /me/fit`):
+  an overall number, a Lifestyle section and a Medicines section, all
+  deterministic arithmetic (`backend/app/services/fit.py`).
+- **Verdict tie-in** — a poor lifestyle dimension amplifies the matching
+  nutrition deduction (e.g. high stress ×1.25 on added sugar); the applied
+  multipliers are shown on the result.
+- **Medicines** — add/remove from a searchable catalogue of ~7.5k Indian brand
+  names, each change gated by an on-device PIN.
+- **Look it up** — search ~1,100 everyday foods (home dishes + packaged
+  products) without a barcode.
+- **Full profile page**, **History**, **Trends**, **Nudges**.
 
-`asdf install` / `mise install` read `/.tool-versions`; `fvm use` reads `/mobile/.fvmrc`.
-No version manager? Match by hand. Run `sh scripts/check-env.sh` to verify your machine.
+---
 
-## Run it locally
-
-```bash
-sh scripts/check-env.sh                  # optional preflight (docker, compose v2, versions, .env)
-cp backend/.env.example backend/.env     # copy backend\.env.example backend\.env on Windows
-docker compose up -d --build             # postgres + backend, auto-migrated
-docker compose ps                        # both should be "healthy"
-```
-
-That's it — the backend container runs `alembic upgrade head` on start
-(`AUTO_MIGRATE=1`), so a fresh clone comes up fully migrated with no extra step.
-API keys can stay blank in dev (features degrade, logged at startup).
-
-- API docs:   http://localhost:8000/docs
-- Health:     `GET http://localhost:8000/health` → `{"status":"ok","db":"connected"}` (503 if the DB is unreachable)
-
-**Port already in use?** Defaults are Postgres `5433`, backend `8000`. Override per-run
-or via a repo-root `.env` (see `/.env.example`):
-```bash
-POSTGRES_HOST_PORT=5434 BACKEND_HOST_PORT=8001 docker compose up -d
-```
-The container-internal Postgres port is always `5432` regardless.
-
-Vector stack, when you need it (Phase 3+):
-`docker compose -f infra/docker-compose.yml up -d`  → Milvus `:19530`, Attu UI `:8100`.
-
-### 2. Backend without Docker (alternative)
+## Run the backend
 
 ```bash
-cd backend
-python -m venv .venv
-.venv\Scripts\activate                   # Windows  (source .venv/bin/activate elsewhere)
-pip install -r requirements.txt
-cp .env.example .env
-# start just Postgres:  docker compose up -d postgres   (publishes host port 5433)
-# then in backend/.env set  POSTGRES_HOST=localhost  and  POSTGRES_PORT=5433
-#   (or: POSTGRES_HOST_PORT=5432 docker compose up -d postgres, and keep 5432)
-alembic upgrade head
-uvicorn app.main:app --reload            # http://localhost:8000/docs
+cp backend/.env.example backend/.env      # copy backend\.env.example on Windows
+docker compose up -d --build              # postgres + backend, auto-migrated
+docker compose ps                         # both should be "healthy"
 ```
 
-### 3. Mobile
+- Health:  `GET http://localhost:8000/health` → `{"status":"ok","db":"connected"}`
+- Docs:    http://localhost:8000/docs  (dev only)
+
+Load the reference data (once, and whenever the CSVs change):
+
+```bash
+docker compose exec backend python -m scripts.load_risk_tables
+docker compose exec backend python -m scripts.load_drug_catalog
+docker compose exec backend python -m scripts.load_food_catalog
+# optional demo fixtures:
+docker compose exec backend python -m scripts.seed_demo_products
+docker compose exec backend python -m scripts.seed_demo_users --reset
+```
+
+Backend without Docker: `cd backend && python -m venv .venv && .venv\Scripts\activate
+&& pip install -r requirements.txt`, start just Postgres
+(`docker compose up -d postgres`, publishes host port 5433), set
+`POSTGRES_HOST=localhost` / `POSTGRES_PORT=5433` in `.env`, then
+`alembic upgrade head && uvicorn app.main:app --reload`.
+
+## Run the app
 
 ```bash
 cd mobile
 flutter pub get
-flutter run -d chrome                    # or: -d windows, or an Android/iOS device
+flutter run                               # a connected Android/iOS device
 ```
 
-The Home screen has a "Ping backend /health" button to confirm the app can reach
-the API. On the Android emulator the API is reached at `http://10.0.2.2:8000`;
-override with `--dart-define=API_BASE_URL=https://...` for other targets.
+Point it at the backend with `--dart-define=API_BASE_URL=http://<host>:8000`
+(`10.0.2.2:8000` from an Android emulator).
+
+### On a physical phone (short version)
+
+1. One-time: JDK 17 or 21 (`flutter config --jdk-dir="…"`); phone with USB
+   debugging on.
+2. Run the backend bound to `0.0.0.0:8000` on your laptop, open port 8000, and
+   confirm `http://<laptop-wifi-ip>:8000/health` loads from the phone's browser.
+3. `cd mobile && .\tool\build_demo.ps1 -ApiBaseUrl http://<laptop-wifi-ip>:8000`
+   then `flutter install --release`.
+4. In the app: enter a 10-digit number starting 6–9 → the code auto-fills → do
+   onboarding → scan something. Keep the backend terminal running.
+
+Full detail (personas, ngrok, troubleshooting): **`DEMO.md`**.
 
 ---
 
-## Layout
+## Tests
 
-```
-backend/
-  Dockerfile    python:3.11-slim image
-  app/
-    main.py       app + GET /health (DB readiness -> 200 or 503)
-    api/          FastAPI routers          (api/v1/routes/*.py)
-    models/       SQLAlchemy ORM models
-    services/     business logic + integrations (OCR, openFDA, USDA, scoring, Claude)
-    core/         config (composes DATABASE_URL from POSTGRES_* or uses an override), security
-    db/           engine / session / declarative base
-    vector/       Milvus client helper
-  alembic/      migrations (env.py -> settings.sqlalchemy_url)
+```bash
+# backend  (needs Postgres; docker compose up -d postgres, then POSTGRES_PORT=5433)
+cd backend && python -m pytest -q
 
-mobile/lib/src/
-  core/         theme (CareCart design tokens), api client
-  routing/      go_router config
-  features/     one folder per screen group
+# mobile
+cd mobile && flutter analyze && flutter test
 ```
 
-## Secrets
+CI (`.github/workflows/ci.yml`) runs both plus an on-emulator integration test
+against a real backend.
 
-All secrets live in `backend/.env`, which is **gitignored and never committed**.
-Every teammate copies `backend/.env.example` (committed, blank values) to their
-own `.env`. Never hardcode a key — even a placeholder — into source.
+## Secrets & privacy
 
-## Data prep
-
-`gradient-ascend-mobile-app/project/dataset/data_prep/` holds a one-time offline
-pipeline: food ingredients → risk compounds, medicine salts → drug classes, and a
-**draft** food×drug interaction table (every row flagged `NEEDS CLINICAL REVIEW`).
-See its `README.md` / `SUMMARY.md`.
+All secrets live in `backend/.env` (gitignored; copy the blank
+`backend/.env.example`). Onboarding + scan data is health data: no telemetry
+SDKs, no raw `print` in `lib/`, PII never leaves the device without the user
+saying so — enforced by `mobile/test/no_pii_telemetry_test.dart` and
+`backend/tests/test_no_internal_endpoints.py`. `ENVIRONMENT=production` refuses
+to boot on placeholder secrets and stops echoing the OTP.
