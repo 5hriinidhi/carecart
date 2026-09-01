@@ -90,6 +90,32 @@ class HealthProfileData {
       );
 }
 
+/// One row of `GET /me/medications/mapping` — what a stored med resolves to.
+class MedMapping {
+  const MedMapping({
+    required this.name,
+    required this.identified,
+    this.drugClasses = const [],
+    this.interactions = const [],
+  });
+
+  final String name;
+  final bool identified;
+  final List<String> drugClasses;
+  final List<String> interactions; // risk-compound display names
+
+  factory MedMapping.fromJson(Map<String, dynamic> j) => MedMapping(
+        name: j['name'] as String? ?? '',
+        identified: j['identified'] as bool? ?? false,
+        drugClasses: ((j['drug_classes'] as List?) ?? const [])
+            .map((e) => e.toString())
+            .toList(),
+        interactions: ((j['interactions'] as List?) ?? const [])
+            .map((e) => e.toString())
+            .toList(),
+      );
+}
+
 sealed class VaultWrite {
   const VaultWrite();
 }
@@ -203,6 +229,25 @@ class VaultApi {
   Future<VaultWrite> deleteMedication(String id) =>
       _send('DELETE', '/me/medications/$id', ok: const {204});
 
+  /// `GET /me/medications/mapping` — name -> {drug class(es), food interactions}.
+  /// Empty map on any failure (the meds screen just omits the mapping line).
+  Future<Map<String, MedMapping>> fetchMedicationMapping() async {
+    try {
+      final res = await _dio.get<List<dynamic>>(
+          '/me/medications/mapping', options: _opts);
+      if (res.statusCode != 200) return const {};
+      final out = <String, MedMapping>{};
+      for (final e in (res.data ?? const [])) {
+        final j = e as Map<String, dynamic>;
+        final m = MedMapping.fromJson(j);
+        out[m.name] = m;
+      }
+      return out;
+    } on DioException {
+      return const {};
+    }
+  }
+
   /// `GET /me/medications`.
   Future<MedicationsResult> fetchMedications() async {
     try {
@@ -237,4 +282,10 @@ final medicationsProvider = FutureProvider.autoDispose<MedicationsResult>(
 /// Drives the profile page's health section.
 final healthProfileProvider = FutureProvider.autoDispose<HealthProfileData?>(
   (ref) => ref.read(vaultApiProvider).fetchHealthProfile(),
+);
+
+/// name -> drug-class + food-interaction mapping, for the meds screen.
+final medicationMappingProvider =
+    FutureProvider.autoDispose<Map<String, MedMapping>>(
+  (ref) => ref.read(vaultApiProvider).fetchMedicationMapping(),
 );

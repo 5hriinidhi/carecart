@@ -125,6 +125,12 @@ class FakeVaultApi implements VaultApi {
               .toList(),
         );
 
+  /// name -> mapping; empty by default. Tests set entries to exercise the UI.
+  Map<String, MedMapping> medMapping = {};
+
+  @override
+  Future<Map<String, MedMapping>> fetchMedicationMapping() async => medMapping;
+
   @override
   Future<MedicationsResult> fetchMedications() async => MedicationsLoaded([
         for (final m in medications)

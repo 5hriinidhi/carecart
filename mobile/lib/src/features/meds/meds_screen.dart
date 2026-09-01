@@ -20,7 +20,10 @@ class MedsScreen extends ConsumerWidget {
 
   Future<void> _add(BuildContext context, WidgetRef ref) async {
     final added = await showAddMedicationSheet(context);
-    if (added) ref.invalidate(medicationsProvider);
+    if (added) {
+      ref.invalidate(medicationsProvider);
+      ref.invalidate(medicationMappingProvider);
+    }
   }
 
   Future<void> _delete(
@@ -37,11 +40,14 @@ class MedsScreen extends ConsumerWidget {
       return;
     }
     ref.invalidate(medicationsProvider);
+    ref.invalidate(medicationMappingProvider);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(medicationsProvider);
+    final mapping = ref.watch(medicationMappingProvider).asData?.value ??
+        const <String, MedMapping>{};
 
     return CcScreen(
       background: Cc.paper,
@@ -88,7 +94,9 @@ class MedsScreen extends ConsumerWidget {
                   children: [
                     for (final m in items) ...[
                       _MedCard(
-                          med: m, onDelete: () => _delete(context, ref, m)),
+                          med: m,
+                          mapping: mapping[m.name],
+                          onDelete: () => _delete(context, ref, m)),
                       const SizedBox(height: 10),
                     ],
                   ],
@@ -122,13 +130,15 @@ class MedsScreen extends ConsumerWidget {
 }
 
 class _MedCard extends StatelessWidget {
-  const _MedCard({required this.med, this.onDelete});
+  const _MedCard({required this.med, this.mapping, this.onDelete});
   final Medication med;
+  final MedMapping? mapping;
   final VoidCallback? onDelete;
 
   @override
   Widget build(BuildContext context) {
     final initial = med.name.isEmpty ? '?' : med.name[0].toUpperCase();
+    final map = mapping;
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
       decoration: BoxDecoration(
@@ -136,48 +146,99 @@ class _MedCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: const Color(0x12151510)),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 38,
-            height: 38,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: Cc.safeTint, borderRadius: BorderRadius.circular(12)),
-            child: Text(initial,
-                style: const TextStyle(
-                    fontFamily: 'Bricolage',
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: Cc.oliveDark)),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(med.name,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 38,
+                height: 38,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: Cc.safeTint,
+                    borderRadius: BorderRadius.circular(12)),
+                child: Text(initial,
                     style: const TextStyle(
                         fontFamily: 'Bricolage',
-                        fontSize: 14.5,
+                        fontSize: 13,
                         fontWeight: FontWeight.w700,
-                        color: Cc.ink)),
-                if ((med.dosage ?? '').isNotEmpty) ...[
-                  const SizedBox(height: 3),
-                  Text(med.dosage!,
-                      style: CcText.bodySm.copyWith(color: Cc.muted)),
+                        color: Cc.oliveDark)),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(med.name,
+                        style: const TextStyle(
+                            fontFamily: 'Bricolage',
+                            fontSize: 14.5,
+                            fontWeight: FontWeight.w700,
+                            color: Cc.ink)),
+                    if ((med.dosage ?? '').isNotEmpty) ...[
+                      const SizedBox(height: 3),
+                      Text(med.dosage!,
+                          style: CcText.bodySm.copyWith(color: Cc.muted)),
+                    ],
+                    if (map != null && map.identified &&
+                        map.drugClasses.isNotEmpty) ...[
+                      const SizedBox(height: 3),
+                      Text(map.drugClasses.join(' · '),
+                          style: CcText.mono.copyWith(
+                              color: Cc.oliveDark, fontSize: 10.5)),
+                    ],
+                  ],
+                ),
+              ),
+              IconButton(
+                key: Key('med-delete-${med.id}'),
+                tooltip: 'Remove',
+                onPressed: onDelete,
+                icon: const Icon(Icons.delete_outline_rounded,
+                    size: 20, color: Cc.muted),
+              ),
+            ],
+          ),
+          if (map != null) ...[
+            const SizedBox(height: 8),
+            const Divider(height: 1, color: Color(0x11151510)),
+            const SizedBox(height: 9),
+            if (!map.identified)
+              Text("Couldn't match this to a drug class — it won't affect "
+                  'label verdicts.',
+                  style: CcText.bodySm.copyWith(color: Cc.muted, fontSize: 11.5))
+            else if (map.interactions.isEmpty)
+              Text('No known food interactions.',
+                  style: CcText.bodySm.copyWith(color: Cc.muted, fontSize: 11.5))
+            else ...[
+              Text('FOODS WE WATCH FOR YOU',
+                  style: CcText.mono.copyWith(
+                      color: const Color(0xFFA3A491),
+                      fontSize: 9.5,
+                      letterSpacing: 0.8)),
+              const SizedBox(height: 7),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: [
+                  for (final f in map.interactions)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF7E2D5),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(f,
+                          style: CcText.bodySm.copyWith(
+                              color: const Color(0xFF8A4526), fontSize: 11.5)),
+                    ),
                 ],
-              ],
-            ),
-          ),
-          IconButton(
-            key: Key('med-delete-${med.id}'),
-            tooltip: 'Remove',
-            onPressed: onDelete,
-            icon: const Icon(Icons.delete_outline_rounded,
-                size: 20, color: Cc.muted),
-          ),
+              ),
+            ],
+          ],
         ],
       ),
     );

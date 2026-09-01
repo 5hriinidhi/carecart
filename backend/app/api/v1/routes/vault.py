@@ -32,6 +32,7 @@ from app.models import (
 from app.schemas.fit import FitOut
 from app.schemas.lifestyle import LifestyleIn, LifestyleOut, LifestylePatch
 from app.services.fit import compute_fit
+from app.services import verdict as verdict_svc
 from app.schemas.vault import (
     AllergyIn,
     AllergyOut,
@@ -43,6 +44,7 @@ from app.schemas.vault import (
     HealthProfileOut,
     HealthProfilePatch,
     MedicationIn,
+    MedicationMappingItem,
     MedicationOut,
     MedicationPatch,
     MedicationScanOut,
@@ -269,6 +271,47 @@ def delete_lifestyle(user: CurrentUser, db: DbSession) -> Response:
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
+# --------------------------------------------------- medication -> food mapping
+med_mapping_router = APIRouter(prefix="/me/medications", tags=["medications"])
+
+
+@med_mapping_router.get(
+    "/mapping",
+    response_model=list[MedicationMappingItem],
+    operation_id="medications_mapping",
+)
+def medications_mapping(user: CurrentUser, db: DbSession):
+    rows = db.scalars(
+        select(Medication).where(Medication.user_id == user.id).order_by(Medication.created_at)
+    ).all()
+    rules = verdict_svc._load_rules(db)
+    out: list[MedicationMappingItem] = []
+    for m in rows:
+        classes = verdict_svc._drug_classes_for(m.name, rules)
+        compounds: list[str] = []
+        seen: set[str] = set()
+        for cls in classes:
+            for rule in rules.interactions.get(cls, []):
+                if rule.risk_compound in seen:
+                    continue
+                seen.add(rule.risk_compound)
+                compounds.append(
+                    rules.display.get(rule.risk_compound,
+                                      rule.risk_compound.replace("_", " "))
+                )
+        out.append(
+            MedicationMappingItem(
+                name=m.name,
+                identified=bool(classes),
+                drug_classes=classes,
+                interactions=sorted(compounds),
+            )
+        )
+    _audit(db, user.id, "read", "medications")
+    db.commit()
+    return out
+
+
 # ------------------------------------------------------------- CareCart Fit
 fit_router = APIRouter(prefix="/me/fit", tags=["fit"])
 
@@ -402,6 +445,7 @@ ROUTERS = [
     health_profile_router,
     lifestyle_router,
     fit_router,
+    med_mapping_router,  # before medications_router so /mapping isn't seen as an {item_id}
     conditions_router,
     allergies_router,
     medications_router,

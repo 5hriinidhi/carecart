@@ -3,6 +3,7 @@
 
 import 'package:carecart/src/core/drugs_api.dart';
 import 'package:carecart/src/core/pin_lock.dart';
+import 'package:carecart/src/core/vault_api.dart';
 import 'package:carecart/src/features/meds/meds_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -121,8 +122,32 @@ void main() {
     await tester.pumpAndSettle();
     await tester.enterText(find.byKey(const Key('med-search-field')), 'e');
     await tester.pump(const Duration(milliseconds: 350));
+    await tester.pump(const Duration(milliseconds: 350));
     await tester.pumpAndSettle();
     expect(find.text('Telma 40 Tablet'), findsNothing);
     expect(find.text('Ecosprin 75 Tablet'), findsNothing);
+  });
+
+  testWidgets('the drug-class + watched-foods mapping is shown per medication',
+      (tester) async {
+    final vault = FakeVaultApi()
+      ..medications.add((name: 'Telma 40', dosage: null))
+      ..medications.add((name: 'Homeo drops', dosage: null))
+      ..medMapping = {
+        'Telma 40': const MedMapping(
+            name: 'Telma 40',
+            identified: true,
+            drugClasses: ['ARB'],
+            interactions: ['Potassium', 'Sodium / salt']),
+        'Homeo drops': const MedMapping(name: 'Homeo drops', identified: false),
+      };
+    await _pumpMeds(tester, vault: vault);
+
+    expect(find.text('ARB'), findsOneWidget);
+    expect(find.text('FOODS WE WATCH FOR YOU'), findsOneWidget);
+    expect(find.text('Potassium'), findsOneWidget);
+    expect(find.text('Sodium / salt'), findsOneWidget);
+    expect(find.textContaining("Couldn't match this to a drug class"),
+        findsOneWidget);
   });
 }

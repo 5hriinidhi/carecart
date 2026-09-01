@@ -42,6 +42,7 @@ _ALLOWED = {
     "/api/v1/me/medications",
     "/api/v1/me/medications/{item_id}",
     "/api/v1/me/medications/scan",
+    "/api/v1/me/medications/mapping",
     "/api/v1/me/account",
 }
 # FastAPI's own dev docs (asserted separately to be prod-gated)

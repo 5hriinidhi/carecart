@@ -174,6 +174,18 @@ class MedicationOut(_Orm):
     updated_at: dt.datetime
 
 
+class MedicationMappingItem(BaseModel):
+    """What a stored medication resolves to: its drug class(es) and the food
+    risk-compounds those classes are known to interact with. Read-only, derived
+    from the same static tables the verdict engine uses — no user data beyond
+    the medication name itself."""
+
+    name: str
+    identified: bool
+    drug_classes: list[str] = []
+    interactions: list[str] = []  # risk-compound display names
+
+
 class MedicationScanOut(BaseModel):
     """The result of OCR-ing a label. A *guess* only — the client shows it, the
     user confirms/edits, then saves it via ``POST /me/medications``. Nothing is
