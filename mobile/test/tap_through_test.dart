@@ -14,7 +14,6 @@ import 'package:carecart/src/features/history/history_screen.dart';
 import 'package:carecart/src/features/home/home_screen.dart';
 import 'package:carecart/src/features/result/result_screen.dart';
 import 'package:carecart/src/features/scan/scan_screen.dart';
-import 'package:carecart/src/core/analytics_api.dart';
 import 'package:carecart/src/features/trends/trends_screen.dart';
 import 'package:carecart/src/state/main_app_state.dart';
 import 'package:flutter/material.dart';
@@ -37,9 +36,8 @@ void main() {
 
     final container = ProviderContainer(
       overrides: fakeBackendOverrides(
-        trends: const TrendsLoaded(Trends(
-            timezone: 'UTC', totalScans: 0, dietHealthScore: 0,
-            deltaSevenDay: 0, trend: 'steady')),
+        trends: sampleWeeklyTrends(),
+        history: sampleHistory(),
       ),
     );
     addTearDown(container.dispose);
@@ -123,36 +121,34 @@ void main() {
     expect(st().tab, MainScreen.trends);
     _step('TREND: TrendsScreen shown, tab=trends');
 
-    // ---- 9. scroll Trends, leave, come back -> offset persists (IndexedStack) ----
-    Finder trendsScroll() => find.descendant(
-          of: find.byType(TrendsScreen),
-          matching: find.byType(Scrollable),
-        );
-    double trendsOffset() =>
-        tester.state<ScrollableState>(trendsScroll()).position.pixels;
-
-    await tester.drag(trendsScroll(), const Offset(0, -320));
-    await tester.pump();
-    final offAfterScroll = trendsOffset();
-    expect(offAfterScroll, greaterThan(100));
-    _step('scrolled Trends to offset ${offAfterScroll.toStringAsFixed(0)}');
-
-    await tester.tap(find.text('Home'));
-    await tester.pump();
-    expect(find.byType(HomeScreen), findsOneWidget);
-    await tester.tap(find.text('Trend'));
-    await tester.pump();
-    final offOnReturn = trendsOffset();
-    expect(offOnReturn, moreOrLessEquals(offAfterScroll, epsilon: 1),
-        reason: 'Trends scroll position must persist across tab switches');
-    _step('returned to TREND: scroll offset still '
-        '${offOnReturn.toStringAsFixed(0)} (not reset)');
-
-    // ---- 10. bottom nav -> HISTORY ----
+    // ---- 9. bottom nav -> HISTORY ----
     await tester.tap(find.text('History'));
     await tester.pump();
     expect(find.byType(HistoryScreen), findsOneWidget);
     expect(find.text('Food history'), findsOneWidget);
+
+    // ---- 10. scroll History, leave, come back -> offset persists (IndexedStack) ----
+    Finder historyScroll() => find.descendant(
+          of: find.byType(HistoryScreen),
+          matching: find.byType(Scrollable),
+        );
+    double historyOffset() =>
+        tester.state<ScrollableState>(historyScroll()).position.pixels;
+
+    await tester.drag(historyScroll(), const Offset(0, -320));
+    await tester.pump();
+    final offAfterScroll = historyOffset();
+    expect(offAfterScroll, greaterThan(100));
+    _step('scrolled History to offset ${offAfterScroll.toStringAsFixed(0)}');
+
+    await tester.tap(find.text('Home'));
+    await tester.pump();
+    expect(find.byType(HomeScreen), findsOneWidget);
+    await tester.tap(find.text('History'));
+    await tester.pump();
+    final offOnReturn = historyOffset();
+    expect(offOnReturn, moreOrLessEquals(offAfterScroll, epsilon: 1),
+        reason: 'History scroll position must persist across tab switches');
     expect(st().screen, MainScreen.history);
     expect(st().tab, MainScreen.history);
     _step('HISTORY: HistoryScreen shown, tab=history');

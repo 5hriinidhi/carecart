@@ -3,14 +3,25 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/analytics_api.dart';
 import '../../core/build_config.dart';
+import '../../core/history_api.dart';
 import '../../core/me_api.dart';
+import '../../core/nudges_api.dart';
 import '../../core/text.dart';
 import '../../core/theme.dart';
+import '../../core/vault_api.dart';
 import '../../core/widgets.dart';
-import '../../fixtures/demo_data.dart';
 
-/// Static home screen — turn `1a` / `state.screen == 'home'` in CareCart App.dc.html.
+const _kWeekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const _kMonths = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+];
+
+/// Home — turn `1a` / `state.screen == 'home'`. Wired to /me, /analytics/trends,
+/// /nudges and /history — everything below the greeting is the user's own data
+/// (or an empty state), never a fixture.
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key, this.onNav, this.onScan, this.onOpenProfiles});
   final void Function(String route)? onNav;
@@ -24,6 +35,35 @@ class HomeScreen extends ConsumerWidget {
     final me = ref.watch(meProvider).asData?.value ?? const MeInfo();
     final firstName = me.firstName;
     final initial = me.initial;
+
+    // Diet Health Score — real, starts at 0 and averages up as scans come in.
+    final trends = ref.watch(trendsProvider).asData?.value;
+    final t = trends is TrendsLoaded ? trends.trends : null;
+    final hasTrend = t != null && !t.isEmpty;
+    final dhs = hasTrend ? t.dietHealthScore : 0;
+    final dhsDelta = hasTrend ? t.deltaSevenDay : 0;
+    final dhsSub = !hasTrend
+        ? 'Starts at 0 and averages up as you scan. Scan a label to begin.'
+        : '${dhsDelta > 0 ? 'Up $dhsDelta' : dhsDelta < 0 ? 'Down ${-dhsDelta}' : 'Steady'} '
+            'over the last 7 days · ${t.trend}.';
+
+    // Proactive nudge — only when the engine has actually produced one.
+    final nudges = ref.watch(nudgesProvider).asData?.value;
+    final nudge = (nudges is NudgesLoaded && nudges.page.items.isNotEmpty)
+        ? nudges.page.items.first
+        : null;
+
+    // Recent scans for the "Today" list.
+    final history = ref.watch(historyPageProvider).asData?.value;
+    final recent = switch (history) {
+      HistoryLoaded(:final page) => page.items.take(4).toList(),
+      HistoryOffline(:final items) => items.take(4).toList(),
+      _ => const <ScanHistoryEntry>[],
+    };
+
+    final now = DateTime.now();
+    final todayLabel =
+        '${_kWeekdays[now.weekday - 1]}, ${now.day} ${_kMonths[now.month - 1]}';
     return CcScreen(
       background: Cc.paper,
       child: ListView(
@@ -39,7 +79,7 @@ class HomeScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(children: [
-                        Text(kTodayLabel.toUpperCase(),
+                        Text(todayLabel.toUpperCase(),
                             style: CcText.label
                                 .copyWith(fontSize: 12, letterSpacing: 0.96)),
                         if (kDemoMode) ...[
@@ -95,12 +135,12 @@ class HomeScreen extends ConsumerWidget {
                       width: 96,
                       height: 96,
                       child: CustomPaint(
-                        painter: _RingPainter(kDietScore / 100),
+                        painter: _RingPainter(dhs / 100),
                         child: Center(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text('$kDietScore',
+                              Text('$dhs',
                                   style: const TextStyle(
                                       fontFamily: 'Bricolage',
                                       fontSize: 30,
@@ -127,9 +167,9 @@ class HomeScreen extends ConsumerWidget {
                                   fontWeight: FontWeight.w700,
                                   color: Cc.inkSoft)),
                           const SizedBox(height: 5),
-                          Text(
-                              'Up 4 points this week. Sodium is still the thing holding you back.',
-                              style: CcText.body.copyWith(color: Cc.oliveDark, fontSize: 12.5)),
+                          Text(dhsSub,
+                              style: CcText.body
+                                  .copyWith(color: Cc.oliveDark, fontSize: 12.5)),
                           const SizedBox(height: 10),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
@@ -186,79 +226,66 @@ class HomeScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 14),
 
-            // proactive nudge
-            Container(
-              padding: const EdgeInsets.fromLTRB(16, 15, 16, 15),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF7E2D5),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0x59D07E52)),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                      margin: const EdgeInsets.only(top: 6),
-                      width: 8,
-                      height: 8,
-                      decoration:
-                          const BoxDecoration(color: Cc.accentDeep, shape: BoxShape.circle)),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('A pattern worth a look',
-                            style: TextStyle(
-                                fontFamily: 'Bricolage',
-                                fontSize: 13,
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xFF8A4526))),
-                        const SizedBox(height: 4),
-                        Text(
-                            "Three high-sodium scans in six days while you're on Telmisartan. "
-                            "Nothing alarming yet — let's fix it early.",
-                            style: CcText.body.copyWith(color: const Color(0xFF7A4A31))),
-                        const SizedBox(height: 11),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 6,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            GestureDetector(
-                              onTap: () => onNav?.call('nudge'),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 8),
-                                decoration: BoxDecoration(
-                                    color: Cc.accentDeep,
-                                    borderRadius: BorderRadius.circular(999)),
-                                child: const Text("What's driving it",
-                                    style: TextStyle(
-                                        fontFamily: 'DMSans',
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white)),
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                              child: Text('Not now',
+            // proactive nudge — only once the engine has produced one
+            if (nudge != null) ...[
+              Container(
+                padding: const EdgeInsets.fromLTRB(16, 15, 16, 15),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF7E2D5),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: const Color(0x59D07E52)),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        margin: const EdgeInsets.only(top: 6),
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                            color: Cc.accentDeep, shape: BoxShape.circle)),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('A pattern worth a look',
+                              style: TextStyle(
+                                  fontFamily: 'Bricolage',
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFF8A4526))),
+                          const SizedBox(height: 4),
+                          Text(nudge.message,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: CcText.body
+                                  .copyWith(color: const Color(0xFF7A4A31))),
+                          const SizedBox(height: 11),
+                          GestureDetector(
+                            onTap: () => onNav?.call('nudge'),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 8),
+                              decoration: BoxDecoration(
+                                  color: Cc.accentDeep,
+                                  borderRadius: BorderRadius.circular(999)),
+                              child: const Text("What's driving it",
                                   style: TextStyle(
                                       fontFamily: 'DMSans',
                                       fontSize: 12,
                                       fontWeight: FontWeight.w500,
-                                      color: Color(0xFF8A4526))),
+                                      color: Colors.white)),
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 14),
+              const SizedBox(height: 14),
+            ],
 
             // action tiles
             Row(
@@ -287,63 +314,94 @@ class HomeScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
 
-            CcSectionHead('Today',
+            CcSectionHead('Recent scans',
                 trailing: 'All history →', onTrailing: () => onNav?.call('history')),
             const SizedBox(height: 10),
-            for (final s in kTodayScans) ...[
-              _ScanRow(scan: s),
-              const SizedBox(height: 9),
-            ],
+            if (recent.isEmpty)
+              Text('Nothing scanned yet — your recent scans show up here.',
+                  style: CcText.bodySm.copyWith(color: Cc.muted))
+            else
+              for (final e in recent) ...[
+                _ScanRow(
+                  name: e.productName,
+                  note: e.tier[0].toUpperCase() + e.tier.substring(1),
+                  score: e.score,
+                  when: _hhmm(e.scannedAt),
+                ),
+                const SizedBox(height: 9),
+              ],
 
             const SizedBox(height: 7),
-            GestureDetector(
-              onTap: () => onNav?.call('meds'),
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(16, 15, 16, 15),
-                decoration: BoxDecoration(
-                    color: const Color(0xFFEAEADB), borderRadius: BorderRadius.circular(20)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Expanded(
-                          child: Text('Watching 4 medications',
-                              style: TextStyle(
-                                  fontFamily: 'Bricolage',
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w700,
-                                  color: Cc.ink)),
-                        ),
-                        Text('Manage →',
-                            style: CcText.bodySm
-                                .copyWith(color: Cc.olive, fontWeight: FontWeight.w500)),
-                      ],
-                    ),
-                    const SizedBox(height: 11),
-                    Wrap(
-                      spacing: 7,
-                      runSpacing: 7,
-                      children: [
-                        for (final m in kMeds)
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: Cc.paperRaised,
-                              borderRadius: BorderRadius.circular(999),
-                              border: Border.all(color: const Color(0x14151510)),
-                            ),
-                            child: Text(m.name,
-                                style: CcText.bodySm.copyWith(color: Cc.oliveDark)),
-                          ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            _MedsCard(onOpen: () => onNav?.call('meds')),
           ],
         ),
+    );
+  }
+}
+
+class _MedsCard extends ConsumerWidget {
+  const _MedsCard({required this.onOpen});
+  final VoidCallback onOpen;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final async = ref.watch(medicationsProvider);
+    final meds = switch (async.asData?.value) {
+      MedicationsLoaded(:final items) => items,
+      _ => const <Medication>[],
+    };
+    return GestureDetector(
+      onTap: onOpen,
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(16, 15, 16, 15),
+        decoration: BoxDecoration(
+            color: const Color(0xFFEAEADB),
+            borderRadius: BorderRadius.circular(20)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                      meds.isEmpty
+                          ? 'No medications on file'
+                          : 'Watching ${meds.length} medication${meds.length == 1 ? '' : 's'}',
+                      style: const TextStyle(
+                          fontFamily: 'Bricolage',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: Cc.ink)),
+                ),
+                Text(meds.isEmpty ? 'Add →' : 'Manage →',
+                    style: CcText.bodySm
+                        .copyWith(color: Cc.olive, fontWeight: FontWeight.w500)),
+              ],
+            ),
+            if (meds.isNotEmpty) ...[
+              const SizedBox(height: 11),
+              Wrap(
+                spacing: 7,
+                runSpacing: 7,
+                children: [
+                  for (final m in meds)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 11, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Cc.paperRaised,
+                        borderRadius: BorderRadius.circular(999),
+                        border: Border.all(color: const Color(0x14151510)),
+                      ),
+                      child: Text(m.name,
+                          style: CcText.bodySm.copyWith(color: Cc.oliveDark)),
+                    ),
+                ],
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 }
@@ -394,9 +452,21 @@ class _ActionTile extends StatelessWidget {
   }
 }
 
+String _hhmm(DateTime dt) {
+  final l = dt.toLocal();
+  return '${l.hour.toString().padLeft(2, '0')}:${l.minute.toString().padLeft(2, '0')}';
+}
+
 class _ScanRow extends StatelessWidget {
-  const _ScanRow({required this.scan});
-  final DemoScan scan;
+  const _ScanRow(
+      {required this.name,
+      required this.note,
+      required this.score,
+      required this.when});
+  final String name;
+  final String note;
+  final int score;
+  final String when;
 
   @override
   Widget build(BuildContext context) {
@@ -409,23 +479,23 @@ class _ScanRow extends StatelessWidget {
       ),
       child: Row(
         children: [
-          CcScoreChip(scan.score),
+          CcScoreChip(score),
           const SizedBox(width: 13),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(scan.name,
+                Text(name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: CcText.listTitle),
                 const SizedBox(height: 2),
-                Text(scan.note, style: CcText.bodySm.copyWith(color: Cc.muted)),
+                Text(note, style: CcText.bodySm.copyWith(color: Cc.muted)),
               ],
             ),
           ),
           const SizedBox(width: 8),
-          Text(scan.when, style: CcText.mono.copyWith(color: const Color(0xFFA3A491))),
+          Text(when, style: CcText.mono.copyWith(color: const Color(0xFFA3A491))),
         ],
       ),
     );

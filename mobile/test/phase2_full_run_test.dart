@@ -242,10 +242,10 @@ void main() {
     // Diet Health Score card is wired to GET /analytics/trends (stubbed empty here)
     expect(find.text('Built from 0 scans. No manual logging.'), findsOneWidget);
     expect(find.textContaining('Diet Health Score and weekly trend'), findsOneWidget);
-    expect(find.text('Nutrient trajectories'), findsOneWidget);
-    expect(find.text('Sodium'), findsWidgets); // trajectory fixture (separate feature)
+    // empty account -> no "where it stands" card, no fixtures
+    expect(find.text('WHERE IT STANDS'), findsNothing);
     noException('trends');
-    _ok('TRENDS — "Your trend", live score card (empty state), trajectories, nav');
+    _ok('TRENDS — "Your trend", live score card empty state, no fixtures, nav');
 
     await tester.tap(find.text('History'));
     await tester.pumpAndSettle();

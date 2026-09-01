@@ -92,7 +92,7 @@ void main() {
     // header
     expect(_text(tester, const Key('dhs-value')), '73');
     expect(_text(tester, const Key('dhs-delta')), '+3');
-    expect(find.textContaining('improving'), findsOneWidget);
+    expect(find.textContaining('improving'), findsWidgets);
 
     // the line chart: one bar, 3 points, y == the weekly diet_health_score list
     final chart = tester.widget<LineChart>(find.byType(LineChart));

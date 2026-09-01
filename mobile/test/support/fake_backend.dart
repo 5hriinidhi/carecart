@@ -267,3 +267,47 @@ List<Override> fakeBackendOverrides({
     medicationsProvider.overrideWith((ref) async => v.fetchMedications()),
   ];
 }
+
+/// A non-empty weekly Trends payload (6 buckets) — tall enough for the Trends
+/// screen to actually scroll in tests that check scroll persistence.
+TrendsLoaded sampleWeeklyTrends() => TrendsLoaded(Trends(
+      timezone: 'UTC',
+      totalScans: 24,
+      dietHealthScore: 71,
+      deltaSevenDay: 4,
+      trend: 'improving',
+      weekly: [
+        for (var i = 0; i < 6; i++)
+          TrendBucket(
+            periodStart: DateTime(2026, 7, 6 + i * 7),
+            label: 'W${i + 1}',
+            scans: 4,
+            avgScore: 60.0 + i * 3,
+            medianScore: 62.0 + i * 3,
+            minScore: 40,
+            maxScore: 90,
+            safe: 2,
+            caution: 1,
+            avoid: 1,
+            dietHealthScore: 60 + i * 2,
+          ),
+      ],
+    ));
+
+/// A HistoryLoaded page with [n] rows — for tests that need a scrollable list.
+HistoryLoaded sampleHistory([int n = 20]) => HistoryLoaded(HistoryPage(
+      items: [
+        for (var i = 0; i < n; i++)
+          ScanHistoryEntry(
+            id: 'h$i',
+            productName: 'Scanned item $i',
+            score: 40 + (i % 5) * 12,
+            tier: i.isEven ? 'caution' : 'safe',
+            scannedAt: DateTime(2026, 8, 20).subtract(Duration(hours: i * 6)),
+          ),
+      ],
+      total: n,
+      limit: n,
+      offset: 0,
+      hasMore: false,
+    ));

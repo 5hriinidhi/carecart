@@ -3,16 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/analytics_api.dart';
-import '../../core/severity.dart';
 import '../../core/text.dart';
 import '../../core/theme.dart';
 import '../../core/widgets.dart';
-import '../../fixtures/demo_data.dart';
 
-/// Trends screen — `state.screen == 'trends'`. The Diet Health Score card + line
-/// chart are wired to `GET /analytics/trends` (Phase 5.2); the older
-/// TREND / TREND_LABELS fixtures are gone. (The nutrient-trajectory section is
-/// still fixture-backed — a separate future feature.)
+/// Trends screen — `state.screen == 'trends'`. Everything is wired to
+/// `GET /analytics/trends`: the Diet Health Score card + line chart + tier
+/// chips, and a plain-language summary. No fixtures — an empty account shows an
+/// empty state and the score is 0 until the first scan.
 class TrendsScreen extends ConsumerStatefulWidget {
   const TrendsScreen({super.key, this.range = '7d', this.onNav, this.onScan});
   final String range;
@@ -65,36 +63,43 @@ class _TrendsScreenState extends ConsumerState<TrendsScreen> {
             onScan: widget.onScan,
           ),
 
-          const SizedBox(height: 22),
-          const Text('Nutrient trajectories', style: CcText.h2),
-          const SizedBox(height: 12),
-          for (final j in kTrajectories) ...[
-            _TrajectoryCard(t: j),
-            const SizedBox(height: 10),
-          ],
-          const SizedBox(height: 8),
-          Container(
-            padding: const EdgeInsets.all(18),
-            decoration:
-                BoxDecoration(color: Cc.sage, borderRadius: BorderRadius.circular(22)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('WHAT CHANGED',
-                    style: CcText.mono.copyWith(
-                        color: Cc.oliveDark, letterSpacing: 1.05, fontSize: 10.5)),
-                const SizedBox(height: 9),
-                Text(
-                    'You swapped instant noodles for millet noodles four times this month. '
-                    'That single habit accounts for most of your +4.',
-                    style: CcText.body.copyWith(
-                        color: Cc.inkSoft, fontSize: 14, height: 1.55)),
-              ],
+          if (trends != null && !trends.isEmpty) ...[
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                  color: Cc.sage, borderRadius: BorderRadius.circular(22)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('WHERE IT STANDS',
+                      style: CcText.mono.copyWith(
+                          color: Cc.oliveDark,
+                          letterSpacing: 1.05,
+                          fontSize: 10.5)),
+                  const SizedBox(height: 9),
+                  Text(_summary(trends),
+                      style: CcText.body.copyWith(
+                          color: Cc.inkSoft, fontSize: 14, height: 1.55)),
+                ],
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );
+  }
+
+  String _summary(Trends t) {
+    final d = t.deltaSevenDay;
+    final move = d > 0
+        ? 'up $d point${d == 1 ? '' : 's'}'
+        : d < 0
+            ? 'down ${-d} point${-d == 1 ? '' : 's'}'
+            : 'unchanged';
+    return 'Your Diet Health Score is $move over the last 7 days and the trend is '
+        '${t.trend}. Built from ${t.totalScans} scan${t.totalScans == 1 ? '' : 's'} — '
+        'keep scanning and it keeps averaging.';
   }
 }
 
@@ -395,72 +400,3 @@ class _DhsLineChart extends StatelessWidget {
   }
 }
 
-class _TrajectoryCard extends StatelessWidget {
-  const _TrajectoryCard({required this.t});
-  final DemoTrajectory t;
-
-  @override
-  Widget build(BuildContext context) {
-    final s = chipFor(_score(t.tone));
-    return Container(
-      padding: const EdgeInsets.fromLTRB(15, 14, 15, 14),
-      decoration: BoxDecoration(
-        color: Cc.paperRaised,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0x12151510)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                  width: 9,
-                  height: 9,
-                  decoration: BoxDecoration(color: s.color, shape: BoxShape.circle)),
-              const SizedBox(width: 9),
-              Expanded(
-                child: Text(t.k,
-                    style: const TextStyle(
-                        fontFamily: 'DMSans',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: Cc.ink)),
-              ),
-              Text(t.delta,
-                  style: CcText.mono.copyWith(color: s.color, fontSize: 11.5)),
-            ],
-          ),
-          const SizedBox(height: 11),
-          SizedBox(
-            height: 38,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                for (var i = 0; i < t.bars.length; i++)
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 2),
-                      height: 38 * t.bars[i] / 100,
-                      decoration: BoxDecoration(
-                        color: i == t.bars.length - 1 ? s.color : s.tint,
-                        borderRadius: BorderRadius.circular(3),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 9),
-          Text(t.note, style: CcText.bodySm.copyWith(color: Cc.muted, height: 1.45)),
-        ],
-      ),
-    );
-  }
-
-  static int _score(Severity s) => switch (s) {
-        Severity.avoid => 20,
-        Severity.caution => 50,
-        Severity.safe => 85,
-      };
-}

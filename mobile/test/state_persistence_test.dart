@@ -6,9 +6,8 @@
 //   flutter test test/state_persistence_test.dart -r expanded
 
 import 'package:carecart/src/app.dart';
-import 'package:carecart/src/core/analytics_api.dart';
 import 'package:carecart/src/features/app_shell.dart';
-import 'package:carecart/src/features/trends/trends_screen.dart';
+import 'package:carecart/src/features/history/history_screen.dart';
 import 'package:carecart/src/state/main_app_state.dart';
 import 'package:carecart/src/state/onboarding_state.dart';
 import 'package:flutter/widgets.dart';
@@ -106,9 +105,7 @@ void main() {
     final container = ProviderContainer(
       overrides: fakeBackendOverrides(
         auth: FakeAuthApi(devCode: '123456'),
-        trends: const TrendsLoaded(Trends(
-            timezone: 'UTC', totalScans: 0, dietHealthScore: 0,
-            deltaSevenDay: 0, trend: 'steady')),
+        history: sampleHistory(),
       ),
     );
     addTearDown(container.dispose);
@@ -133,11 +130,11 @@ void main() {
 
     expect(find.byType(MainAppShell), findsOneWidget);
 
-    container.read(mainAppProvider.notifier).goTab(MainScreen.trends);
+    container.read(mainAppProvider.notifier).goTab(MainScreen.history);
     await tester.pumpAndSettle();
-    expect(app().tab, MainScreen.trends);
+    expect(app().tab, MainScreen.history);
     final scrollable = find.descendant(
-        of: find.byType(TrendsScreen), matching: find.byType(Scrollable));
+        of: find.byType(HistoryScreen), matching: find.byType(Scrollable));
     await tester.drag(scrollable, const Offset(0, -260));
     await tester.pump();
     final offset = tester.state<ScrollableState>(scrollable).position.pixels;
@@ -145,16 +142,16 @@ void main() {
 
     tester.view.physicalSize = const Size(920, 430);
     await tester.pumpAndSettle();
-    expect(app().screen, MainScreen.trends, reason: 'tab kept across rotation');
-    expect(app().tab, MainScreen.trends);
-    expect(find.byType(TrendsScreen), findsOneWidget);
+    expect(app().screen, MainScreen.history, reason: 'tab kept across rotation');
+    expect(app().tab, MainScreen.history);
+    expect(find.byType(HistoryScreen), findsOneWidget);
 
     tester.view.physicalSize = const Size(430, 920);
     await tester.pumpAndSettle();
-    expect(app().tab, MainScreen.trends);
+    expect(app().tab, MainScreen.history);
     expect(tester.state<ScrollableState>(scrollable).position.pixels,
         moreOrLessEquals(offset, epsilon: 1),
-        reason: 'Trends scroll offset survived rotation');
+        reason: 'History scroll offset survived rotation');
   });
 
   test('core providers are not autoDispose (state outlives listener removal)', () {
