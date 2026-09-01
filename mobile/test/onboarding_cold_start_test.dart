@@ -93,7 +93,7 @@ void main() {
     assertMainUntouched('steps/0');
     _step('code accepted → token stored → oScreen=steps, oStep=0');
 
-    // ---- walk all 7 profile steps ----
+    // ---- walk all 8 profile steps ----
     const titles = <int, String>{
       0: 'A few things about you',
       1: 'How many days a week are you active?',
@@ -102,16 +102,16 @@ void main() {
       4: 'Anything you must avoid?',
       5: 'What are you taking?',
       6: 'A little about your lifestyle',
+      7: 'Set a PIN',
     };
     const pickPerStep = <int, String>{
       0: 'Male',
       1: '3 days',
       3: 'Low sugar',
       4: 'Dairy',
-      5: 'Type it in',
       6: 'Non-smoker',
     };
-    const last = 6;
+    final last = kOnbSteps.length - 1;
 
     for (var i = 0; i <= last; i++) {
       expect(onb().oScreen, OnbScreen.steps, reason: 'step $i screen');
@@ -125,6 +125,11 @@ void main() {
         await tester.pump();
         expect(onb().oName, 'Nadia');
       }
+      if (kOnbSteps[i] == OnbStep.pin) {
+        await tester.enterText(find.byType(TextField).at(0), '4271');
+        await tester.enterText(find.byType(TextField).at(1), '4271');
+        await tester.pump();
+      }
 
       final pick = pickPerStep[i];
       if (pick != null) {
@@ -134,8 +139,7 @@ void main() {
 
       await tester.tap(find.text(i == last ? 'Complete' : 'Next'));
       await tester.pumpAndSettle();
-      _step('STEP ${i + 1}/${last + 1} "${titles[i]}"'
-          '${pick != null ? '  (picked "$pick")' : ''} → '
+      _step('STEP ${i + 1}/${last + 1} "${titles[i]}" → '
           '${i == last ? 'Complete' : 'Next'}');
     }
 

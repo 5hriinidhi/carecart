@@ -132,7 +132,10 @@ class MainAppShell extends ConsumerWidget {
         bg = Cc.paper;
         body = ResultScreen(
           productId: s.pid ?? 'noodles',
-          verdict: s.verdict, // live Phase 4.4 verdict; null -> demo fixture
+          // the real scanned product's name (a live scan sets s.product); the
+          // demo picker leaves it null and ResultScreen falls back to the fixture.
+          productName: s.product?.displayName,
+          verdict: s.verdict, // live verdict; null -> demo fixture
           onHome: app.goHome,
           onScan: app.goScan,
         );

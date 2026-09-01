@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'dart:async';
+
+import '../../core/drugs_api.dart';
+import '../../core/text.dart';
 import '../../core/theme.dart';
 import '../../core/widgets.dart';
 import '../../routing/app_router.dart';
@@ -111,6 +115,11 @@ const _stepCopy = <OnbStep, (String, String)>{
     'A little about your lifestyle',
     'These drive the lifestyle half of your CareCart Fit score. Skip anything '
         'you would rather not answer.'
+  ),
+  OnbStep.pin: (
+    'Set a PIN',
+    'A 4–6 digit PIN protects your medicine list — you enter it whenever you '
+        'add or remove a medication. Stored only on this device.'
   ),
 };
 
@@ -524,7 +533,7 @@ class _StepsView extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Flexible(
-                      child: Text('STEP ${s.oStepNo} OF 6',
+                      child: Text('STEP ${s.oStepNo} OF ${kOnbSteps.length}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -569,7 +578,7 @@ class _StepsView extends ConsumerWidget {
                 const SizedBox(height: 8),
                 Text(why, style: _sans(12.5, color: Cc.muted, height: 1.55)),
                 const SizedBox(height: 20),
-                ..._stepBody(s, flow),
+                ..._stepBody(s, flow, ref),
               ],
             ),
           ),
@@ -625,7 +634,7 @@ class _StepsView extends ConsumerWidget {
   }
 }
 
-List<Widget> _stepBody(OnboardingState s, OnboardingFlow flow) {
+List<Widget> _stepBody(OnboardingState s, OnboardingFlow flow, WidgetRef ref) {
   switch (s.oStepKind) {
     case OnbStep.gender:
       return [
@@ -746,29 +755,7 @@ List<Widget> _stepBody(OnboardingState s, OnboardingFlow flow) {
       ];
     case OnbStep.meds:
       return [
-        Row(
-          children: [
-            Expanded(
-              child: _MedTile(
-                dark: true,
-                icon: Icons.document_scanner_outlined,
-                title: 'Scan prescription',
-                sub: 'Reads names and doses',
-                onTap: flow.scanRx,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _MedTile(
-                dark: false,
-                icon: Icons.add_rounded,
-                title: 'Type it in',
-                sub: 'Search 12,000 names',
-                onTap: flow.addRx,
-              ),
-            ),
-          ],
-        ),
+        _OnbMedSearch(onPick: flow.addRxNamed),
         const SizedBox(height: 16),
         if (s.oRx.isEmpty)
           const _DashedEmpty(
@@ -829,6 +816,55 @@ List<Widget> _stepBody(OnboardingState s, OnboardingFlow flow) {
         Text('1 = very low · 5 = very high',
             style: _sans(11.5, color: _faint)),
       ];
+    case OnbStep.pin:
+      return [
+        _PinField(hint: 'New PIN', onChanged: flow.setPin),
+        const SizedBox(height: 10),
+        _PinField(hint: 'Confirm PIN', onChanged: flow.setPinConfirm),
+        const SizedBox(height: 12),
+        if (s.oPin.isNotEmpty && !s.oPinValid)
+          Text('Use 4 to 6 digits.', style: _sans(12, color: Cc.avoid))
+        else if (s.oPinConfirm.isNotEmpty && s.oPin != s.oPinConfirm)
+          Text("Those don't match yet.", style: _sans(12, color: Cc.avoid))
+        else if (s.oPinReady)
+          Text('PIN set. You can still skip and add one later.',
+              style: _sans(12, color: Cc.oliveDark)),
+      ];
+  }
+}
+
+class _PinField extends StatelessWidget {
+  const _PinField({required this.hint, required this.onChanged});
+  final String hint;
+  final void Function(String) onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Cc.paperRaised,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: _hair),
+      ),
+      child: TextField(
+        obscureText: true,
+        keyboardType: TextInputType.number,
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(6),
+        ],
+        onChanged: onChanged,
+        style: _sans(15, w: FontWeight.w600),
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          isCollapsed: true,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 15, vertical: 14),
+          hintText: hint,
+          hintStyle: _sans(13.5, color: _faint),
+        ),
+      ),
+    );
   }
 }
 
@@ -1154,9 +1190,11 @@ class _BigInput extends StatelessWidget {
 }
 
 class _PlainInput extends StatelessWidget {
-  const _PlainInput({required this.hint, required this.onChanged});
+  const _PlainInput(
+      {required this.hint, required this.onChanged, this.controller});
   final String hint;
   final void Function(String) onChanged;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -1167,6 +1205,7 @@ class _PlainInput extends StatelessWidget {
         border: Border.all(color: _hair),
       ),
       child: TextField(
+        controller: controller,
         onChanged: onChanged,
         maxLength: 120,
         style: _sans(13.5),
@@ -1201,49 +1240,135 @@ class _InfoBox extends StatelessWidget {
   }
 }
 
-class _MedTile extends StatelessWidget {
-  const _MedTile({
-    required this.dark,
-    required this.icon,
-    required this.title,
-    required this.sub,
-    required this.onTap,
-  });
-  final bool dark;
-  final IconData icon;
-  final String title;
-  final String sub;
-  final VoidCallback onTap;
+/// Onboarding meds step — search the real drug catalogue (`GET /drugs/search`)
+/// and tap to add. No receipt / label scan here (a future update).
+class _OnbMedSearch extends ConsumerStatefulWidget {
+  const _OnbMedSearch({required this.onPick});
+  final void Function(String name) onPick;
+
+  @override
+  ConsumerState<_OnbMedSearch> createState() => _OnbMedSearchState();
+}
+
+class _OnbMedSearchState extends ConsumerState<_OnbMedSearch> {
+  final _q = TextEditingController();
+  Timer? _debounce;
+  List<DrugHit> _hits = const [];
+  bool _searching = false;
+  String? _note;
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _q.dispose();
+    super.dispose();
+  }
+
+  void _onChanged(String v) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 300), () => _run(v));
+  }
+
+  Future<void> _run(String v) async {
+    final q = v.trim();
+    if (q.replaceAll(RegExp(r'\s'), '').length < 2) {
+      setState(() {
+        _hits = const [];
+        _note = null;
+        _searching = false;
+      });
+      return;
+    }
+    setState(() => _searching = true);
+    final res = await ref.read(drugsApiProvider).search(q);
+    if (!mounted || _q.text.trim() != q) return;
+    setState(() {
+      _searching = false;
+      switch (res) {
+        case DrugSearchHits(:final hits):
+          _hits = hits;
+          _note = hits.isEmpty ? 'No matches — check the spelling.' : null;
+        case DrugSearchError(:final message):
+          _hits = const [];
+          _note = message;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Container(
-        padding: const EdgeInsets.all(15),
-        decoration: BoxDecoration(
-          color: dark ? Cc.inkSoft : Cc.paperRaised,
-          borderRadius: BorderRadius.circular(18),
-          border: dark ? null : Border.all(color: _hair),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _PlainInput(
+          hint: 'Search a medicine — brand or salt',
+          onChanged: _onChanged,
+          controller: _q,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 20, color: dark ? Cc.sage : Cc.oliveDark),
-            const SizedBox(height: 10),
-            Text(title,
-                style: _bric(13.5, FontWeight.w700,
-                    color: dark ? Cc.paper : Cc.ink)),
-            const SizedBox(height: 3),
-            Text(sub,
-                style: _sans(11,
-                    color: dark ? const Color(0xB3F1F0E4) : Cc.muted,
-                    height: 1.3)),
-          ],
-        ),
-      ),
+        if (_searching)
+          const Padding(
+            padding: EdgeInsets.only(top: 14),
+            child: SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(strokeWidth: 2)),
+          )
+        else if (_note != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: Text(_note!, style: _sans(12, color: _faint)),
+          )
+        else if (_hits.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Column(
+              children: [
+                for (final d in _hits.take(8))
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 7),
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        widget.onPick(d.name);
+                        _q.clear();
+                        setState(() => _hits = const []);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 13, vertical: 11),
+                        decoration: BoxDecoration(
+                          color: Cc.paperRaised,
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(color: _hair),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(d.name, style: CcText.listTitle),
+                                  if (d.subtitle.isNotEmpty) ...[
+                                    const SizedBox(height: 2),
+                                    Text(d.subtitle,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: _sans(11.5, color: Cc.muted)),
+                                  ],
+                                ],
+                              ),
+                            ),
+                            const Icon(Icons.add_rounded,
+                                size: 18, color: Cc.oliveDark),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+      ],
     );
   }
 }

@@ -5,6 +5,7 @@
 // machine or the router gate.
 
 import 'package:carecart/src/core/api_client.dart';
+import 'package:carecart/src/core/pin_lock.dart';
 import 'package:carecart/src/routing/app_router.dart';
 import 'package:carecart/src/state/main_app_state.dart';
 import 'package:carecart/src/state/onboarding_state.dart';
@@ -145,10 +146,10 @@ void main() {
     expect(st().oError, 'That code is wrong or has expired.');
   });
 
-  test('next walks the 7 steps in order, then enters building', () async {
+  test('next walks the 8 steps in order, then enters building', () async {
     await signIn();
     final seen = <OnbStep>[st().oStepKind];
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < kOnbSteps.length - 1; i++) {
       flow().next();
       seen.add(st().oStepKind);
     }
@@ -160,6 +161,7 @@ void main() {
       OnbStep.allergies,
       OnbStep.meds,
       OnbStep.lifestyle,
+      OnbStep.pin,
     ]);
     expect(st().oScreen, OnbScreen.steps);
     flow().next();
@@ -212,14 +214,15 @@ void main() {
     expect(s.oOther, 'mustard');
   });
 
-  test('scanRx / addRx / removeRx manage the prescription list', () {
-    flow().scanRx();
-    expect(flow().state.oRx.map((r) => r.name), const ['Telmisartan', 'Metformin']);
-    flow().addRx();
+  test('addRxNamed / removeRx manage the medication list', () {
+    flow().addRxNamed('Telmisartan 40 Tablet');
+    flow().addRxNamed('Metformin 500');
+    flow().addRxNamed('  telmisartan 40 tablet  '); // dup (case/space-insensitive)
+    flow().addRxNamed('   ');                        // blank -> ignored
     expect(flow().state.oRx.map((r) => r.name),
-        const ['Telmisartan', 'Metformin', 'Atorvastatin']);
-    flow().removeRx(1);
-    expect(flow().state.oRx.map((r) => r.name), const ['Telmisartan', 'Atorvastatin']);
+        const ['Telmisartan 40 Tablet', 'Metformin 500']);
+    flow().removeRx(0);
+    expect(flow().state.oRx.map((r) => r.name), const ['Metformin 500']);
   });
 
   test('startBuilding writes the whole profile to the vault, then -> done',
@@ -238,11 +241,15 @@ void main() {
     flow().toggleAllergy('Tree nuts');
     flow().setOther('mustard');
     flow().next();
-    flow().scanRx(); // Telmisartan + Metformin
+    flow().addRxNamed('Telmisartan');
+    flow().addRxNamed('Metformin');
     flow().next(); // meds -> lifestyle
     flow().setSleep(7.5);
     flow().setExerciseDays(4);
     flow().setStress(3);
+    flow().next(); // lifestyle -> pin
+    flow().setPin('4271');
+    flow().setPinConfirm('4271');
     await flow().next(); // last step -> startBuilding()
 
     expect(st().oScreen, OnbScreen.done);
@@ -254,6 +261,7 @@ void main() {
     expect(vault.medications.map((m) => m.name), const ['Telmisartan', 'Metformin']);
     expect(lifestyle.writes.single.sleepHours, 7.5);
     expect(lifestyle.writes.single.exerciseDays, 4);
+    expect(await c.read(pinLockProvider).verify('4271'), isTrue);
 
     // reaching done does NOT itself flip the router gate — that's the widget's job
     expect(c.read(onboardingCompleteProvider), isFalse);
@@ -263,7 +271,7 @@ void main() {
       () async {
     vault.failOn = {'health-profile'};
     await signIn();
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < kOnbSteps.length - 1; i++) {
       flow().next();
     }
     await flow().next(); // -> startBuilding, which fails on the first write

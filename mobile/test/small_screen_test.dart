@@ -86,13 +86,14 @@ void main() {
       flow.submitPhone();
       await check('otp');
       flow.skipAuth();
-      for (var i = 0; i < 6; i++) {
+      final last = kOnbSteps.length - 1;
+      for (var i = 0; i <= last; i++) {
         await check('step ${i + 1} (${flow.state.oStepKind.name})');
-        if (i == 5) {
-          flow.scanRx(); // meds step: render the Rx list too
-          await check('step 6 with Rx list');
+        if (flow.state.oStepKind == OnbStep.meds) {
+          flow.addRxNamed('Telmisartan 40'); // render the Rx list too
+          await check('meds step with an Rx');
         }
-        if (i < 5) flow.next();
+        if (i < last) flow.next();
       }
       flow.startBuilding();
       await check('building');

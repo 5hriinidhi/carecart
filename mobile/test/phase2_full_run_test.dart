@@ -131,12 +131,12 @@ void main() {
       'Anything you must avoid?',
       'What are you taking?',
       'A little about your lifestyle',
+      'Set a PIN',
     ];
     const stepPick = {
-      0: 'Male', 1: '2 days', 3: 'Low sugar', 4: 'Dairy', 5: 'Type it in',
-      6: 'Non-smoker',
+      0: 'Male', 1: '2 days', 3: 'Low sugar', 4: 'Dairy', 6: 'Non-smoker',
     };
-    const lastStep = 6;
+    final lastStep = kOnbSteps.length - 1;
     for (var i = 0; i <= lastStep; i++) {
       expect(onb().oScreen, OnbScreen.steps);
       expect(onb().oStep, i);
@@ -147,6 +147,11 @@ void main() {
         await tester.pump();
         expect(onb().oName, 'Devi');
       }
+      if (kOnbSteps[i] == OnbStep.pin) {
+        await tester.enterText(find.byType(TextField).at(0), '4271');
+        await tester.enterText(find.byType(TextField).at(1), '4271');
+        await tester.pump();
+      }
       if (stepPick[i] != null) {
         await tester.tap(find.text(stepPick[i]!));
         await tester.pump();
@@ -154,7 +159,7 @@ void main() {
       await tester.tap(find.text(i == lastStep ? 'Complete' : 'Next'));
       await tester.pumpAndSettle();
     }
-    _ok('onboarding: walked all 7 profile steps');
+    _ok('onboarding: walked all ${kOnbSteps.length} profile steps');
 
     // building writes the profile to the vault (fakes here), then -> done
     expect(onb().oScreen, OnbScreen.done);

@@ -8,6 +8,7 @@ import '../core/auth_repository.dart';
 import '../core/fit_api.dart';
 import '../core/lifestyle_api.dart';
 import '../core/me_api.dart';
+import '../core/pin_lock.dart';
 import '../core/vault_api.dart';
 
 /// SECOND, independent state machine — the sign-in + 6-step profile wizard
@@ -26,7 +27,7 @@ import '../core/vault_api.dart';
 
 enum OnbScreen { login, otp, steps, building, done }
 
-enum OnbStep { gender, activity, body, diet, allergies, meds, lifestyle }
+enum OnbStep { gender, activity, body, diet, allergies, meds, lifestyle, pin }
 
 const kOnbSteps = [
   OnbStep.gender,
@@ -36,6 +37,7 @@ const kOnbSteps = [
   OnbStep.allergies,
   OnbStep.meds,
   OnbStep.lifestyle,
+  OnbStep.pin,
 ];
 
 /// Digits in the SMS code (`settings.otp_length` on the backend).
@@ -72,6 +74,8 @@ class OnboardingState {
     this.oSmoking,
     this.oAlcohol,
     this.oStress,
+    this.oPin = '',
+    this.oPinConfirm = '',
     this.oBuild = 0,
     this.oBusy = false,
     this.oError,
@@ -100,6 +104,12 @@ class OnboardingState {
   final String? oSmoking; // none | occasional | daily
   final String? oAlcohol; // none | occasional | weekly | daily
   final int? oStress; // 1..5
+
+  // ---- medications PIN (set once here, guards later add/delete) ----
+  final String oPin;
+  final String oPinConfirm;
+  bool get oPinValid => RegExp(r'^\d{4,6}$').hasMatch(oPin);
+  bool get oPinReady => oPinValid && oPin == oPinConfirm;
 
   final int oBuild; // 0..4 build-step progress
 
@@ -182,6 +192,8 @@ class OnboardingState {
     Object? oSmoking = _sentinel,
     Object? oAlcohol = _sentinel,
     Object? oStress = _sentinel,
+    String? oPin,
+    String? oPinConfirm,
     int? oBuild,
     bool? oBusy,
     Object? oError = _sentinel,
@@ -213,6 +225,8 @@ class OnboardingState {
       oAlcohol:
           identical(oAlcohol, _sentinel) ? this.oAlcohol : oAlcohol as String?,
       oStress: identical(oStress, _sentinel) ? this.oStress : oStress as int?,
+      oPin: oPin ?? this.oPin,
+      oPinConfirm: oPinConfirm ?? this.oPinConfirm,
       oBuild: oBuild ?? this.oBuild,
       oBusy: oBusy ?? this.oBusy,
       oError: identical(oError, _sentinel) ? this.oError : oError as String?,
@@ -376,6 +390,11 @@ class OnboardingFlow extends Notifier<OnboardingState> {
   void setAlcohol(String v) => state = state.copyWith(oAlcohol: v);
   void setStress(int v) => state = state.copyWith(oStress: v.clamp(1, 5));
 
+  void setPin(String v) =>
+      state = state.copyWith(oPin: v.replaceAll(RegExp(r'\D'), ''));
+  void setPinConfirm(String v) =>
+      state = state.copyWith(oPinConfirm: v.replaceAll(RegExp(r'\D'), ''));
+
   void setUnitW(String u) => state = state.copyWith(oUnitW: u);
   void setUnitH(String u) => state = state.copyWith(oUnitH: u);
   void setWeight(String v) => state = state.copyWith(oWeight: v);
@@ -398,15 +417,15 @@ class OnboardingFlow extends Notifier<OnboardingState> {
   static List<String> _toggle(List<String> list, String v) =>
       list.contains(v) ? [for (final x in list) if (x != v) x] : [...list, v];
 
-  /// prototype `oScanRx` — kept as a quick "the scanner found these" shortcut so
-  /// the wizard has content to save. A real label scan lives on the meds screen.
-  void scanRx() => state = state.copyWith(oRx: const [
-        RxEntry('Telmisartan', '40 mg', 'morning'),
-        RxEntry('Metformin', '500 mg', 'twice daily'),
-      ]);
-
-  void addRx() => state = state.copyWith(
-      oRx: [...state.oRx, const RxEntry('Atorvastatin', '10 mg', 'night')]);
+  /// Add a medication the user picked from the `/drugs/search` catalogue.
+  /// Dosage is left blank here — they can set it later on the meds screen.
+  void addRxNamed(String name) {
+    final n = name.trim();
+    if (n.isEmpty || state.oRx.any((r) => r.name.toLowerCase() == n.toLowerCase())) {
+      return;
+    }
+    state = state.copyWith(oRx: [...state.oRx, RxEntry(n, '', '')]);
+  }
 
   void removeRx(int i) =>
       state = state.copyWith(oRx: [for (var j = 0; j < state.oRx.length; j++) if (j != i) state.oRx[j]]);
@@ -488,6 +507,12 @@ class OnboardingFlow extends Notifier<OnboardingState> {
       await ref.read(lifestyleApiProvider).put(life);
       ref.invalidate(lifestyleProfileProvider);
       ref.invalidate(fitProvider);
+    }
+
+    // The medications PIN, set on the last step. On-device only (salted hash in
+    // secure storage) — nothing about it goes to the server.
+    if (state.oPinReady) {
+      await ref.read(pinLockProvider).setPin(state.oPin);
     }
 
     // (nothing more to persist; step 4 is "encrypting on device" flavour)

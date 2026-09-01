@@ -5,6 +5,7 @@
 //
 //   flutter test test/onboarding_tap_through_test.dart -r expanded
 
+import 'package:carecart/src/core/drugs_api.dart';
 import 'package:carecart/src/features/onboarding/onboarding_screen.dart';
 import 'package:carecart/src/state/onboarding_state.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,13 @@ void main() {
     addTearDown(tester.view.reset);
 
     final container = ProviderContainer(
-        overrides: fakeBackendOverrides(auth: FakeAuthApi(devCode: '424242')));
+        overrides: fakeBackendOverrides(
+      auth: FakeAuthApi(devCode: '424242'),
+      drugs: FakeDrugsApi(hits: const [
+        DrugHit(name: 'Telmisartan 40 Tablet', saltComposition: 'Telmisartan (40mg)'),
+        DrugHit(name: 'Metformin 500 Tablet', saltComposition: 'Metformin (500mg)'),
+      ]),
+    ));
     addTearDown(container.dispose);
     OnboardingState st() => container.read(onboardingFlowProvider);
 
@@ -98,11 +105,13 @@ void main() {
     await tester.tap(find.text('Next'));
     await tester.pumpAndSettle();
     expect(find.text('What are you taking?'), findsOneWidget);
-    await tester.tap(find.text('Scan prescription'));
+    await tester.enterText(find.byType(TextField), 'telmi');
+    await tester.pump(const Duration(milliseconds: 350));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Telmisartan 40 Tablet'));
     await tester.pump();
-    expect(find.text('Telmisartan'), findsOneWidget);
-    expect(st().oRx, hasLength(2));
-    _step('STEP 6 meds: scanned 2 prescriptions');
+    expect(st().oRx.map((r) => r.name), const ['Telmisartan 40 Tablet']);
+    _step('STEP 6 meds: added Telmisartan from search');
 
     await tester.tap(find.text('Next'));
     await tester.pumpAndSettle();
@@ -112,6 +121,15 @@ void main() {
     await tester.tap(find.text('3')); // stress
     await tester.pump();
     _step('STEP 7 lifestyle');
+
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+    expect(find.text('Set a PIN'), findsOneWidget);
+    await tester.enterText(find.byType(TextField).at(0), '4271');
+    await tester.enterText(find.byType(TextField).at(1), '4271');
+    await tester.pump();
+    expect(st().oPinReady, isTrue);
+    _step('STEP 8 PIN set');
 
     await tester.tap(find.text('Complete'));
     await tester.pumpAndSettle(); // building -> real vault writes -> done
